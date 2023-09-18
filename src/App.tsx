@@ -16,52 +16,56 @@ import AdminUsersOverviewPage from './pages/AdminPages/AdminUsersOverviewPage'
 import AdminRestaurantsOverviewPage from './pages/AdminPages/AdminRestaurantsOverviewPage'
 import Navigation from './pages/Partials/Navigation'
 
+import Container from 'react-bootstrap/Container'
+
 const App = () => {
 	return (
 		<div id='App'>
 			<Navigation />
 
-			<Routes>
-				{/* No Log In Routes */}
-				<Route path="*" element={<NotFoundPage />} />
-				<Route path="/forgot-password" element={<ForgotPasswordPage />} />
-				<Route path="/login" element={<LoginPage />} />
-				<Route path="/logout" element={<LogoutPage />} />
-				<Route path="/signup" element={<SignupPage />} />
-				<Route path="/" element={<HomePage />} />
-				<Route path="/map" element={<MapPage />} />
-				<Route path="/restaurants" element={<RestaurantListPage />} />
+			<Container fluid>
+				<Routes>
+					{/* No Log In Routes */}
+					<Route path="*" element={<NotFoundPage />} />
+					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/logout" element={<LogoutPage />} />
+					<Route path="/signup" element={<SignupPage />} />
+					<Route path="/" element={<HomePage />} />
+					<Route path="/map" element={<MapPage />} />
+					<Route path="/restaurants" element={<RestaurantListPage />} />
 
-				{/* Protected Routes: */}
-				{/* Admin Routes */}
-				<Route path="/admin-usersoverview" element={
-					// <RequireAuth>
-					<AdminUsersOverviewPage />
-					// </RequireAuth>
-				} />
-				<Route path="/admin-restaurantsoverview" element={
-					// <RequireAuth>
-					<AdminRestaurantsOverviewPage />
-					// </RequireAuth>
-				} />
+					{/* Protected Routes: */}
+					{/* Admin Routes */}
+					<Route path="/admin-usersoverview" element={
+						// <RequireAuth>
+						<AdminUsersOverviewPage />
+						// </RequireAuth>
+					} />
+					<Route path="/admin-restaurantsoverview" element={
+						// <RequireAuth>
+						<AdminRestaurantsOverviewPage />
+						// </RequireAuth>
+					} />
 
-				{/* User Routes */}
-				<Route path="/update-profile" element={
-					// <RequireAuth>
-					<UpdateProfilePage />
-					// </RequireAuth>
-				} />
-				<Route path="/tips" element={
-					// <RequireAuth>
-					<TipsPage />
-					// </RequireAuth>
-				} />
-			</Routes>
+					{/* User Routes */}
+					<Route path="/update-profile" element={
+						// <RequireAuth>
+						<UpdateProfilePage />
+						// </RequireAuth>
+					} />
+					<Route path="/tips" element={
+						// <RequireAuth>
+						<TipsPage />
+						// </RequireAuth>
+					} />
+				</Routes>
 
-			<ToastContainer
-				autoClose={2000}
-				theme='colored'
-			/>
+				<ToastContainer
+					autoClose={2000}
+					theme='colored'
+				/>
+			</Container>
 		</div>
 	)
 }
