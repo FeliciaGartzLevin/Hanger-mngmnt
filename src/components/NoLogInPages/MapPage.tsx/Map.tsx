@@ -7,11 +7,14 @@ import {
 	Circle,
 	MarkerClusterer,
 } from '@react-google-maps/api'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import SearchBox from './SearchBox'
 
 // type Props = {}
+
+const handleSearchInput = (queryInput: string) => {
+	console.log('queryInput:', queryInput)
+
+}
 
 const Map /* : React.FC<Props> */ = (/* {} */) => {
 	// this center must ltr be dynamic depending on the city searched for
@@ -25,10 +28,12 @@ const Map /* : React.FC<Props> */ = (/* {} */) => {
 				width: '100%',
 				height: '100vh',
 				// style away the tiny scroll
-				// check johans vid about it
+				// check johans video about it
 			}}
 		>
-
+			<SearchBox
+				onSubmit={handleSearchInput}
+			/>
 			<Marker position={center} />
 		</GoogleMap>
 
