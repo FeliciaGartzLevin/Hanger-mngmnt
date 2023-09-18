@@ -7,15 +7,15 @@ import {
 	MarkerClusterer,
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
+import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 
 
 
 const Map = () => {
 	// this center must ltr be dynamic depending on
-	// the city searched for or the users location
-	const [center, setCenter] = useState<google.maps.LatLngLiteral | null>(null)
-
-	// { lat: 55.6, lng: 13 } //Malmö
+	// the city searched for ❌ or the users location✅
+	const { position, error } = useGetCurrentLocation()
+	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 
 	// Finding and showing the location that user requested
 	const handleSearchInput = (queryInput: string) => {
@@ -24,18 +24,10 @@ const Map = () => {
 
 	// Finding users location by sending in their position by lat and long
 	const handleFindLocation = () => {
-		console.log('Finding users location by sending in their position by lat and long...')
-		if (!navigator.geolocation) return
+		console.log('Finding users location by lat and long...')
+		if (!position) return console.log('no position')
+		setCenter(position)
 
-		// MAKE CUSTOM HOOK LTR: get and use the current position of user
-		navigator.geolocation.getCurrentPosition((position) => {
-			// getting current long and lat
-			const { latitude, longitude } = position.coords;
-			setCenter({ lat: latitude, lng: longitude });
-
-		}, (error) => {
-			console.error('Error getting user location:', error);
-		})
 		console.log('Users current position is:', center)
 	}
 

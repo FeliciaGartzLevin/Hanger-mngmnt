@@ -13,7 +13,6 @@ type Props = {
 
 const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
 	const [queryInput, setQueryInput] = useState("")
-	const [currentLocation, setCurrentLocation] = useState<google.maps.LatLngLiteral | null>(null)
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -76,7 +75,6 @@ const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
 							background: 'rgb(134, 0, 85)',
 						}}
 						type='submit'
-					// dummy-location for now
 					>
 						<FontAwesomeIcon icon={LocationIcon} />
 					</Button>
