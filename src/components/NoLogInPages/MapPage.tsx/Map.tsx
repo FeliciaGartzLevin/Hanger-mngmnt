@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState, useMemo, useCallback, useRef } from 'react'
 import {
 	GoogleMap,
@@ -9,16 +8,20 @@ import {
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 
-// type Props = {}
+// this center must ltr be dynamic depending on
+// the city searched for or the users location
+const center = { lat: 55.6, lng: 13 } //Malmö
+
 
 const handleSearchInput = (queryInput: string) => {
 	console.log('queryInput:', queryInput)
-
 }
 
-const Map /* : React.FC<Props> */ = (/* {} */) => {
-	// this center must ltr be dynamic depending on the city searched for
-	const center = useMemo(() => ({ lat: 55.6, lng: 13 }), []) //Malmö
+const handleFindLocation = (location: google.maps.LatLngLiteral) => {
+	console.log('Users location:', location)
+}
+
+const Map = () => {
 
 	return (
 		<GoogleMap
@@ -32,7 +35,8 @@ const Map /* : React.FC<Props> */ = (/* {} */) => {
 			}}
 		>
 			<SearchBox
-				onSubmit={handleSearchInput}
+				onQuerySubmit={handleSearchInput}
+				handleFindLocation={handleFindLocation}
 			/>
 			<Marker position={center} />
 		</GoogleMap>
