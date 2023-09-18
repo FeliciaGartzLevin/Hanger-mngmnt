@@ -7,20 +7,15 @@ import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
-// import useAuth from '../../hooks/useAuth'
+import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
-	// const {
-	// 	currentUser,
-	// 	userEmail,
-	// 	userName,
-	// 	userPhotoUrl,
-	// } = useAuth()
-
-	const isLoggedIn = true
-	const userPhotoUrl = 'https://picsum.photos/200'
-	const userName = 'al_binaur'
-	const userEmail = 'albin@gmail.com'
+	const {
+		currentUser,
+		userEmail,
+		userName,
+		userPhotoUrl,
+	} = useAuth()
 
 	return (
 		<Navbar bg='dark' variant='dark' expand='sm'>
@@ -36,7 +31,7 @@ const Navigation = () => {
 								<Button variant='success'>🔍</Button>
 							</InputGroup>
 						</div>
-						{isLoggedIn ? (
+						{currentUser ? (
 							<NavDropdown
 								drop='start'
 								title={
@@ -76,12 +71,12 @@ const Navigation = () => {
 								</Nav.Link>
 								<Nav.Link
 									as={NavLink}
-									to='/register'
+									to='/signup'
 								>
 									<Button
 										size='sm'
 										variant='primary'
-									>Register</Button>
+									>Sign Up</Button>
 								</Nav.Link>
 							</div>
 						)}
