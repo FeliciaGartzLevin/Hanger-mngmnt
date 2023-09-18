@@ -18,27 +18,20 @@ const Map /* : React.FC<Props> */ = (/* {} */) => {
 	const center = useMemo(() => ({ lat: 55.6, lng: 13 }), []) //Malmö
 
 	return (
-		<Container fluid id='Map'>
-			<Row className='d-flex justify-content center'>
-				{/* Make the restaurants an offcanvas ltr?
-				Maybe only on small screens, or on all screens? */}
-				<Col sm={{ span: 3 }} >
-					<h1>Restaurants</h1>
-				</Col>
-				<Col sm={{ span: 9 }}>
-					<GoogleMap
-						zoom={14}
-						center={center}
-						mapContainerStyle={{
-							width: '100%',
-							height: '100vh'
-						}}
-					>
+		<GoogleMap
+			zoom={14}
+			center={center}
+			mapContainerStyle={{
+				width: '100%',
+				height: '100vh',
+				// style away the tiny scroll
+				// check johans vid about it
+			}}
+		>
 
-					</GoogleMap>
-				</Col>
-			</Row>
-		</Container >
+			<Marker position={center} />
+		</GoogleMap>
+
 	)
 }
 
