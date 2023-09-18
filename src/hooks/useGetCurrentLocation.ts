@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 const useGetCurrentLocation = () => {
-	const [position, setPosition] = useState<google.maps.LatLngLiteral | undefined>({ lat: 55.6, lng: 13 }) //Malmö as default
+	const center = useMemo<google.maps.LatLngLiteral>(() => ({
+		lat: 55.606970,
+		lng: 13.021060
+	}), []) //Malmö as default
+	const [position, setPosition] = useState<google.maps.LatLngLiteral | undefined>(center)
 	const [error, setError] = useState<GeolocationPositionError | null>(null)
 
 	// get and use the current position of user
