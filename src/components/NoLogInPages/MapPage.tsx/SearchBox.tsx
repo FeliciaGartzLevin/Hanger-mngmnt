@@ -8,7 +8,7 @@ import { faLocationArrow as LocationIcon } from '@fortawesome/free-solid-svg-ico
 
 type Props = {
 	onQuerySubmit: (queryInput: string) => void
-	handleFindLocation: (location: google.maps.LatLngLiteral) => void
+	handleFindLocation: () => void
 }
 
 const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
@@ -29,9 +29,7 @@ const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
 
 	const findUsersLocation = (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!currentLocation) return
-
-		handleFindLocation(currentLocation)
+		handleFindLocation()
 	}
 
 	return (
@@ -78,7 +76,7 @@ const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
 							background: 'rgb(134, 0, 85)',
 						}}
 						type='submit'
-						onClick={() => setCurrentLocation({ lat: 55.6, lng: 13 })}
+					// dummy-location for now
 					>
 						<FontAwesomeIcon icon={LocationIcon} />
 					</Button>
