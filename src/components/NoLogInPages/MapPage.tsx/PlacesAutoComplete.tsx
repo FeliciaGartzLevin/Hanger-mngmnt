@@ -62,6 +62,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 	return (
 		<div ref={ref}>
 			<input
+				onClick={() => setValue('')}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready
