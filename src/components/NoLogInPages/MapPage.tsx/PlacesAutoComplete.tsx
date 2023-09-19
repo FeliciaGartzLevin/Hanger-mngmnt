@@ -30,8 +30,12 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 			// Get latitude and longitude via utility functions
 			const results = await getGeocode({ address: description })
 
+			console.log('results', results)
+			console.log('Address', results[0].formatted_address)
+
 			const { lat, lng } = getLatLng(results[0])
 			// console.log("📍 Coordinates: ", { lat, lng })
+
 
 			onQuerySubmit({ lat, lng })
 
