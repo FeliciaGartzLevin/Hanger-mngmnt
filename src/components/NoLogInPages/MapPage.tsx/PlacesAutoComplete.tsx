@@ -1,8 +1,5 @@
 import React from 'react'
 import usePlacesAutoComplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
-// import Form from 'react-bootstrap/Form'
-// import InputGroup from 'react-bootstrap/InputGroup'
-// import Button from 'react-bootstrap/Button'
 import useOnclickOutside from "react-cool-onclickoutside";
 
 type Props = {
@@ -22,10 +19,6 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 		// the searched suggestions by calling this method
 		clearSuggestions()
 	})
-
-	// const handleSubmit = (e: React.FormEvent) => {
-	// 	e.preventDefault()
-	// }
 
 	const handleSelect = ({ description }: { description: string }) =>
 		async () => {
@@ -49,15 +42,20 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 			const {
 				place_id,
 				structured_formatting: { main_text, secondary_text },
-			} = suggestion;
+			} = suggestion
 
 			return (
-				<li key={place_id} onClick={handleSelect(suggestion)}>
-					<strong>{main_text}</strong> <small>{secondary_text}</small>
-				</li>
+				<>
+					<li
+						className='autoComplete-options'
+						key={place_id}
+						onClick={handleSelect(suggestion)}>
+						<strong>{main_text}</strong> <small>{secondary_text}</small>
+					</li>
+					<hr />
+				</>
 			)
 		})
-
 
 	return (
 		<div ref={ref}>
@@ -67,39 +65,17 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready
 				}
-				placeholder="Select location"
+				placeholder="Search location"
 			/>
-			{/* We can use the "status" to decide whether we should display the dropdown or not */}
-			{status === "OK" && <ul>{renderSuggestions()}</ul>}
+			{status === "OK" &&
+				<ul style={{
+					listStyle: 'none',
+					padding: '0 0.5rem',
+					backgroundColor: 'black',
+				}}>
+					{renderSuggestions()}
+				</ul>}
 		</div >
-
-
-		// < Form
-		// 	ref={ref}
-		// 	onSubmit={handleSubmit}
-		// >
-		// 	<InputGroup>
-		// 		<Form.Control
-		// 			type='text'
-		// 			onChange={e => setValue(e.target.value)}
-		// 			disabled={!ready
-		// 			}
-		// 			placeholder="Select location"
-		// 			value={value}
-		// 		/>
-		// 		{status === "OK" && <ul>{renderSuggestions()}</ul>}
-		// 		<Button style={{
-		// 			padding: '0.3rem',
-		// 			background: 'rgb(134, 0, 85)',
-		// 		}}
-		// 			disabled={!queryInput.trim().length && !ready}
-		// 			type='submit'
-		// 		>
-		// 			Search
-		// 		</Button>
-		// 	</InputGroup>
-		// </ Form >
-
 	)
 }
 

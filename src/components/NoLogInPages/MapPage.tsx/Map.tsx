@@ -9,7 +9,6 @@ import {
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 
-
 const Map = () => {
 
 	// this center must ltr be dynamic depending on
@@ -52,6 +51,7 @@ const Map = () => {
 				handleFindLocation={handleFindLocation}
 			/>
 
+			<Marker position={center} />
 			<Marker position={center} />
 		</GoogleMap>
 
