@@ -8,11 +8,9 @@ import {
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
+import { getLatLng } from 'use-places-autocomplete'
 
 const Map = () => {
-
-	// this center must ltr be dynamic depending on
-	// the city searched for ❌ or the users location✅
 	const { position, error } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	const mapOptions = useMemo<google.maps.MapOptions>(() => ({
@@ -20,7 +18,14 @@ const Map = () => {
 	}), [])
 
 	// Finding and showing the location that user requested
-	const handleSearchInput = ({ lat, lng }: google.maps.LatLngLiteral) => {
+	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
+
+		console.log('results:', results)
+		console.log('Address:', results[0].formatted_address)
+		console.log('Ort:', results[0].address_components[0].long_name)
+
+		const { lat, lng } = getLatLng(results[0])
+		// console.log("📍 Coordinates: ", { lat, lng })
 		setCenter({ lat, lng })
 		console.log('Finding and showing the location that user requested:', { lat, lng })
 	}

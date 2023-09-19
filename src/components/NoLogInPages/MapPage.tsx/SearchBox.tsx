@@ -8,7 +8,7 @@ import PlacesAutoComplete from './PlacesAutoComplete'
 
 type Props = {
 	handleFindLocation: () => void
-	handleLatLng: ({ lat, lng }: google.maps.LatLngLiteral) => void
+	handleLatLng: (results: google.maps.GeocoderResult[]) => void
 }
 
 const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
@@ -33,7 +33,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
 					boxShadow: ' 8px 8px 5px rgba(0, 0, 0, 0.56)',
 				}}>
 				<PlacesAutoComplete
-					onQuerySubmit={({ lat, lng }) => handleLatLng({ lat, lng })}
+					onClickedPlace={(results) => handleLatLng(results)}
 				/>
 				<Form onSubmit={findUsersLocation}>
 					<Button

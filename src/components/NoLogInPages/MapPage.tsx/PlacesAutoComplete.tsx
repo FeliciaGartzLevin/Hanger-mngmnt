@@ -1,12 +1,12 @@
 import React from 'react'
-import usePlacesAutoComplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
+import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 import useOnclickOutside from "react-cool-onclickoutside";
 
 type Props = {
-	onQuerySubmit: ({ lat, lng }: google.maps.LatLngLiteral) => void
+	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 	const {
 		ready,
 		value,
@@ -30,14 +30,14 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 			// Get latitude and longitude via utility functions
 			const results = await getGeocode({ address: description })
 
-			console.log('results', results)
-			console.log('Address', results[0].formatted_address)
+			// console.log('results:', results)
+			// console.log('Address:', results[0].formatted_address)
+			// console.log('Ort:', results[0].address_components[0].long_name)
 
-			const { lat, lng } = getLatLng(results[0])
-			// console.log("📍 Coordinates: ", { lat, lng })
+			// const { lat, lng } = getLatLng(results[0])
+			// // console.log("📍 Coordinates: ", { lat, lng })
 
-
-			onQuerySubmit({ lat, lng })
+			onClickedPlace(results)
 
 		}
 
@@ -51,8 +51,8 @@ const PlacesAutoComplete: React.FC<Props> = ({ onQuerySubmit }) => {
 			return (
 				<>
 					<li
-						className='autoComplete-options'
 						key={place_id}
+						className='autoComplete-options'
 						onClick={handleSelect(suggestion)}>
 						<strong>{main_text}</strong> <small>{secondary_text}</small>
 					</li>
