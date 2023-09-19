@@ -28,7 +28,6 @@ const Map = () => {
 
 	// Finding users location by sending in their position by lat and long
 	const handleFindLocation = () => {
-		console.log('Finding users location by lat and long...')
 		if (!position) return console.log('no position:', error)
 		setCenter(position)
 
@@ -40,6 +39,7 @@ const Map = () => {
 			zoom={14}
 			center={center}
 			options={mapOptions}
+			mapContainerClassName='map-container'
 			mapContainerStyle={{
 				width: '100%',
 				height: '100vh',
@@ -47,12 +47,12 @@ const Map = () => {
 				// check johans video about it
 			}}
 		>
-			<Marker position={center} />
-
 			<SearchBox
 				handleLatLng={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
+
+			<Marker position={center} />
 		</GoogleMap>
 
 	)
