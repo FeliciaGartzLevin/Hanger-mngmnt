@@ -1,22 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const useGetCurrentLocation = () => {
 	const [position, setPosition] = useState<google.maps.LatLngLiteral | undefined>(undefined)
 	const [error, setError] = useState<GeolocationPositionError | null>(null)
 
-	useEffect(() => {
+	// get and use the current position of user
+	navigator.geolocation.getCurrentPosition((position) => {
+		// getting current long and lat
+		const { latitude, longitude } = position.coords;
+		setPosition({ lat: latitude, lng: longitude });
 
-		// get and use the current position of user
-		navigator.geolocation.getCurrentPosition((position) => {
-			// getting current long and lat
-			const { latitude, longitude } = position.coords;
-			setPosition({ lat: latitude, lng: longitude });
+	}, (error) => {
+		console.error('Error getting user location:', error);
+		setError
+	})
 
-		}, (error) => {
-			console.error('Error getting user location:', error);
-			setError
-		})
-	}, [])
 
 	return {
 		position,
