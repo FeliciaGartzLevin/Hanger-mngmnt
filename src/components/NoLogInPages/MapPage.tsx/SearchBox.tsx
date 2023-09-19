@@ -1,30 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow as LocationIcon } from '@fortawesome/free-solid-svg-icons'
+import PlacesAutoComplete from './PlacesAutoComplete'
 
 type Props = {
-	onQuerySubmit: (queryInput: string) => void
 	handleFindLocation: () => void
+	handleLatLng: ({ lat, lng }: google.maps.LatLngLiteral) => void
 }
 
-const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
-	const [queryInput, setQueryInput] = useState("")
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault()
-
-		if (!queryInput.trim().length) return
-
-		// send the query string to parent function
-		onQuerySubmit(queryInput)
-
-		// reset input field
-		setQueryInput("")
-	}
+const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
 
 	const findUsersLocation = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -45,27 +32,9 @@ const SearchBox: React.FC<Props> = ({ onQuerySubmit, handleFindLocation }) => {
 					padding: '0.5rem',
 					boxShadow: ' 8px 8px 5px rgba(0, 0, 0, 0.56)',
 				}}>
-				<Form
-					onSubmit={handleSubmit}
-				>
-					<InputGroup >
-						<Form.Control
-							type='text'
-							placeholder='Search location'
-							onChange={e => setQueryInput(e.target.value)}
-							value={queryInput}
-						/>
-						<Button style={{
-							padding: '0.3rem',
-							background: 'rgb(134, 0, 85)',
-						}}
-							disabled={!queryInput.trim().length}
-							type='submit'
-						>
-							Search
-						</Button>
-					</InputGroup>
-				</Form>
+				<PlacesAutoComplete
+					onQuerySubmit={({ lat, lng }) => handleLatLng({ lat, lng })}
+				/>
 				<Form onSubmit={findUsersLocation}>
 					<Button
 						aria-label='Use my location'

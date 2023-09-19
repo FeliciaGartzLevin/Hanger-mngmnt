@@ -1,15 +1,17 @@
-import { useState, useMemo, useCallback, useRef } from 'react'
+import { useState, useMemo } from 'react'
 import {
 	GoogleMap,
 	Marker,
-	DirectionsRenderer,
-	Circle,
-	MarkerClusterer,
+	// DirectionsRenderer,
+	// Circle,
+	// MarkerClusterer,
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 
+
 const Map = () => {
+
 	// this center must ltr be dynamic depending on
 	// the city searched for ❌ or the users location✅
 	const { position, error } = useGetCurrentLocation()
@@ -19,8 +21,9 @@ const Map = () => {
 	}), [])
 
 	// Finding and showing the location that user requested
-	const handleSearchInput = (queryInput: string) => {
-		console.log('Finding and showing the location that user requested:', queryInput)
+	const handleSearchInput = ({ lat, lng }: google.maps.LatLngLiteral) => {
+		setCenter({ lat, lng })
+		console.log('Finding and showing the location that user requested:', { lat, lng })
 	}
 
 	// Finding users location by sending in their position by lat and long
@@ -45,8 +48,9 @@ const Map = () => {
 			}}
 		>
 			<Marker position={center} />
+
 			<SearchBox
-				onQuerySubmit={handleSearchInput}
+				handleLatLng={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
 		</GoogleMap>
