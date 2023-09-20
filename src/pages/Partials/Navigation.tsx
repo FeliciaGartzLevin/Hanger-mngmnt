@@ -1,7 +1,5 @@
 import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
 import Image from 'react-bootstrap/Image'
-import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
@@ -18,19 +16,10 @@ const Navigation = () => {
 	} = useAuth()
 
 	return (
-		<Navbar bg='dark' variant='dark' expand='sm'>
+		<Navbar bg='dark' variant='dark'>
 			<Container fluid>
 				<Navbar.Brand as={Link} to='/'>Hanger Management</Navbar.Brand>
-
-				<Navbar.Toggle aria-controls='basic-navbar-nav' />
-				<Navbar.Collapse id='basic-navbar-nav'>
-					<Nav className='ms-auto'>
-						<div className='me-2 mt-2'>
-							<InputGroup size='sm'>
-								<Form.Control placeholder='Restaurant, cafe...' />
-								<Button variant='success'>🔍</Button>
-							</InputGroup>
-						</div>
+					<Nav>
 						{currentUser ? (
 							<NavDropdown
 								drop='start'
@@ -48,11 +37,15 @@ const Navigation = () => {
 							>
 								<NavDropdown.Item
 									as={NavLink}
-									to='/update-profile'
-									>Update Profile</NavDropdown.Item>
+									to='/recommend'
+								>Recommend</NavDropdown.Item>
 								<NavDropdown.Divider />
 								<NavDropdown.Item
-									className='m-0'
+									as={NavLink}
+									to='/update-profile'
+								>Update Profile</NavDropdown.Item>
+								<NavDropdown.Divider />
+								<NavDropdown.Item
 									as={NavLink}
 									to='/logout'
 								>Logout</NavDropdown.Item>
@@ -81,7 +74,7 @@ const Navigation = () => {
 							</div>
 						)}
 					</Nav>
-				</Navbar.Collapse>
+
 			</Container>
 		</Navbar>
 	)
