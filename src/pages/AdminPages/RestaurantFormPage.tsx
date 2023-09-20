@@ -13,9 +13,9 @@ import {
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
 import { Restaurant } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
-import { placeCol } from "../../services/firebase";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { getLatLng } from "use-places-autocomplete";
+import { restaurantsCol } from "../../services/firebase";
 
 const libraries: Libraries = ['places']
 
@@ -60,13 +60,13 @@ const RestaurantFormPage = () => {
 				return;
 			}
 
-			console.log(selectedPlace);
+			// console.log(selectedPlace);
 
 			const newRestaurant: Restaurant = {
 				_id: data._id,
 				name: data.name,
 				streetAddress: data.streetAddress || "", // Provide a default value if not available
-				city: data.city || "", // Provide a default value if not available
+				city: data.city ?? "", // Provide a default value if not available
 				description: data.description,
 				category: data.category,
 				supply: data.supply,
@@ -77,8 +77,8 @@ const RestaurantFormPage = () => {
 				instagram: data.instagram || "", // Provide a default value if not available
 				location: selectedPlace,
 			};
-			const docRef = doc(placeCol);
-			//   const placeCol = collection(db, 'restaurants');
+			const docRef = doc(restaurantsCol);
+			//   const restaurantsCol = collection(db, 'restaurants');
 			await setDoc(docRef, newRestaurant);
 
 			console.log(newRestaurant);
@@ -112,13 +112,27 @@ const RestaurantFormPage = () => {
 									onClickedPlace={(results) => {
 										const selectedAddress =
 											results[0]?.formatted_address || "";
-										setValue("name", selectedAddress); // Set name as the selected address
-										setValue("_id", results[0]?.place_id); // Set id to googles id on the place
+
+										// Set name as the selected address
+										setValue("name", selectedAddress);
+
+										// Set address as the selected address
+										setValue("streetAddress", selectedAddress);
+
+										// Set id to googles id on the place
+										setValue("_id", results[0]?.place_id);
+
+										// get and set the lat and long positions
 										const { lat, lng } = getLatLng(results[0])
 										setSelectedPlace({ lat, lng })
+
+										// Find the city component in the address_components array
+										results[0]?.address_components.find((component) => {
+											if (component.types[0] !== ("postal_town")) return
+											setValue("city", component.long_name)
+										})
 									}}
 								/>
-
 							</div>
 
 							<Form onSubmit={handleSubmit(onSubmit)}>
