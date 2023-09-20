@@ -76,7 +76,6 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			/>
 			{status === "OK" &&
 				<ul style={{
-					width: 'inherit',
 					listStyle: 'none',
 					padding: '0 0.5rem',
 					backgroundColor: 'black',
