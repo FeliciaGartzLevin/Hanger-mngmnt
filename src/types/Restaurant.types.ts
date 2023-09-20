@@ -5,7 +5,7 @@ export type Restaurant = {
 	city: string;
 	description: string;
 	category: Category;
-	supply: Supply[]
+	supply: Supply
 	email?: string;
 	telephone?: string;
 	website?: string;
@@ -16,11 +16,8 @@ export type Restaurant = {
 
 export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck';
 
-export type Supply = {
-	lunch?: 'Lunch'
-	afterWork?: 'After Work',
-	dinner?: 'Middag/Á la carte',
-}
+export type Supply = 'Lunch' | 'After Work'| 'Middag/Á la carte'
+
 
 export type Location = {
 	latitude: number;
