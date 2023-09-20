@@ -1,22 +1,20 @@
-import { Routes, Route } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-
-import './assets/scss/App.scss'
-import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
 import ForgotPasswordPage from './pages/NoLogInPages/ForgotPasswordPage'
+import HomePage from './pages/NoLogInPages/HomePage'
 import LoginPage from './pages/NoLogInPages/LoginPage'
 import LogoutPage from './pages/NoLogInPages/LogoutPage'
-import SignupPage from './pages/NoLogInPages/SignupPage'
-import HomePage from './pages/NoLogInPages/HomePage'
 import MapPage from './pages/NoLogInPages/MapPage'
+import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
+import SignupPage from './pages/NoLogInPages/SignupPage'
 import RestaurantListPage from './pages/NoLogInPages/RestaurantListPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
 import TipsPage from './pages/UserPages/TipsPage'
 import AdminUsersOverviewPage from './pages/AdminPages/AdminUsersOverviewPage'
 import AdminRestaurantsOverviewPage from './pages/AdminPages/AdminRestaurantsOverviewPage'
 import Navigation from './pages/Partials/Navigation'
-
 import Container from 'react-bootstrap/Container'
+import { Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import './assets/scss/App.scss'
 
 const App = () => {
 	return (
@@ -62,7 +60,7 @@ const App = () => {
 				</Routes>
 
 				<ToastContainer
-					autoClose={2000}
+					autoClose={3000}
 					theme='colored'
 				/>
 			</Container>

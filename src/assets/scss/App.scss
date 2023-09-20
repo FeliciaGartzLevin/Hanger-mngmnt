@@ -1,4 +1,6 @@
 @import "bootstrap/scss/bootstrap";
+@import "react-toastify/scss/main";
+@import "toastify";
 
 #App {
 	min-height: 100vh;
@@ -7,4 +9,9 @@
 .img-square {
 	aspect-ratio: 1;
 	object-fit: cover;
+}
+
+.invalid-value {
+	font-size: smaller;
+	color: $danger;
 }
