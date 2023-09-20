@@ -6,6 +6,10 @@
 	min-height: 100vh;
 }
 
+.navbar-expand .navbar-nav .nav-link {
+	padding-right: 0;
+}
+
 .img-square {
 	aspect-ratio: 1;
 	object-fit: cover;

@@ -9,36 +9,43 @@ import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
 	const {
-		currentUser,
-		userEmail,
-		userName,
-		userPhotoUrl,
+		signedInUser,
+		signedInUserEmail,
+		signedInUserName,
+		signedInUserPhotoUrl
 	} = useAuth()
 
 	return (
 		<Navbar bg='dark' variant='dark'>
 			<Container fluid>
-				<Navbar.Brand as={Link} to='/'>Hanger Management</Navbar.Brand>
+				<Navbar.Brand
+					as={Link}
+					to='/'
+				>
+					🍔 😡 Hanger
+					<span className='d-none d-sm-inline'> Management</span>
+					<span className='d-inline d-sm-none'> Mgmt</span>
+				</Navbar.Brand>
 					<Nav>
-						{currentUser ? (
+						{signedInUser ? (
 							<NavDropdown
 								drop='start'
 								title={
-									userPhotoUrl
+									signedInUserPhotoUrl
 									? <Image
-										src={userPhotoUrl}
+										src={signedInUserPhotoUrl}
 										width={30}
-										title={(userName || userEmail) ?? ''}
+										title={(signedInUserName || signedInUserEmail) ?? ''}
 										className='img-square'
 										fluid
 										roundedCircle />
-									: userName || userEmail
+									: signedInUserName || signedInUserEmail
 								}
 							>
 								<NavDropdown.Item
 									as={NavLink}
-									to='/recommend'
-								>Recommend</NavDropdown.Item>
+									to='/recommend-place'
+								>Recommend Place</NavDropdown.Item>
 								<NavDropdown.Divider />
 								<NavDropdown.Item
 									as={NavLink}
@@ -47,34 +54,32 @@ const Navigation = () => {
 								<NavDropdown.Divider />
 								<NavDropdown.Item
 									as={NavLink}
-									to='/logout'
-								>Logout</NavDropdown.Item>
+									to='/sign-out'
+								>Sign Out</NavDropdown.Item>
 							</NavDropdown>
 						) : (
-							<div className='d-flex'>
+							<>
 								<Nav.Link
 									as={NavLink}
-									className='pe-2'
-									to='/login'
+									to='/sign-in'
 								>
 									<Button
 										size='sm'
 										variant='outline-light'
-									>Login</Button>
+									>Sign In</Button>
 								</Nav.Link>
 								<Nav.Link
 									as={NavLink}
-									to='/signup'
+									to='/sign-up'
 								>
 									<Button
 										size='sm'
 										variant='primary'
 									>Sign Up</Button>
 								</Nav.Link>
-							</div>
+							</>
 						)}
 					</Nav>
-
 			</Container>
 		</Navbar>
 	)
