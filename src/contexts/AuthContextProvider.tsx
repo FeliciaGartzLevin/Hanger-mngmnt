@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
 	UserCredential,
 	createUserWithEmailAndPassword,
@@ -13,7 +12,8 @@ import {
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import PuffLoader from 'react-spinners/PuffLoader'
-import { auth } from '../services/firebase'
+import { auth, usersCol } from '../services/firebase'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 
 type AuthContextType = {
 	currentUser: User|null
@@ -25,13 +25,12 @@ type AuthContextType = {
 	setDisplayName: (displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
 	setPhotoUrl: (photoURL: string) => Promise<void>
-	signup: (email: string, password: string) => Promise<UserCredential>
+	signup: (email: string, name: string, password: string) => Promise<User>
 	userEmail: string|null
 	userName: string|null
 	userPhotoUrl: string|null
 }
 
-// This creates the actual context and sets the context's initial/default value
 export const AuthContext = createContext<AuthContextType|null>(null)
 
 type AuthContextProps = {
@@ -51,10 +50,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const logout = () => {
 		return signOut(auth)
-	}
-
-	const signup = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password)
 	}
 
 	const reloadUser = async () => {
@@ -96,18 +91,42 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updateProfile(currentUser, { photoURL })
 	}
 
-	// add auth-state observer here (somehow... 😈)
+	const signup = async (email: string, name: string, password: string) => {
+		const newUserCredential = await createUserWithEmailAndPassword(auth, email, password)
+		const newUser = newUserCredential.user
+
+		const randomPhoto = 'https://picsum.photos/200'
+
+		updateProfile(newUser, {
+			displayName: name,
+			photoURL: randomPhoto
+		})
+		setUserName(name)
+		setPhotoUrl(randomPhoto)
+
+		const docRef = doc(usersCol)
+		setDoc(docRef, {
+			createdAt: serverTimestamp(),
+			email,
+			isAdmin: false,
+			name,
+			photoUrl: randomPhoto,
+			uid: newUser.uid,
+			updatedAt: serverTimestamp()
+		})
+
+		return newUser
+	}
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setCurrentUser(user)
 
 			if (user) {
-				// User is logged in
 				setUserEmail(user.email)
 				setUserName(user.displayName)
 				setUserPhotoUrl(user.photoURL)
 			} else {
-				// No user is logged in
 				setUserEmail(null)
 				setUserName(null)
 				setUserPhotoUrl(null)

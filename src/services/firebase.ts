@@ -1,7 +1,8 @@
-import { initializeApp } from "firebase/app"
-import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
-import { CollectionReference, collection, DocumentData, getFirestore } from "firebase/firestore"
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { CollectionReference, collection, DocumentData, getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
+import { User } from '../types/User.types'
 
 // Firebase configuration
 const firebaseConfig = {
@@ -14,7 +15,7 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 
 // Get Auth instance
 export const auth = getAuth(app)
@@ -31,6 +32,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 }
 
 // Export collection references
-export const dummyCol = createCollection<never>("stupid")
+export const usersCol = createCollection<User>('users')
 
 export default app

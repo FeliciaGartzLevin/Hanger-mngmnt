@@ -1,16 +1,17 @@
 import { FirebaseError } from 'firebase/app'
+import useAuth from '../../hooks/useAuth'
 import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
-import Container from "react-bootstrap/Container"
+import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { UserSignUp } from '../../types/User.types'
-import useAuth from '../../hooks/useAuth'
+import { toast } from 'react-toastify'
 
 const SignupPage = () => {
 	const [isError, setIsError] = useState(false)
@@ -19,16 +20,18 @@ const SignupPage = () => {
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<UserSignUp>()
 	const { signup } = useAuth()
 
-	const passwordRef = useRef("")
+	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const onSignup: SubmitHandler<UserSignUp> = async (data) => {
+	const onSignup: SubmitHandler<UserSignUp> = async (data: UserSignUp) => {
 		setIsError(false)
 		setErrorMessage(null)
 
 		try {
 			setIsLoading(true)
-			await signup(data.email, data.password)
+			await signup(data.email, data.name, data.password)
+
+			toast.success("Welcome, " + data.name)
 
 		} catch (error) {
 			if (error instanceof FirebaseError) {
@@ -42,78 +45,86 @@ const SignupPage = () => {
 	}
 
 	return (
-		<Container className="py-3 center-y">
+		<Container className='py-3 center-y'>
 			<Row>
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card>
 						<Card.Body>
-							<Card.Title className="mb-3">Sign Up</Card.Title>
+							<Card.Title className='mb-3'>Sign up</Card.Title>
 
-							{isError && (<Alert variant="danger">{errorMessage}</Alert>)}
+							{isError && (<Alert variant='danger'>{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onSignup)}>
-								<Form.Group controlId="email" className="mb-3">
+								<Form.Group controlId='name' className='mb-3'>
 									<Form.Control
-										placeholder="Email"
-										type="email"
-										{...register('email', {
-											required: "Missing email",
+										placeholder="Name"
+										type='text'
+										{...register('name', {
+											required: "Name missing",
 										})}
 									/>
-									{errors.email && <p className="invalid">{errors.email.message ?? "Invalid value"}</p>}
+									{errors.name && <div className='invalid-value'>{errors.name.message ?? "Invalid value"}</div>}
 								</Form.Group>
 
-								<Form.Group controlId="password" className="mb-3">
+								<Form.Group controlId='email' className='mb-3'>
 									<Form.Control
-										placeholder='Password'
-										type="password"
-										autoComplete="new-password"
+										placeholder="Email"
+										type='email'
+										{...register('email', {
+											required: "Email missing",
+										})}
+									/>
+									{errors.email && <div className='invalid-value'>{errors.email.message ?? "Invalid value"}</div>}
+								</Form.Group>
+
+								<Form.Group controlId='password' className='mb-3'>
+									<Form.Control
+										placeholder="Password"
+										type='password'
+										autoComplete='new-password'
 										{...register('password', {
-											required: "Missing password",
+											required: "Password missing",
 											minLength: {
 												value: 6,
-												message: "You must enter at least 6 characters"
+												message: "Enter at least 6 characters"
 											},
 										})}
 									/>
-									{errors.password && <p className="invalid">{errors.password.message ?? "Invalid value"}</p>}
+									{errors.password && <div className='invalid-value'>{errors.password.message ?? "Invalid value"}</div>}
 									<Form.Text>At least 6 characters</Form.Text>
 								</Form.Group>
 
-								<Form.Group controlId="confirmPassword" className="mb-3">
+								<Form.Group controlId='confirmPassword' className='mb-3'>
 									<Form.Control
-										placeholder='Confirm Password'
-										type="password"
-										autoComplete="off"
+										placeholder="Confirm Password"
+										type='password'
+										autoComplete='off'
 										{...register('passwordConfirm', {
-											required: "Enter your password again.........",
+											required: "Confirm Password missing",
 											minLength: {
-												value: 3,
-												message: "Please enter at least 3 characters"
+												value: 6,
+												message: "Enter at least 6 characters"
 											},
 											validate: (value) => {
-												return value === passwordRef.current || "The passwords does not match 🤦🏼‍♂️"
+												return value === passwordRef.current || "Passwords don't match"
 											}
 										})}
 									/>
-									{errors.passwordConfirm && <p className="invalid">{errors.passwordConfirm.message ?? "Invalid value"}</p>}
+									{errors.passwordConfirm && <div className='invalid-value'>{errors.passwordConfirm.message ?? "Invalid value"}</div>}
 								</Form.Group>
 
 								<Button
 									disabled={isLoading}
-									variant="primary"
-									type="submit"
-								>
-									{isLoading
-										? "Creating account..."
-										: "Create Account"}
-								</Button>
+									variant='primary'
+									size='sm'
+									type='submit'
+								>{isLoading ? "Signing up..." : "Sign up"}</Button>
 							</Form>
 						</Card.Body>
 					</Card>
 
-					<div className="text-center mt-3">
-						Already have an account? <Link to="/login">Log In</Link>
+					<div className='text-center mt-3'>
+						Already have an account? <Link to='/login'>Log in</Link>
 					</div>
 				</Col>
 			</Row>
