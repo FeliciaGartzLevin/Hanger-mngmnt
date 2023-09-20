@@ -64,6 +64,9 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 	return (
 		<div ref={ref}>
 			<input
+				style={{
+					padding: '0.2rem 0.5rem',
+				}}
 				onClick={() => setValue('')}
 				value={value}
 				onChange={e => setValue(e.target.value)}
@@ -73,6 +76,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			/>
 			{status === "OK" &&
 				<ul style={{
+					width: 'inherit',
 					listStyle: 'none',
 					padding: '0 0.5rem',
 					backgroundColor: 'black',

@@ -57,8 +57,6 @@ const Map = () => {
 			/>
 
 			<MarkerF position={center} />
-
-			<MarkerF position={center} />
 		</GoogleMap>
 
 	)
