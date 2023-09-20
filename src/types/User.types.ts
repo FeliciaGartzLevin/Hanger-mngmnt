@@ -21,3 +21,11 @@ export type UserSignUp = {
 	password: string
 	passwordConfirm: string
 }
+
+export type UserUpdate = {
+	name: string
+	email: string
+	photoFile: FileList
+	password: string
+	passwordConfirm: string
+}
