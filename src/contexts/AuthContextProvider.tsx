@@ -1,37 +1,36 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
-	UserCredential,
 	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
 	onAuthStateChanged,
-	User,
-	signOut,
 	sendPasswordResetEmail,
-	updateProfile,
+	signInWithEmailAndPassword,
+	signOut,
 	updateEmail,
 	updatePassword,
+	updateProfile,
+	User
 } from 'firebase/auth'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { createContext, useEffect, useState } from 'react'
 import PuffLoader from 'react-spinners/PuffLoader'
-import { auth } from '../services/firebase'
+import { toast } from 'react-toastify'
+import { auth, usersCol } from '../services/firebase'
 
 type AuthContextType = {
-	currentUser: User|null
-	login: (email: string, password: string) => Promise<UserCredential>
-	logout: () => Promise<void>
 	reloadUser: () => Promise<boolean>
 	resetPassword: (email: string) => Promise<void>
-	setEmail: (email: string) => Promise<void>
 	setDisplayName: (displayName: string) => Promise<void>
+	setEmail: (email: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
 	setPhotoUrl: (photoURL: string) => Promise<void>
-	signup: (email: string, password: string) => Promise<UserCredential>
-	userEmail: string|null
-	userName: string|null
-	userPhotoUrl: string|null
+	signInUser: (email: string, password: string) => Promise<void>
+	signOutUser: () => Promise<void>
+	signUpUser: (email: string, name: string, password: string) => Promise<void>
+	signedInUser: User|null
+	signedInUserEmail: string|null
+	signedInUserName: string|null
+	signedInUserPhotoUrl: string|null
 }
 
-// This creates the actual context and sets the context's initial/default value
 export const AuthContext = createContext<AuthContextType|null>(null)
 
 type AuthContextProps = {
@@ -39,78 +38,100 @@ type AuthContextProps = {
 }
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState<User|null>(null)
+	const [signedInUser, setSignedInUser] = useState<User|null>(null)
 	const [isLoading, setIsLoading] = useState(true)
-	const [userEmail, setUserEmail] = useState<string|null>(null)
-	const [userName, setUserName] = useState<string|null>(null)
-	const [userPhotoUrl, setUserPhotoUrl] = useState<string|null>(null)
-
-	const login = (email: string, password: string) => {
-		return signInWithEmailAndPassword(auth, email, password)
-	}
-
-	const logout = () => {
-		return signOut(auth)
-	}
-
-	const signup = (email: string, password: string) => {
-		return createUserWithEmailAndPassword(auth, email, password)
-	}
+	const [signedInUserEmail, setSignedInUserEmail] = useState<string|null>(null)
+	const [signedInUserName, setSignedInUserName] = useState<string|null>(null)
+	const [signedInUserPhotoUrl, setSignedInUserPhotoUrl] = useState<string|null>(null)
 
 	const reloadUser = async () => {
 		if (!auth.currentUser) {
 			return false
 		}
 
-		setUserName(auth.currentUser.displayName)
-		setUserEmail(auth.currentUser.email)
-		setUserPhotoUrl(auth.currentUser.photoURL)
+		setSignedInUserName(auth.currentUser.displayName)
+		setSignedInUserEmail(auth.currentUser.email)
+		setSignedInUserPhotoUrl(auth.currentUser.photoURL)
 
 		return true
 	}
 
 	const resetPassword = (email: string) => {
 		return sendPasswordResetEmail(auth, email, {
-			url: window.location.origin + "/login",
+			url: window.location.origin + '/login',
 		})
 	}
 
+	const setDisplayName = (displayName: string) => {
+		if (!signedInUser) { throw new Error("No signed in user") }
+		return updateProfile(signedInUser, { displayName })
+	}
+
 	const setEmail = (email: string) => {
-		if (!currentUser) { throw new Error("Current User is null!") }
-		return updateEmail(currentUser, email)
+		if (!signedInUser) { throw new Error("No signed in user") }
+		return updateEmail(signedInUser, email)
 	}
 
 	const setPassword = (password: string) => {
-		if (!currentUser) { throw new Error("Current User is null!") }
-		return updatePassword(currentUser, password)
-	}
-
-	const setDisplayName = (displayName: string) => {
-		if (!currentUser) { throw new Error("Current User is null!") }
-		return updateProfile(currentUser, { displayName })
+		if (!signedInUser) { throw new Error("No signed in user") }
+		return updatePassword(signedInUser, password)
 	}
 
 	const setPhotoUrl = (photoURL: string) => {
-		if (!currentUser) { throw new Error("Current User is null!") }
-		setUserPhotoUrl(photoURL)
-		return updateProfile(currentUser, { photoURL })
+		if (!signedInUser) { throw new Error("No signed in user") }
+		setSignedInUserPhotoUrl(photoURL)
+		return updateProfile(signedInUser, { photoURL })
 	}
 
-	// add auth-state observer here (somehow... 😈)
+	const signInUser = async (email: string, password: string) => {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password)
+		toast.success("Welcome back, " + userCredential.user.displayName)
+	}
+
+	const signOutUser = () => {
+		toast.success("Welcome back anytime, " + signedInUserName)
+		return signOut(auth)
+	}
+
+	const signUpUser = async (email: string, name: string, password: string) => {
+		const newUserCredential = await createUserWithEmailAndPassword(auth, email, password)
+		const newUser = newUserCredential.user
+
+		const randomPhoto = 'https://picsum.photos/200'
+
+		updateProfile(newUser, {
+			displayName: name,
+			photoURL: randomPhoto
+		})
+		setSignedInUserName(name)
+		setPhotoUrl(randomPhoto)
+
+		const docRef = doc(usersCol)
+		setDoc(docRef, {
+			createdAt: serverTimestamp(),
+			email,
+			isAdmin: false,
+			name,
+			photoUrl: randomPhoto,
+			uid: newUser.uid,
+			updatedAt: serverTimestamp()
+		})
+
+		toast.success("Welcome, " + name)
+	}
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			setCurrentUser(user)
+			setSignedInUser(user)
 
 			if (user) {
-				// User is logged in
-				setUserEmail(user.email)
-				setUserName(user.displayName)
-				setUserPhotoUrl(user.photoURL)
+				setSignedInUserEmail(user.email)
+				setSignedInUserName(user.displayName)
+				setSignedInUserPhotoUrl(user.photoURL)
 			} else {
-				// No user is logged in
-				setUserEmail(null)
-				setUserName(null)
-				setUserPhotoUrl(null)
+				setSignedInUserEmail(null)
+				setSignedInUserName(null)
+				setSignedInUserPhotoUrl(null)
 			}
 			setIsLoading(false)
 		})
@@ -120,19 +141,19 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	return (
 		<AuthContext.Provider value={{
-			currentUser,
-			login,
-			logout,
 			reloadUser,
 			resetPassword,
 			setDisplayName,
 			setEmail,
 			setPassword,
 			setPhotoUrl,
-			signup,
-			userEmail,
-			userName,
-			userPhotoUrl,
+			signInUser,
+			signOutUser,
+			signUpUser,
+			signedInUser,
+			signedInUserEmail,
+			signedInUserName,
+			signedInUserPhotoUrl
 		}}>
 			{isLoading ? (
 				<div id="initial-loader">

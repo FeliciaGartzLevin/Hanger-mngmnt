@@ -1,7 +1,5 @@
 import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
 import Image from 'react-bootstrap/Image'
-import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
@@ -11,77 +9,77 @@ import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
 	const {
-		currentUser,
-		userEmail,
-		userName,
-		userPhotoUrl,
+		signedInUser,
+		signedInUserEmail,
+		signedInUserName,
+		signedInUserPhotoUrl
 	} = useAuth()
 
 	return (
-		<Navbar bg='dark' variant='dark' expand='sm'>
+		<Navbar bg='dark' variant='dark'>
 			<Container fluid>
-				<Navbar.Brand as={Link} to='/'>Hanger Management</Navbar.Brand>
-
-				<Navbar.Toggle aria-controls='basic-navbar-nav' />
-				<Navbar.Collapse id='basic-navbar-nav'>
-					<Nav className='ms-auto'>
-						<div className='me-2 mt-2'>
-							<InputGroup size='sm'>
-								<Form.Control placeholder='Restaurant, cafe...' />
-								<Button variant='success'>🔍</Button>
-							</InputGroup>
-						</div>
-						{currentUser ? (
+				<Navbar.Brand
+					as={Link}
+					to='/'
+				>
+					🍔 😡 Hanger
+					<span className='d-none d-sm-inline'> Management</span>
+					<span className='d-inline d-sm-none'> Mgmt</span>
+				</Navbar.Brand>
+					<Nav>
+						{signedInUser ? (
 							<NavDropdown
 								drop='start'
 								title={
-									userPhotoUrl
+									signedInUserPhotoUrl
 									? <Image
-										src={userPhotoUrl}
+										src={signedInUserPhotoUrl}
 										width={30}
-										title={(userName || userEmail) ?? ''}
+										title={(signedInUserName || signedInUserEmail) ?? ''}
 										className='img-square'
 										fluid
 										roundedCircle />
-									: userName || userEmail
+									: signedInUserName || signedInUserEmail
 								}
 							>
 								<NavDropdown.Item
 									as={NavLink}
-									to='/update-profile'
-									>Update Profile</NavDropdown.Item>
+									to='/recommend-place'
+								>Recommend Place</NavDropdown.Item>
 								<NavDropdown.Divider />
 								<NavDropdown.Item
-									className='m-0'
 									as={NavLink}
-									to='/logout'
-								>Logout</NavDropdown.Item>
+									to='/update-profile'
+								>Update Profile</NavDropdown.Item>
+								<NavDropdown.Divider />
+								<NavDropdown.Item
+									as={NavLink}
+									to='/sign-out'
+								>Sign Out</NavDropdown.Item>
 							</NavDropdown>
 						) : (
-							<div className='d-flex'>
+							<>
 								<Nav.Link
 									as={NavLink}
-									className='pe-2'
-									to='/login'
+									to='/sign-in'
 								>
 									<Button
 										size='sm'
 										variant='outline-light'
-									>Login</Button>
+									>Sign In</Button>
 								</Nav.Link>
 								<Nav.Link
 									as={NavLink}
-									to='/signup'
+									to='/sign-up'
 								>
 									<Button
 										size='sm'
 										variant='primary'
 									>Sign Up</Button>
 								</Nav.Link>
-							</div>
+							</>
 						)}
 					</Nav>
-				</Navbar.Collapse>
 			</Container>
 		</Navbar>
 	)
