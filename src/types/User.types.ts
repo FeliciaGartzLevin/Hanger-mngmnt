@@ -10,9 +10,14 @@ export type User = {
 	updatedAt: Timestamp
 }
 
+export type UserSignIn = {
+	email: string
+	password: string
+}
+
 export type UserSignUp = {
-	email: string,
-	name: string,
-	password: string,
+	email: string
+	name: string
+	password: string
 	passwordConfirm: string
 }
