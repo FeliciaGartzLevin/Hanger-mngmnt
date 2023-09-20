@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import {
 	GoogleMap,
-	Marker,
+	MarkerF,
 	// DirectionsRenderer,
 	// Circle,
 	// MarkerClusterer,
@@ -56,8 +56,9 @@ const Map = () => {
 				handleFindLocation={handleFindLocation}
 			/>
 
-			<Marker position={center} />
-			<Marker position={center} />
+			<MarkerF position={center} />
+
+			<MarkerF position={center} />
 		</GoogleMap>
 
 	)
