@@ -85,11 +85,11 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const signInUser = async (email: string, password: string) => {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password)
-		toast.success("Welcome back, " + userCredential.user.displayName)
+		toast.dark("Welcome back, " + userCredential.user.displayName)
 	}
 
 	const signOutUser = () => {
-		toast.success("Welcome back anytime, " + signedInUserName)
+		toast.dark("Welcome back anytime, " + signedInUserName)
 		return signOut(auth)
 	}
 
@@ -117,7 +117,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			updatedAt: serverTimestamp()
 		})
 
-		toast.success("Welcome, " + name)
+		toast.dark("Welcome, " + name)
 	}
 
 	useEffect(() => {

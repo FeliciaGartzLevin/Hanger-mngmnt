@@ -46,7 +46,8 @@
 		#ff2d55
 	);
 	// Used when no type is provided
-	--toastify-color-progress-dark: #bb86fc;
+	// --toastify-color-progress-dark: #bb86fc;
+	--toastify-color-progress-dark: var(--toastify-color-success);
 	--toastify-color-progress-info: var(--toastify-color-info);
 	--toastify-color-progress-success: var(--toastify-color-success);
 	--toastify-color-progress-warning: var(--toastify-color-warning);
