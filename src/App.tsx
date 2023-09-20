@@ -4,7 +4,7 @@ import SignInPage from './pages/NoLogInPages/SignInPage'
 import SignOutPage from './pages/NoLogInPages/SignOutPage'
 import MapPage from './pages/NoLogInPages/MapPage'
 import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
-import SignUpPage from './pages/NoLogInPages/SignupPage'
+import RestaurantFormPage from './pages/AdminPages/RestaurantFormPage'
 import RestaurantListPage from './pages/NoLogInPages/RestaurantListPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
 import TipsPage from './pages/UserPages/TipsPage'
@@ -15,6 +15,7 @@ import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
+import SignUpPage from './pages/NoLogInPages/SignUpPage'
 
 const App = () => {
 	return (
@@ -43,6 +44,11 @@ const App = () => {
 					<Route path="/admin-restaurantsoverview" element={
 						// <RequireAuth>
 						<AdminRestaurantsOverviewPage />
+						// </RequireAuth>
+					} />
+					<Route path="/restaurant-form" element={
+						// <RequireAuth>
+						<RestaurantFormPage/>
 						// </RequireAuth>
 					} />
 

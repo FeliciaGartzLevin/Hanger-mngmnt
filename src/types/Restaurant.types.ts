@@ -5,18 +5,19 @@ export type Restaurant = {
 	city: string;
 	description: string;
 	category: Category;
-	supply: Supply[]
+	supply: Supply
 	email?: string;
 	telephone?: string;
 	website?: string;
 	facebook?: string;
 	instagram?: string;
-	location: Location;
+	location: google.maps.LatLngLiteral;
 };
 
 export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck';
 
-export type Supply = 'Lunch' | 'After Work' | 'Middag/Á la carte';
+export type Supply = 'Lunch' | 'After Work' | 'Middag/Á la carte'
+
 
 export type Location = {
 	latitude: number;
