@@ -9,38 +9,38 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { UserSignUp } from '../../types/User.types'
-import { toast } from 'react-toastify'
 
-const SignupPage = () => {
-	const [isError, setIsError] = useState(false)
+const SignUpPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string|null>(null)
-	const [isLoading, setIsLoading] = useState(false)
+	const [isError, setIsError] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	const { signUpUser } = useAuth()
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<UserSignUp>()
-	const { signup } = useAuth()
+	const navigate = useNavigate()
 
 	const passwordRef = useRef('')
 	passwordRef.current = watch('password')
 
-	const onSignup: SubmitHandler<UserSignUp> = async (data: UserSignUp) => {
+	const onSignUp: SubmitHandler<UserSignUp> = async (data: UserSignUp) => {
 		setIsError(false)
 		setErrorMessage(null)
 
 		try {
-			setIsLoading(true)
-			await signup(data.email, data.name, data.password)
-
-			toast.success("Welcome, " + data.name)
+			setIsSubmitting(true)
+			await signUpUser(data.email, data.name, data.password)
+			navigate('/')
 
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
 			} else {
-				setErrorMessage("Something went wrong when trying to signup")
+				setErrorMessage("Something went wrong when trying to sign up")
 			}
 			setIsError(true)
-			setIsLoading(false)
+			setIsSubmitting(false)
 		}
 	}
 
@@ -54,7 +54,7 @@ const SignupPage = () => {
 
 							{isError && (<Alert variant='danger'>{errorMessage}</Alert>)}
 
-							<Form onSubmit={handleSubmit(onSignup)}>
+							<Form onSubmit={handleSubmit(onSignUp)}>
 								<Form.Group controlId='name' className='mb-3'>
 									<Form.Control
 										placeholder="Name"
@@ -96,9 +96,9 @@ const SignupPage = () => {
 
 								<Form.Group controlId='confirmPassword' className='mb-3'>
 									<Form.Control
+										autoComplete='off'
 										placeholder="Confirm Password"
 										type='password'
-										autoComplete='off'
 										{...register('passwordConfirm', {
 											required: "Confirm Password missing",
 											minLength: {
@@ -114,17 +114,17 @@ const SignupPage = () => {
 								</Form.Group>
 
 								<Button
-									disabled={isLoading}
-									variant='primary'
+									disabled={isSubmitting}
 									size='sm'
 									type='submit'
-								>{isLoading ? "Signing up..." : "Sign up"}</Button>
+									variant='primary'
+								>{isSubmitting ? "Signing Up..." : "Sign Up"}</Button>
 							</Form>
 						</Card.Body>
 					</Card>
 
 					<div className='text-center mt-3'>
-						Already have an account? <Link to='/login'>Log in</Link>
+						Already have an account? <Link to='/sign-in'>Sign In</Link>
 					</div>
 				</Col>
 			</Row>
@@ -132,4 +132,4 @@ const SignupPage = () => {
 	)
 }
 
-export default SignupPage
+export default SignUpPage

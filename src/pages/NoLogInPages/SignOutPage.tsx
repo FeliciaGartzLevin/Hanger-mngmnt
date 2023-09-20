@@ -5,20 +5,19 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
-const LogoutPage = () => {
+const SignOutPage = () => {
 	const navigate = useNavigate()
-	const { logout } = useAuth()
+	const { signOutUser } = useAuth()
 
 	useEffect(() => {
-		const logoutUser = async () => {
-			await logout()
-			navigate('/login')
-			toast.success("Successfully logged out")
+		const signOut = async () => {
+			await signOutUser()
+			navigate('/')
 		}
-		logoutUser()
-	}, [logout, navigate])
+
+		signOut()
+	}, [signOutUser, navigate])
 
 	return (
 		<Container className='py-3 center-y'>
@@ -26,8 +25,8 @@ const LogoutPage = () => {
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card>
 						<Card.Body>
-							<Card.Title className='mb-3'>Log out</Card.Title>
-							<Card.Text>Please wait while you're being logged out...</Card.Text>
+							<Card.Title className='mb-3'>Sign Out</Card.Title>
+							<Card.Text>Please wait while you're being signed out...</Card.Text>
 						</Card.Body>
 					</Card>
 				</Col>
@@ -36,4 +35,4 @@ const LogoutPage = () => {
 	)
 }
 
-export default LogoutPage
+export default SignOutPage

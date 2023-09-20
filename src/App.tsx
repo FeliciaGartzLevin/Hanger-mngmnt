@@ -1,10 +1,10 @@
 import ForgotPasswordPage from './pages/NoLogInPages/ForgotPasswordPage'
 import HomePage from './pages/NoLogInPages/HomePage'
-import LoginPage from './pages/NoLogInPages/LoginPage'
-import LogoutPage from './pages/NoLogInPages/LogoutPage'
+import SignInPage from './pages/NoLogInPages/SignInPage'
+import SignOutPage from './pages/NoLogInPages/SignOutPage'
 import MapPage from './pages/NoLogInPages/MapPage'
 import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
-import SignupPage from './pages/NoLogInPages/SignupPage'
+import SignUpPage from './pages/NoLogInPages/SignupPage'
 import RestaurantListPage from './pages/NoLogInPages/RestaurantListPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
 import TipsPage from './pages/UserPages/TipsPage'
@@ -26,9 +26,9 @@ const App = () => {
 					{/* No Log In Routes */}
 					<Route path="*" element={<NotFoundPage />} />
 					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
-					<Route path="/login" element={<LoginPage />} />
-					<Route path="/logout" element={<LogoutPage />} />
-					<Route path="/signup" element={<SignupPage />} />
+					<Route path="/sign-in" element={<SignInPage />} />
+					<Route path="/sign-out" element={<SignOutPage />} />
+					<Route path="/sign-up" element={<SignUpPage />} />
 					<Route path="/" element={<HomePage />} />
 					<Route path="/map" element={<MapPage />} />
 					<Route path="/restaurants" element={<RestaurantListPage />} />
@@ -62,6 +62,7 @@ const App = () => {
 				<ToastContainer
 					autoClose={3000}
 					theme='colored'
+					position='bottom-right'
 				/>
 			</Container>
 		</div>
