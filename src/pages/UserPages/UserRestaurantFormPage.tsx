@@ -10,15 +10,15 @@ import {
 	Row,
 } from "react-bootstrap";
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
-import { Restaurant } from "../../types/Restaurant.types";
+import { Restaurant_User } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { getLatLng } from "use-places-autocomplete";
-import { adminRestaurantsCol } from "../../services/firebase";
+import { userRestaurantsCol } from "../../services/firebase";
 
 const libraries: Libraries = ["places"];
 
-const AdminRestaurantFormPage = () => {
+const UserRestaurantFormPage = () => {
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.LatLngLiteral | null>(null);
 	const [isError, setIsError] = useState(false);
@@ -30,7 +30,7 @@ const AdminRestaurantFormPage = () => {
 		register,
 		setValue,
 		formState: { errors },
-	} = useForm<Restaurant>();
+	} = useForm<Restaurant_User>();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
@@ -45,7 +45,7 @@ const AdminRestaurantFormPage = () => {
 			</Container>
 		);
 
-	const onSubmit = async (data: Restaurant) => {
+	const onSubmit = async (data: Restaurant_User) => {
 		try {
 			setIsError(false);
 			setErrorMessage(null);
@@ -61,7 +61,7 @@ const AdminRestaurantFormPage = () => {
 
 		// console.log(selectedPlace);
 
-		const newRestaurant: Restaurant = {
+		const newRestaurant: Restaurant_User = {
 			_id: data._id,
 			uid: data.uid,
 			isAdmin: data.isAdmin,
@@ -71,14 +71,14 @@ const AdminRestaurantFormPage = () => {
 			description: data.description,
 			category: data.category,
 			supply: data.supply,
-			email: data.email,
-			telephone: data.telephone,
-			website: data.website,
-			facebook: data.facebook,
-			instagram: data.instagram,
+			email: data.email || "",
+			telephone: data.telephone || "",
+			website: data.website || "",
+			facebook: data.facebook || "",
+			instagram: data.instagram || "",
 			location: selectedPlace,
 		};
-		const docRef = doc(adminRestaurantsCol);
+		const docRef = doc(userRestaurantsCol);
 		//   const restaurantsCol = collection(db, 'restaurants');
 		await setDoc(docRef, newRestaurant);
 
@@ -254,10 +254,8 @@ const AdminRestaurantFormPage = () => {
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Control
 										type="email"
-										placeholder='Email'
-										{...register("email", {
-											required: "Email missing",
-										})}
+										placeholder='Email (optional)'
+										{...register("email")}
 									/>
 									{errors.email && (
 										<Form.Text className="text-danger">
@@ -274,10 +272,8 @@ const AdminRestaurantFormPage = () => {
 
 									<Form.Control
 										type="tel"
-										placeholder='Telephone'
-										{...register("telephone", {
-											required: "Telephone missing",
-										})}
+										placeholder='Telephone (optional)'
+										{...register("telephone")}
 									/>
 								</Form.Group>
 
@@ -289,10 +285,8 @@ const AdminRestaurantFormPage = () => {
 
 									<Form.Control
 										type="url"
-										placeholder='Website'
-										{...register("website", {
-											required: "Website missing",
-										})}
+										placeholder='Website (optional)'
+										{...register("website")}
 									/>
 								</Form.Group>
 
@@ -304,10 +298,8 @@ const AdminRestaurantFormPage = () => {
 
 									<Form.Control
 										type="text"
-										placeholder='Facebook'
-										{...register("facebook", {
-											required: "Facebook missing",
-										})}
+										placeholder='Facebook (optional)'
+										{...register("facebook")}
 									/>
 								</Form.Group>
 
@@ -319,10 +311,8 @@ const AdminRestaurantFormPage = () => {
 
 									<Form.Control
 										type="text"
-										placeholder='Instagram'
-										{...register("instagram", {
-											required: "Instagram missing",
-										})}
+										placeholder='Instagram (optional)'
+										{...register("instagram")}
 									/>
 								</Form.Group>
 								{/* Submit Button */}
@@ -344,4 +334,4 @@ const AdminRestaurantFormPage = () => {
 	);
 };
 
-export default AdminRestaurantFormPage;
+export default UserRestaurantFormPage;
