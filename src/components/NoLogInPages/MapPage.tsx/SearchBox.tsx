@@ -28,6 +28,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
 				}}>
 				<PlacesAutoComplete
 					onClickedPlace={(results) => handleLatLng(results)}
+					searchPlacesOfTypes={['postal_town']}
 				/>
 				<Button
 					onClick={handleFindLocation}
