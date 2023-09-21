@@ -30,7 +30,7 @@ const SignUpPage = () => {
 
 		try {
 			setIsSubmitting(true)
-			await signUpUser(data.email, data.name, data.password)
+			await signUpUser(data.email, data.displayName, data.password)
 			navigate('/')
 
 		} catch (error) {
@@ -50,20 +50,20 @@ const SignUpPage = () => {
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card>
 						<Card.Body>
-							<Card.Title className='mb-3'>Sign up</Card.Title>
+							<Card.Title className='mb-3'>Sign Up</Card.Title>
 
 							{isError && (<Alert variant='danger'>{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onSignUp)}>
-								<Form.Group controlId='name' className='mb-3'>
+								<Form.Group controlId='displayName' className='mb-3'>
 									<Form.Control
 										placeholder="Name"
 										type='text'
-										{...register('name', {
+										{...register('displayName', {
 											required: "Name missing",
 										})}
 									/>
-									{errors.name && <div className='invalid-value'>{errors.name.message ?? "Invalid value"}</div>}
+									{errors.displayName && <div className='invalid-value'>{errors.displayName.message ?? "Invalid value"}</div>}
 								</Form.Group>
 
 								<Form.Group controlId='email' className='mb-3'>

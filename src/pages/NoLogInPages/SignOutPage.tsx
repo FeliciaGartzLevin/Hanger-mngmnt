@@ -7,8 +7,8 @@ import Row from 'react-bootstrap/Row'
 import { useNavigate } from 'react-router-dom'
 
 const SignOutPage = () => {
-	const navigate = useNavigate()
 	const { signOutUser } = useAuth()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const signOut = async () => {
