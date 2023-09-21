@@ -100,7 +100,7 @@ const RestaurantFormPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Add Restaurant
+								Admin Restaurant Form
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>
@@ -108,30 +108,84 @@ const RestaurantFormPage = () => {
 
 							{/* Display the selected place data here */}
 							<div className="mb-3">
-								<label htmlFor="name" className="mb-2">
-									Place
-								</label>
+								{/* Description */}
+								<Form.Group
+									controlId="name"
+									className="mb-3"
+								>
+
+									<Form.Control
+										type="name"
+										placeholder="Location Name"
+										{...register("name", {
+											required: "Location name missing",
+											minLength: {
+												value: 3,
+												message: "Enter at least 3 characters"
+											},
+										})}
+									/>
+									{errors.name && (
+										<Form.Text className="text-danger">
+											{errors.name.message}
+										</Form.Text>
+									)}
+								</Form.Group>
 								<PlacesAutoComplete
 									onClickedPlace={(results) => {
-										const selectedAddress =results[0]?.formatted_address || "";
-										// Set name as the selected address
-										setValue("name", selectedAddress);
-										// Set address as the selected address
-										setValue("streetAddress",selectedAddress);
+										const selectedPlace = results[0];
 
-										// Set id to googles id on the place
-										setValue("_id", results[0]?.place_id);
+										if (!selectedPlace) {
+											// No place selected
+											setIsError(true);
+											setErrorMessage("Please select a valid place.");
+											return;
+										}
 
-										// get and set the lat and long positions
-										const { lat, lng } = getLatLng(results[0]);
+										// Check for the type of place (you can customize this based on your requirements)
+										const placeTypes = selectedPlace.types || [];
+										if (
+											!placeTypes.includes("street_address") &&
+											!placeTypes.includes("establishment")
+										) {
+											// Invalid place type (e.g., country or city)
+											setIsError(true);
+											setErrorMessage("Please select a valid address.");
+											return;
+										}
+
+										// Valid place selection
+										setIsError(false);
+										setErrorMessage(null);
+
+										const selectedAddress = selectedPlace.formatted_address || "";
+										// // Set name as the selected address
+										// setValue("name", selectedAddress);
+										// // Set address as the selected address
+										setValue("streetAddress", selectedAddress);
+
+										// Set id to Google's id on the place
+										setValue("_id", selectedPlace.place_id);
+
+										// Get and set the latitude and longitude positions
+										const { lat, lng } = getLatLng(selectedPlace);
 										setSelectedPlace({ lat, lng });
 
 										// Find the city component in the address_components array
-										results[0]?.address_components.find(
-											(component) => {
-												if (component.types[0] !=="postal_town")
-													return;
-												setValue("city",component.long_name);
+										selectedPlace.address_components?.find((component) => {
+											if (component.types[0] !== "postal_town") return;
+											setValue("city", component.long_name);
+											// Check for the type of place (you can customize this based on your requirements)
+											const placeTypes = selectedPlace.types || [];
+											if (
+												!placeTypes.includes("street_address") &&
+												!placeTypes.includes("establishment")
+											) {
+												// Invalid place type (e.g., country or city)
+												setIsError(true);
+												setErrorMessage("Please select a valid address.");
+												return;
+											}
 											}
 										);
 									}}
@@ -144,11 +198,18 @@ const RestaurantFormPage = () => {
 									controlId="description"
 									className="mb-3"
 								>
-									<Form.Label>Description</Form.Label>
+
 									<Form.Control
 										as="textarea"
+										placeholder="Description"
 										rows={3}
-										{...register("description")}
+										{...register("description", {
+											required: "Description missing",
+											minLength: {
+												value: 10,
+												message: "Enter at least 10 characters"
+											},
+										})}
 									/>
 								</Form.Group>
 
@@ -189,7 +250,7 @@ const RestaurantFormPage = () => {
 										{...register("supply")}
 										className="form-select"
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
-									>
+									>	<option value="Lunch">Chilling</option>
 										<option value="Lunch">Lunch</option>
 										<option value="After Work">
 											After Work
@@ -199,33 +260,14 @@ const RestaurantFormPage = () => {
 										</option>
 									</select>
 								</div>
-								{/* Supply */}
-								<div className="mb-3 d-flex align-items-center">
-									<label className="m-2" htmlFor="supply">
-										Supply
-									</label>
-									<select
-										id="supply"
-										{...register("supply")}
-										className="form-select"
-										style={{ flex: 0.7, maxWidth: "150px" }}
-									>
-										<option value="Lunch">Lunch</option>
-										<option value="After Work">
-											After Work
-										</option>
-										<option value="Middag/Á la carte">
-											Middag/Á la carte
-										</option>
-									</select>
-								</div>
-
 								{/* E-mail */}
 								<Form.Group controlId="email" className="mb-3">
-									<Form.Label>E-mail</Form.Label>
 									<Form.Control
 										type="email"
-										{...register("email")}
+										placeholder='Email'
+										{...register("email", {
+											required: "Email missing",
+										})}
 									/>
 									{errors.email && (
 										<Form.Text className="text-danger">
@@ -239,10 +281,13 @@ const RestaurantFormPage = () => {
 									controlId="telephone"
 									className="mb-3"
 								>
-									<Form.Label>Telephone</Form.Label>
+
 									<Form.Control
 										type="tel"
-										{...register("telephone")}
+										placeholder='Telephone'
+										{...register("telephone", {
+											required: "Telephone missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -251,10 +296,13 @@ const RestaurantFormPage = () => {
 									controlId="website"
 									className="mb-3"
 								>
-									<Form.Label>Website</Form.Label>
+
 									<Form.Control
 										type="url"
-										{...register("website")}
+										placeholder='Website'
+										{...register("website", {
+											required: "Website missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -263,10 +311,13 @@ const RestaurantFormPage = () => {
 									controlId="facebook"
 									className="mb-3"
 								>
-									<Form.Label>Facebook</Form.Label>
+
 									<Form.Control
 										type="text"
-										{...register("facebook")}
+										placeholder='Facebook'
+										{...register("facebook", {
+											required: "Facebook missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -275,10 +326,13 @@ const RestaurantFormPage = () => {
 									controlId="instagram"
 									className="mb-3"
 								>
-									<Form.Label>Instagram</Form.Label>
+
 									<Form.Control
 										type="text"
-										{...register("instagram")}
+										placeholder='Instagram'
+										{...register("instagram", {
+											required: "Instagram missing",
+										})}
 									/>
 								</Form.Group>
 								{/* Submit Button */}
