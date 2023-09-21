@@ -49,7 +49,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			} = suggestion
 
 			return (
-				<>
+				<React.Fragment key={place_id}>
 					<li
 						key={place_id}
 						className='autoComplete-options'
@@ -57,7 +57,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 						<strong>{main_text}</strong> <small>{secondary_text}</small>
 					</li>
 					<hr />
-				</>
+				</React.Fragment>
 			)
 		})
 
@@ -84,3 +84,5 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 }
 
 export default PlacesAutoComplete
+
+
