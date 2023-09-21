@@ -4,9 +4,10 @@ import useOnclickOutside from "react-cool-onclickoutside";
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
+	searchPlacesOfTypes?: string[] | undefined
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes }) => {
 	const {
 		ready,
 		value,
@@ -18,6 +19,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			componentRestrictions: {
 				country: 'SE'
 			},
+			types: searchPlacesOfTypes ?? undefined
 		}
 	})
 	const ref = useOnclickOutside(() => {
