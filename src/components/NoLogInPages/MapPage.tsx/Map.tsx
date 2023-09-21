@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -14,11 +14,11 @@ import useGetRestaurantsByCity from '../../../hooks/useGetRestaurantsByCity'
 const Map = () => {
 	const { position: usersPosition, error } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
-	const [address, setAddress] = useState<string | null>(null)
+	const [, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
 	const {
 		data: restaurants,
-		loading
+		// loading
 	} = useGetRestaurantsByCity(city)
 
 	// Finding and showing the location that user requested
