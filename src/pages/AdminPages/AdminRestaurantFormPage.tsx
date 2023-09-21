@@ -63,17 +63,19 @@ const RestaurantFormPage = () => {
 
 		const newRestaurant: Restaurant = {
 			_id: data._id,
+			uid: data.uid,
+			isAdmin: data.isAdmin,
 			name: data.name,
-			streetAddress: data.streetAddress || "", // Provide a default value if not available
-			city: data.city ?? "", // Provide a default value if not available
+			streetAddress: data.streetAddress || "",
+			city: data.city ?? "",
 			description: data.description,
 			category: data.category,
 			supply: data.supply,
-			email: data.email || "", // Provide a default value if not available
-			telephone: data.telephone || "", // Provide a default value if not available
-			website: data.website || "", // Provide a default value if not available
-			facebook: data.facebook || "", // Provide a default value if not available
-			instagram: data.instagram || "", // Provide a default value if not available
+			email: data.email || "",
+			telephone: data.telephone || "",
+			website: data.website || "",
+			facebook: data.facebook || "",
+			instagram: data.instagram || "",
 			location: selectedPlace,
 		};
 		const docRef = doc(restaurantsCol);
@@ -226,18 +228,10 @@ const RestaurantFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Restaurant">
-											Restaurant
-										</option>
-										<option value="Fast food">
-											Fast food
-										</option>
-										<option value="Kiosk/grill">
-											Kiosk/grill
-										</option>
-										<option value="Food truck">
-											Food truck
-										</option>
+										<option value="Restaurant">Restaurant</option>
+										<option value="Fast food">Fast food</option>
+										<option value="Kiosk/grill">Kiosk/grill</option>
+										<option value="Food truck">Food truck</option>
 									</select>
 								</div>
 
@@ -250,14 +244,10 @@ const RestaurantFormPage = () => {
 										{...register("supply")}
 										className="form-select"
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
-									>	<option value="Lunch">Chilling</option>
+									>	<option value="General Menu">General Menu</option>
 										<option value="Lunch">Lunch</option>
-										<option value="After Work">
-											After Work
-										</option>
-										<option value="Middag/Á la carte">
-											Middag/Á la carte
-										</option>
+										<option value="After Work">After Work</option>
+										<option value="Middag/Á la carte">Middag/Á la carte</option>
 									</select>
 								</div>
 								{/* E-mail */}
