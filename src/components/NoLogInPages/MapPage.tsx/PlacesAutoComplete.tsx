@@ -1,7 +1,6 @@
 import React from 'react'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 import useOnclickOutside from "react-cool-onclickoutside";
-import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation';
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
