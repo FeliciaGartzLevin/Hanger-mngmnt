@@ -1,6 +1,8 @@
 import { FirebaseError } from 'firebase/app'
-import { useRef, useState } from 'react'
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import useAuth from '../../hooks/useAuth'
+import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -11,11 +13,10 @@ import Image from 'react-bootstrap/Image'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
-
 import { toast } from 'react-toastify'
-import { storage } from '../../services/firebase'
-import useAuth from '../../hooks/useAuth'
+import { storage, usersCol } from '../../services/firebase'
 import { UserUpdate } from '../../types/User.types'
+
 
 const UpdateProfile = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -34,9 +35,9 @@ const UpdateProfile = () => {
 		signedInUserEmail,
 		signedInUserPhotoUrl
 	} = useAuth()
-	const { handleSubmit, register, watch, formState: { errors } } = useForm<UserUpdate>({
+	const { handleSubmit, register, setValue, watch, formState: { errors } } = useForm<UserUpdate>({
 		defaultValues: {
-			name: signedInUserName ?? '',
+			displayName: signedInUserName ?? '',
 			email: signedInUserEmail ?? ''
 		}
 	})
@@ -56,14 +57,15 @@ const UpdateProfile = () => {
 		try {
 			setIsSubmitting(true)
 
-			if (data.name && data.name !== signedInUserName) {
-				await setDisplayName(data.name)
+			if (data.displayName && data.displayName !== signedInUserName) {
+				await setDisplayName(data.displayName)
+				toast.dark("Name updated")
 			}
 
 			if (data.photoFile.length) {
 				const photo = data.photoFile[0]
 
-				const fileRef = ref(storage, `photos/${signedInUser.uid}/${photo.name}`)
+				const fileRef = ref(storage, `users/${signedInUser.uid}/${photo.name}`)
 
 				const uploadTask = uploadBytesResumable(fileRef, photo)
 
@@ -78,20 +80,36 @@ const UpdateProfile = () => {
 					const photoUrl = await getDownloadURL(fileRef)
 					await setPhotoUrl(photoUrl)
 					await reloadUser()
+					if (photoRef.current) photoRef.current = null
 				})
 			}
 
 			if (data.email && data.email !== signedInUserEmail) {
 				await setEmail(data.email)
+				toast.dark("Email updated")
 			}
 
 			if (data.password) {
-				await setPassword(data.password)
+				try {
+					await setPassword(data.password)
+
+					const docRef = doc(usersCol, signedInUser.uid)
+					updateDoc(docRef, {
+						updatedAt: serverTimestamp()
+					})
+
+					toast.dark("Password updated")
+
+				} catch (error) {
+					setIsError(true)
+					setErrorMessage("Please sign out and in again before changing password")
+				}
+
+				setValue('password', '')
+				setValue('passwordConfirm', '')
 			}
 
 			await reloadUser()
-
-			toast.dark("Your profile was successfully updated")
 
 			setIsSubmitting(false)
 
@@ -121,11 +139,11 @@ const UpdateProfile = () => {
 							{isError && (<Alert variant='danger'>{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onUpdateProfile)}>
-								<Form.Group controlId='name' className='mb-3'>
+								<Form.Group controlId='displayName' className='mb-3'>
 									<Form.Label>Name</Form.Label>
 									<Form.Control
 										type='text'
-										{...register('name')}
+										{...register('displayName')}
 									/>
 								</Form.Group>
 
@@ -141,12 +159,14 @@ const UpdateProfile = () => {
 
 								<div className='d-flex justify-content-evenly mb-3'>
 									<Button
+										disabled={signedInUserPhotoUrl === null}
 										onClick={() => handleUpdatePhoto('')}
 										size='sm'
 										variant='danger'
 									>Delete photo</Button>
 
 									<Button
+										disabled={signedInUserPhotoUrl === 'https://picsum.photos/200'}
 										onClick={() => handleUpdatePhoto('https://picsum.photos/200')}
 										size='sm'
 										variant='primary'
@@ -169,7 +189,7 @@ const UpdateProfile = () => {
 													label={`${uploadProgress}%`}
 													animated
 													className='mt-1'
-													variant='success'
+													variant='primary'
 												/>
 											)
 											: photoRef.current && photoRef.current.length > 0 && (
@@ -178,7 +198,8 @@ const UpdateProfile = () => {
 													{' '}
 													({Math.round(photoRef.current[0].size / 1024)} kB)
 												</span>
-											)}
+											)
+										}
 									</Form.Text>
 								</Form.Group>
 
@@ -194,8 +215,8 @@ const UpdateProfile = () => {
 								<Form.Group controlId='password' className='mb-3'>
 									<Form.Label>Password</Form.Label>
 									<Form.Control
-										type='password'
 										autoComplete='new-password'
+										type='password'
 										{...register('password', {
 											minLength: {
 												value: 6,
