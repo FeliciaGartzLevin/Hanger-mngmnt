@@ -1,6 +1,5 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocationArrow as LocationIcon } from '@fortawesome/free-solid-svg-icons'
@@ -12,11 +11,6 @@ type Props = {
 }
 
 const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
-
-	const findUsersLocation = (e: React.FormEvent) => {
-		e.preventDefault()
-		handleFindLocation()
-	}
 
 	return (
 		<Container style={{
@@ -34,20 +28,20 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
 				}}>
 				<PlacesAutoComplete
 					onClickedPlace={(results) => handleLatLng(results)}
+					searchPlacesOfTypes={['postal_town']}
 				/>
-				<Form onSubmit={findUsersLocation}>
-					<Button
-						aria-label='Use my location'
-						className='mx-2 rounded-circle'
-						style={{
-							marginLeft: '2rem',
-							background: 'rgb(134, 0, 85)',
-						}}
-						type='submit'
-					>
-						<FontAwesomeIcon icon={LocationIcon} />
-					</Button>
-				</Form>
+				<Button
+					onClick={handleFindLocation}
+					aria-label='Use my location'
+					className='mx-2 rounded-circle'
+					style={{
+						marginLeft: '2rem',
+						background: 'rgb(134, 0, 85)',
+					}}
+					type='submit'
+				>
+					<FontAwesomeIcon icon={LocationIcon} />
+				</Button>
 			</Container>
 		</Container>
 	)

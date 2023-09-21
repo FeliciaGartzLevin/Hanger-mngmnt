@@ -1,11 +1,11 @@
+import useAuth from '../../hooks/useAuth'
+import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Image from 'react-bootstrap/Image'
-import Button from 'react-bootstrap/Button'
+import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
 	const {
@@ -44,14 +44,22 @@ const Navigation = () => {
 							>
 								<NavDropdown.Item
 									as={NavLink}
+									to='/'
+								>See Map</NavDropdown.Item>
+								<NavDropdown.Item
+									as={NavLink}
 									to='/recommend-place'
 								>Recommend Place</NavDropdown.Item>
+
 								<NavDropdown.Divider />
+
 								<NavDropdown.Item
 									as={NavLink}
 									to='/update-profile'
 								>Update Profile</NavDropdown.Item>
+
 								<NavDropdown.Divider />
+
 								<NavDropdown.Item
 									as={NavLink}
 									to='/sign-out'

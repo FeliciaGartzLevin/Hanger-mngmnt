@@ -1,11 +1,11 @@
-import { Timestamp } from "firebase/firestore"
+import { Timestamp } from 'firebase/firestore'
 
 export type User = {
 	createdAt: Timestamp
+	displayName: string
 	email: string,
 	isAdmin: boolean
-	name: string
-	photoUrl: string
+	photoURL: string
 	uid: string
 	updatedAt: Timestamp
 }
@@ -16,8 +16,16 @@ export type UserSignIn = {
 }
 
 export type UserSignUp = {
+	displayName: string
 	email: string
-	name: string
+	password: string
+	passwordConfirm: string
+}
+
+export type UserUpdate = {
+	displayName: string
+	email: string
+	photoFile: FileList
 	password: string
 	passwordConfirm: string
 }

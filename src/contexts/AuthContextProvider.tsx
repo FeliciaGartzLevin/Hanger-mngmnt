@@ -9,7 +9,7 @@ import {
 	updateProfile,
 	User
 } from 'firebase/auth'
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { createContext, useEffect, useState } from 'react'
 import PuffLoader from 'react-spinners/PuffLoader'
 import { toast } from 'react-toastify'
@@ -18,10 +18,10 @@ import { auth, usersCol } from '../services/firebase'
 type AuthContextType = {
 	reloadUser: () => Promise<boolean>
 	resetPassword: (email: string) => Promise<void>
-	setDisplayName: (displayName: string) => Promise<void>
-	setEmail: (email: string) => Promise<void>
-	setPassword: (password: string) => Promise<void>
-	setPhotoUrl: (photoURL: string) => Promise<void>
+	setDisplayName: (name: string) => void
+	setEmail: (email: string) => void
+	setPassword: (password: string) => void
+	setPhotoUrl: (photoURL: string) => void
 	signInUser: (email: string, password: string) => Promise<void>
 	signOutUser: () => Promise<void>
 	signUpUser: (email: string, name: string, password: string) => Promise<void>
@@ -62,62 +62,91 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		})
 	}
 
-	const setDisplayName = (displayName: string) => {
-		if (!signedInUser) { throw new Error("No signed in user") }
-		return updateProfile(signedInUser, { displayName })
-	}
-
 	const setEmail = (email: string) => {
 		if (!signedInUser) { throw new Error("No signed in user") }
+
+		const docRef = doc(usersCol, signedInUser.uid)
+		updateDoc(docRef, {
+			email,
+			updatedAt: serverTimestamp()
+		})
+
 		return updateEmail(signedInUser, email)
+	}
+
+	const setDisplayName = (displayName: string) => {
+		if (!signedInUser) { throw new Error("No signed in user") }
+
+		const docRef = doc(usersCol, signedInUser.uid)
+		updateDoc(docRef, {
+			displayName,
+			updatedAt: serverTimestamp()
+		})
+
+		return updateProfile(signedInUser, {
+			displayName
+		})
 	}
 
 	const setPassword = (password: string) => {
 		if (!signedInUser) { throw new Error("No signed in user") }
+
 		return updatePassword(signedInUser, password)
 	}
 
 	const setPhotoUrl = (photoURL: string) => {
 		if (!signedInUser) { throw new Error("No signed in user") }
+
+		const docRef = doc(usersCol, signedInUser.uid)
+		updateDoc(docRef, {
+			photoURL,
+			updatedAt: serverTimestamp()
+		})
+
 		setSignedInUserPhotoUrl(photoURL)
-		return updateProfile(signedInUser, { photoURL })
+
+		toast.dark(photoURL ? "Photo updated" : "Photo deleted")
+
+		return updateProfile(signedInUser, {
+			photoURL
+		})
 	}
 
 	const signInUser = async (email: string, password: string) => {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password)
-		toast.success("Welcome back, " + userCredential.user.displayName)
+		toast.dark("Welcome back, " + userCredential.user.displayName)
 	}
 
 	const signOutUser = () => {
-		toast.success("Welcome back anytime, " + signedInUserName)
+		toast.dark("Welcome back anytime, " + signedInUserName)
 		return signOut(auth)
 	}
 
-	const signUpUser = async (email: string, name: string, password: string) => {
+	const signUpUser = async (email: string, displayName: string, password: string) => {
 		const newUserCredential = await createUserWithEmailAndPassword(auth, email, password)
 		const newUser = newUserCredential.user
 
 		const randomPhoto = 'https://picsum.photos/200'
 
 		updateProfile(newUser, {
-			displayName: name,
+			displayName,
 			photoURL: randomPhoto
 		})
-		setSignedInUserName(name)
-		setPhotoUrl(randomPhoto)
+		setSignedInUserName(displayName)
+		setSignedInUserPhotoUrl(randomPhoto)
 
-		const docRef = doc(usersCol)
+		const docRef = doc(usersCol, newUser.uid)
 		setDoc(docRef, {
 			createdAt: serverTimestamp(),
 			email,
 			isAdmin: false,
-			name,
-			photoUrl: randomPhoto,
+			displayName,
+			photoURL: randomPhoto,
 			uid: newUser.uid,
 			updatedAt: serverTimestamp()
 		})
 
-		toast.success("Welcome, " + name)
+		toast.dark("Welcome, " + displayName)
 	}
 
 	useEffect(() => {

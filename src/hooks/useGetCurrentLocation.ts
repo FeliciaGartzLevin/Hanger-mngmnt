@@ -12,7 +12,7 @@ const useGetCurrentLocation = () => {
 
 	}, (error) => {
 		console.error('Error getting user location:', error);
-		setError
+		setError(error)
 	})
 
 
