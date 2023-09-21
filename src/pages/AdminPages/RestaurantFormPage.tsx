@@ -186,33 +186,33 @@ const RestaurantFormPage = () => {
 										{...register("email")}
 									/>
 								</Form.Group>
-                {/* Supply */}
-                <div className="mb-3 d-flex align-items-center">
-                  <label className="m-2" htmlFor="supply">
-                    Supply
-                  </label>
-                  <select
-                    id="supply"
-                    {...register("supply")}
-                    className="form-select"
-                    style={{ flex: 0.7, maxWidth: "150px" }}
-                  >
-                    <option value="Lunch">Lunch</option>
-                    <option value="After Work">After Work</option>
-                    <option value="Middag/Á la carte">Middag/Á la carte</option>
-                  </select>
-                </div>
+								{/* Supply */}
+								<div className="mb-3 d-flex align-items-center">
+								<label className="m-2" htmlFor="supply">
+									Supply
+								</label>
+								<select
+									id="supply"
+									{...register("supply")}
+									className="form-select"
+									style={{ flex: 0.7, maxWidth: "150px" }}
+								>
+									<option value="Lunch">Lunch</option>
+									<option value="After Work">After Work</option>
+									<option value="Middag/Á la carte">Middag/Á la carte</option>
+								</select>
+								</div>
 
-                {/* E-mail */}
-                <Form.Group controlId="email" className="mb-3">
-                  <Form.Label>E-mail</Form.Label>
-                  <Form.Control type="email" {...register("email")} />
-                  {errors.email && (
-                    <Form.Text className="text-danger">
-                      {errors.email.message}
-                    </Form.Text>
-                  )}
-                </Form.Group>
+								{/* E-mail */}
+								<Form.Group controlId="email" className="mb-3">
+								<Form.Label>E-mail</Form.Label>
+								<Form.Control type="email" {...register("email")} />
+								{errors.email && (
+									<Form.Text className="text-danger">
+									{errors.email.message}
+									</Form.Text>
+								)}
+								</Form.Group>
 
 								{/* Telephone */}
 								<Form.Group controlId="telephone" className="mb-3">
@@ -223,19 +223,12 @@ const RestaurantFormPage = () => {
 									/>
 								</Form.Group>
 
+
 								{/* Website */}
 								<Form.Group controlId="website" className="mb-3">
-									<Form.Label>Website</Form.Label>
-									<Form.Control
-										type="url"
-										{...register("website")}
-									/>
+								<Form.Label>Website</Form.Label>
+								<Form.Control type="url" {...register("website")} />
 								</Form.Group>
-                {/* Website */}
-                <Form.Group controlId="website" className="mb-3">
-                  <Form.Label>Website</Form.Label>
-                  <Form.Control type="url" {...register("website")} />
-                </Form.Group>
 
 								{/* Facebook */}
 								<Form.Group controlId="facebook" className="mb-3">
