@@ -1,6 +1,7 @@
 import React from 'react'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 import useOnclickOutside from "react-cool-onclickoutside";
+import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation';
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
@@ -13,7 +14,13 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 		setValue,
 		suggestions: { status, data },
 		clearSuggestions,
-	} = usePlacesAutoComplete()
+	} = usePlacesAutoComplete({
+		requestOptions: {
+			componentRestrictions: {
+				country: 'SE'
+			},
+		}
+	})
 	const ref = useOnclickOutside(() => {
 		// When the user clicks outside of the component, we can dismiss
 		// the searched suggestions by calling this method
@@ -27,15 +34,12 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			setValue(description, false);
 			clearSuggestions();
 
-			// Get latitude and longitude via utility functions
-			const results = await getGeocode({ address: description })
-
-			// console.log('results:', results)
-			// console.log('Address:', results[0].formatted_address)
-			// console.log('Ort:', results[0].address_components[0].long_name)
-
-			// const { lat, lng } = getLatLng(results[0])
-			// // console.log("📍 Coordinates: ", { lat, lng })
+			// Get the google.maps.GeocoderResult[] response
+			const results = await getGeocode({
+				address: description,
+				componentRestrictions: { country: 'SE' } //giving only results in Sweden
+				// but I also don't even wanna show autocomplete results that is not in sweden
+			})
 
 			onClickedPlace(results)
 
@@ -49,7 +53,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 			} = suggestion
 
 			return (
-				<>
+				<React.Fragment key={place_id}>
 					<li
 						key={place_id}
 						className='autoComplete-options'
@@ -57,7 +61,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace }) => {
 						<strong>{main_text}</strong> <small>{secondary_text}</small>
 					</li>
 					<hr />
-				</>
+				</React.Fragment>
 			)
 		})
 
