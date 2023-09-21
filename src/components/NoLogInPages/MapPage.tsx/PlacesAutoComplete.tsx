@@ -28,7 +28,8 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		clearSuggestions()
 	})
 
-	const handleSelect = ({ description }: { description: string }) =>
+	const handleSelect = ({ description }: { description: string }) => (
+
 		async () => {
 			// When the user selects a place, we can replace the keyword without request data from API
 			// by setting the second parameter to "false"
@@ -45,8 +46,10 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 			onClickedPlace(results)
 
 		}
+	)
 
-	const renderSuggestions = () =>
+	const renderSuggestions = () => (
+
 		data.map((suggestion) => {
 			const {
 				place_id,
@@ -65,6 +68,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 				</React.Fragment>
 			)
 		})
+	)
 
 	return (
 		<div ref={ref}>
