@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -9,27 +9,27 @@ import {
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 import { getLatLng } from 'use-places-autocomplete'
-import useGetRestaurantsByCity from '../../../hooks/useGetRestaurantsByCity'
-
+import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
 const Map = () => {
+
 	const { position: usersPosition, error } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	const [, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
 	const {
-		data: restaurants,
+		data: places,
 		// loading
-	} = useGetRestaurantsByCity(city)
+	} = useGetPlacesByCity(city)
 
 	// Finding and showing the location that user requested
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		// console logs for the clarity for now
-		console.log('results:', results)
-		console.log('Address:', results[0].formatted_address)
+		console.log('googleMapAPIresults:', results)
 
 		// setting states
 		setAddress(results[0].formatted_address)
 		const { lat, lng } = getLatLng(results[0])
+
 		setCenter({ lat, lng })
 
 		const component = results[0]?.address_components.find((component) => {
@@ -41,8 +41,8 @@ const Map = () => {
 				console.log("didn't contain 'postal_town' or 'locality' ")
 				return false
 			}
-
 		})
+
 		if (!component) return
 
 		setCity(component.long_name)
@@ -54,12 +54,15 @@ const Map = () => {
 		if (!usersPosition) return console.log('no position:', error)
 		setCenter(usersPosition)
 
+		// reversed geocoding to get the users address: if needed?? not now at least
+
 		console.log('Users current position is:', center)
 	}
 
-	// useEffect(() => {
+	useEffect(() => {
 
-	// }, [city])
+		console.log('city:', city)
+	}, [city])
 
 	return (
 		<GoogleMap
@@ -80,10 +83,15 @@ const Map = () => {
 				handleLatLng={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
-			{restaurants && restaurants.map((restaurant) => (
+			{places && places.map((place) => (
 				<MarkerF
-					key={restaurant._id}
-					position={restaurant.location} />
+					key={place._id}
+					position={place.location}
+					clickable={true}
+					opacity={0.8}
+					title={place.name}
+
+				/>
 			))}
 		</GoogleMap>
 

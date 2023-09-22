@@ -10,16 +10,16 @@ import {
 	Row,
 } from "react-bootstrap";
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
-import { Restaurant } from "../../types/Restaurant.types";
+import { Place } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { getLatLng } from "use-places-autocomplete";
-import { restaurantsCol } from "../../services/firebase";
+import { placesCol } from "../../services/firebase";
 import useAuth from "../../hooks/useAuth";
 
 const libraries: Libraries = ["places"];
 
-const AdminRestaurantFormPage = () => {
+const AdminPlaceFormPage = () => {
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.LatLngLiteral | null>(null);
 	const [isError, setIsError] = useState(false);
@@ -31,7 +31,7 @@ const AdminRestaurantFormPage = () => {
 		register,
 		setValue,
 		formState: { errors },
-	} = useForm<Restaurant>();
+	} = useForm<Place>();
 	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
@@ -47,7 +47,7 @@ const AdminRestaurantFormPage = () => {
 			</Container>
 		);
 
-	const onSubmit = async (data: Restaurant) => {
+	const onSubmit = async (data: Place) => {
 		try {
 			setIsError(false);
 			setErrorMessage(null);
@@ -69,10 +69,9 @@ const AdminRestaurantFormPage = () => {
 				setIsLoading(false);
 				return;
 			}
-
 			// console.log(selectedPlace);
 
-			const newRestaurant: Restaurant = {
+			const newPlace: Place = {
 				_id: data._id,
 				uid: user.uid,
 				isAdmin: true,
@@ -89,31 +88,32 @@ const AdminRestaurantFormPage = () => {
 				instagram: data.instagram,
 				location: selectedPlace,
 			};
-			const docRef = doc(restaurantsCol);
-			//   const restaurantsCol = collection(db, 'restaurants');
-			await setDoc(docRef, newRestaurant);
+			const docRef = doc(placesCol);
+			//   const  = collection(db, 'places');
+			await setDoc(docRef, newPlace);
 
-			console.log(newRestaurant);
+			console.log(newPlace);
 
-			console.log("Restaurant added successfully!");
+			console.log("Place added successfully!");
 			setIsLoading(false);
 		} catch (error) {
-			console.error("Error adding restaurant:", error);
+			console.error("Error adding place:", error);
 
 			setIsError(true);
-			setErrorMessage("An error occurred while adding the restaurant.");
+			setErrorMessage("An error occurred while adding the place.");
 			setIsLoading(false);
 		}
 	};
 
 	return (
+
 		<Container className="py-3 center-y">
 			<Row>
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Admin Restaurant Form
+								Admin Place Form
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>
@@ -253,7 +253,7 @@ const AdminRestaurantFormPage = () => {
 									/>
 								</Form.Group>
 
-								{/* Add more fields based on your Restaurant type */}
+								{/* Add more fields based on your Place type */}
 
 								<div className="mb-3 d-flex align-items-center">
 									<label className="m-2" htmlFor="category">
@@ -266,8 +266,8 @@ const AdminRestaurantFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Restaurant">
-											Restaurant
+										<option value="Place">
+											Place
 										</option>
 										<option value="Fast food">
 											Fast food
@@ -382,8 +382,8 @@ const AdminRestaurantFormPage = () => {
 									className="mt-3"
 								>
 									{isLoading
-										? "Adding Restaurant..."
-										: "Add Restaurant"}
+										? "Adding Place..."
+										: "Add Place"}
 								</Button>
 							</Form>
 						</Card.Body>
@@ -394,4 +394,4 @@ const AdminRestaurantFormPage = () => {
 	);
 };
 
-export default AdminRestaurantFormPage;
+export default AdminPlaceFormPage;

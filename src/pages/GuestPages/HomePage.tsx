@@ -10,6 +10,7 @@ const libraries: Libraries = ['places']
 
 const MapPage = () => {
 
+	// connect to maps API
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
@@ -24,12 +25,12 @@ const MapPage = () => {
 
 	return (
 
-		<Container fluid id='Map'>
+		<Container fluid id='App'>
 			<Row className='d-flex justify-content center'>
-				{/* Make the restaurants an offcanvas ltr?
+				{/* Make the places an offcanvas ltr?
 				Maybe only on small screens, or on all screens? */}
 				<Col sm={{ span: 3 }} >
-					<h1>Restaurants</h1>
+					<h1>Places</h1>
 				</Col>
 				<Col sm={{ span: 9 }}>
 					<Map />
