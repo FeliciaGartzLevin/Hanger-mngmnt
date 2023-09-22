@@ -18,7 +18,7 @@ const Map = () => {
 	const locality = searchParams.get("locality") ?? ''
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
-	const [address, setAddress] = useState<string | null>(null)
+	// const [address, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
 	const [error, setError] = useState<string | null>(null)
 	const {
@@ -30,7 +30,7 @@ const Map = () => {
 		// getting coordinates
 		const { lat, lng } = getLatLng(results[0])
 
-		setAddress(results[0].formatted_address)
+		// setAddress(results[0].formatted_address)
 		// center the map on the searched city
 		setCenter({ lat, lng })
 
@@ -95,7 +95,7 @@ const Map = () => {
 			// getting coordinates
 			const { lat, lng } = getLatLng(results[0])
 
-			setAddress(results[0].formatted_address)
+			// setAddress(results[0].formatted_address)
 			// center the map on the searched city
 			setCenter({ lat, lng })
 
