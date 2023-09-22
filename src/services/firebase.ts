@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth'
 import { CollectionReference, collection, DocumentData, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { User } from '../types/User.types'
-import { Place } from '../types/Restaurant.types'
+import { Place } from '../types/Place.types'
 
 // Firebase configuration
 const firebaseConfig = {

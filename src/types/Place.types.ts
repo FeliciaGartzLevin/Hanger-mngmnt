@@ -12,9 +12,9 @@ export type Place = {
 	facebook?: string;
 	instagram?: string;
 	location: google.maps.LatLngLiteral;
-};
+}
 
-export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck';
+export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
 
 export type Supply = 'Lunch' | 'After Work' | 'Middag/Á la carte'
 
@@ -22,7 +22,7 @@ export type Supply = 'Lunch' | 'After Work' | 'Middag/Á la carte'
 export type Location = {
 	latitude: number;
 	longitude: number;
-};
+}
 
 export type Recomendation = {
 	_id: string

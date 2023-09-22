@@ -1,16 +1,16 @@
-import ForgotPasswordPage from './pages/NoLogInPages/ForgotPasswordPage'
-import HomePage from './pages/NoLogInPages/HomePage'
-import SignInPage from './pages/NoLogInPages/SignInPage'
-import SignOutPage from './pages/NoLogInPages/SignOutPage'
-import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
-import RestaurantFormPage from './pages/AdminPages/AdminPlaceFormPage'
+import ForgotPasswordPage from './pages/GuestPages/ForgotPasswordPage'
+import HomePage from './pages/GuestPages/HomePage'
+import SignInPage from './pages/GuestPages/SignInPage'
+import SignOutPage from './pages/GuestPages/SignOutPage'
+import NotFoundPage from './pages/GuestPages/NotFoundPage'
+import AdminPlaceFormPage from './pages/AdminPages/AdminPlaceFormPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
 import Navigation from './pages/Partials/Navigation'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
-import SignUpPage from './pages/NoLogInPages/SignUpPage'
+import SignUpPage from './pages/GuestPages/SignUpPage'
 
 const App = () => {
 	return (
@@ -30,9 +30,9 @@ const App = () => {
 					{/* Protected Routes: */}
 					{/* Admin Routes */}
 
-					<Route path="/admin-restaurant-form" element={
+					<Route path="/admin-place-form" element={
 						// <RequireAuth>
-						<RestaurantFormPage />
+						<AdminPlaceFormPage />
 						// </RequireAuth>
 					} />
 

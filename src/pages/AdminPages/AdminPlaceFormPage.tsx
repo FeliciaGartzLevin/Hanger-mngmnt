@@ -10,7 +10,7 @@ import {
 	Row,
 } from "react-bootstrap";
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
-import { Place } from "../../types/Restaurant.types";
+import { Place } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { getLatLng } from "use-places-autocomplete";

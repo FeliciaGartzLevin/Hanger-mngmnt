@@ -18,7 +18,7 @@ export const getDistanceInKm = (distance: number) => {
 	if (distance < 1000) return
 	return distance / 1000
 }
-// Use this to render distance on the restaurant-cards ltr:
+// Use this to render distance on the place-cards ltr:
 // // shortest distance (haversine_disctance) between userCurrentposition, and place
 // if (usersPosition) {
 // 	setDistance(getHaversineDistance(LatLngOfPlace, usersPosition))

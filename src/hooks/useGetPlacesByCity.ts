@@ -1,4 +1,4 @@
-import { Place } from '../types/Restaurant.types'
+import { Place } from '../types/Place.types'
 import { where } from 'firebase/firestore'
 import useStreamCollection from './useStreamCollection'
 import { placesCol } from '../services/firebase'

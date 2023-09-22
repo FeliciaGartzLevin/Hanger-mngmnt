@@ -83,13 +83,13 @@ const Map = () => {
 				handleLatLng={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
-			{places && places.map((restaurant) => (
+			{places && places.map((place) => (
 				<MarkerF
-					key={restaurant._id}
-					position={restaurant.location}
+					key={place._id}
+					position={place.location}
 					clickable={true}
 					opacity={0.8}
-					title={restaurant.name}
+					title={place.name}
 
 				/>
 			))}
