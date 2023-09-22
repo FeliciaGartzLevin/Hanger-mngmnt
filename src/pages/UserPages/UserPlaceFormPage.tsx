@@ -9,13 +9,13 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
 import { Place_User } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { placesCol } from "../../services/firebase";
 import useAuth from "../../hooks/useAuth";
 import { getLatLng } from "use-places-autocomplete";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
+import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
 
 const libraries: Libraries = ["places"];
 
@@ -267,6 +267,9 @@ const UserPlaceFormPage = () => {
 										</option>
 										<option value="Fast food">
 											Fast food
+										</option>
+										<option value="Pub">
+											Pub
 										</option>
 										<option value="Kiosk/grill">
 											Kiosk/grill

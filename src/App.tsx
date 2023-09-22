@@ -14,6 +14,7 @@ import SignUpPage from './pages/GuestPages/SignUpPage'
 import UserPlaceFormPage from './pages/UserPages/UserPlaceFormPage'
 import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
+import AdminPlacesOverviewPage from './pages/AdminPages/AdminPlacesOverviewPage'
 
 const App = () => {
 	return (
@@ -39,6 +40,12 @@ const App = () => {
 					<Route path="/admin-place-form" element={
 						<RequireAuthAdmin>
 							<AdminPlaceFormPage />
+						</RequireAuthAdmin>
+					} />
+
+					<Route path="/admin-places" element={
+						<RequireAuthAdmin>
+							<AdminPlacesOverviewPage />
 						</RequireAuthAdmin>
 					} />
 
