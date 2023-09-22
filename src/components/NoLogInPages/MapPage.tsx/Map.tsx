@@ -87,35 +87,7 @@ const Map = () => {
 
     //     console.log('On component mount, city was set to:', foundCity)
     //     setCity(foundCity)
-
-
     // }, [])
-
-	useEffect(() => {
-		const fetchCity = async () => {
-			if (!usersPosition) return;
-			try {
-				// reversed geocoding to get the users address:
-				const usersPositionResults = await getGeocode({ location: usersPosition });
-				console.log('usersPositionResults', usersPositionResults);
-
-				// getting the city ('postal_town' or 'locality') from the response
-				const foundCity = findAdressComponent(usersPositionResults);
-
-				if (!foundCity) return;
-
-				console.log('On component mount, city was set to:', foundCity);
-				setCity(foundCity);
-			} catch (error) {
-				console.log('No current city was found:', error);
-			}
-		};
-
-		fetchCity();
-	}, []);
-
-
-
     return (
         <GoogleMap
             zoom={14}
