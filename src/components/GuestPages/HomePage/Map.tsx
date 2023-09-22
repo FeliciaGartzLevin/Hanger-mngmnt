@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -8,10 +8,32 @@ import {
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-import { getLatLng } from 'use-places-autocomplete'
+import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-const Map = () => {
+import { findAdressComponent } from '../../../helpers/locations'
 
+const getCurrentCity = async (position: google.maps.LatLngLiteral | undefined) => {
+	if (!position) return
+	try {
+		// reversed geocoding to get the users address:
+		const usersPositionResults = await getGeocode({ location: position })
+
+		console.log('usersPositionResults', usersPositionResults)
+
+		// getting the city ('postal_town' or 'locality') from the response
+		const foundCity = findAdressComponent(usersPositionResults)
+
+		if (!foundCity) return
+
+		console.log('foundCity:', foundCity)
+		return foundCity
+
+	} catch (error) {
+		console.log('No current city was found:', error)
+	}
+}
+
+const Map = () => {
 	const { position: usersPosition, error } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	const [, setAddress] = useState<string | null>(null)
@@ -32,37 +54,38 @@ const Map = () => {
 
 		setCenter({ lat, lng })
 
-		const component = results[0]?.address_components.find((component) => {
-			if (component.types.includes("postal_town") ||
-				(component.types.includes("locality"))) {
-				console.log("did contain 'postal_town' or 'locality' ")
-				return true
-			} else {
-				console.log("didn't contain 'postal_town' or 'locality' ")
-				return false
-			}
-		})
+		const foundCity = findAdressComponent(results)
 
-		if (!component) return
+		if (!foundCity) return
 
-		setCity(component.long_name)
-		console.log('component:', component)
+		setCity(foundCity)
+		console.log('foundCity:', foundCity)
 	}
 
 	// Finding users location by sending in their position by lat and long
 	const handleFindLocation = () => {
 		if (!usersPosition) return console.log('no position:', error)
 		setCenter(usersPosition)
-
-		// reversed geocoding to get the users address: if needed?? not now at least
-
 		console.log('Users current position is:', center)
 	}
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		console.log('city:', city)
-	}, [city])
+	// 	console.log('city:', city)
+	// }, [city])
+
+	const getCity = useCallback(async () => {
+		// const foundCity = await getCurrentCity(usersPosition)
+		// if (!foundCity) return
+		// setCity(foundCity)
+		// console.log('foundCity', foundCity)
+		console.log('running getCity function')
+
+	}, [])
+
+	useEffect(() => {
+		getCity()
+	}, [getCity])
 
 	return (
 		<GoogleMap
