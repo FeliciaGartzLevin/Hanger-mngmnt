@@ -58,7 +58,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const resetPassword = (email: string) => {
 		return sendPasswordResetEmail(auth, email, {
-			url: window.location.origin + '/login',
+			url: window.location.origin + '/sign-in',
 		})
 	}
 
