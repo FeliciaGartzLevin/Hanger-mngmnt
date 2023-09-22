@@ -12,6 +12,8 @@ import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
 import SignUpPage from './pages/GuestPages/SignUpPage'
 import UserRestaurantFormPage from './pages/UserPages/UserRestaurantFormPage'
+import RequireAuth from './components/RequireAuth'
+import RequireAuthAdmin from './components/RequireAuthAdmin'
 
 const App = () => {
 	return (
@@ -20,7 +22,7 @@ const App = () => {
 
 			<Container fluid>
 				<Routes>
-					{/* No Log In Routes */}
+					{/* Guest Routes */}
 					<Route path="*" element={<NotFoundPage />} />
 					<Route
 						path="/forgot-password"
@@ -35,9 +37,9 @@ const App = () => {
 					{/* Admin Routes */}
 
 					<Route path="/admin-place-form" element={
-						// <RequireAuth>
-						<AdminPlaceFormPage />
-						// </RequireAuth>
+						<RequireAuthAdmin>
+							<AdminPlaceFormPage />
+						</RequireAuthAdmin>
 					} />
 
 					{/* User Routes */}
