@@ -10,16 +10,16 @@ import {
 	Row,
 } from "react-bootstrap";
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
-import { Place } from "../../types/Place.types";
+import { Restaurant_User } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
-import { Libraries, useLoadScript } from "@react-google-maps/api";
-import { getLatLng } from "use-places-autocomplete";
-import { placesCol } from "../../services/firebase";
+import { restaurantsCol } from "../../services/firebase";
 import useAuth from "../../hooks/useAuth";
+import { getLatLng } from "use-places-autocomplete";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 const libraries: Libraries = ["places"];
 
-const AdminPlaceFormPage = () => {
+const UserRestaurantFormPage = () => {
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.LatLngLiteral | null>(null);
 	const [isError, setIsError] = useState(false);
@@ -31,14 +31,13 @@ const AdminPlaceFormPage = () => {
 		register,
 		setValue,
 		formState: { errors },
-	} = useForm<Place>();
+	} = useForm<Restaurant_User>();
 	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	});
-
 	if (!isLoaded)
 		return (
 			<Container>
@@ -47,7 +46,7 @@ const AdminPlaceFormPage = () => {
 			</Container>
 		);
 
-	const onSubmit = async (data: Place) => {
+	const onSubmit = async (data: Restaurant_User) => {
 		try {
 			setIsError(false);
 			setErrorMessage(null);
@@ -69,51 +68,48 @@ const AdminPlaceFormPage = () => {
 				setIsLoading(false);
 				return;
 			}
-			// console.log(selectedPlace);
 
-			const newPlace: Place = {
+			const newRestaurant: Restaurant_User = {
 				_id: data._id,
 				uid: user.uid,
-				isAdmin: true,
+				isAdmin: false,
 				name: data.name,
 				streetAddress: data.streetAddress,
 				city: data.city,
 				description: data.description,
 				category: data.category,
 				supply: data.supply,
-				email: data.email,
-				telephone: data.telephone,
-				website: data.website,
-				facebook: data.facebook,
-				instagram: data.instagram,
+				email: data.email || "",
+				telephone: data.telephone || "",
+				website: data.website || "",
+				facebook: data.facebook || "",
+				instagram: data.instagram || "",
 				location: selectedPlace,
 			};
-			const docRef = doc(placesCol);
-			//   const  = collection(db, 'places');
-			await setDoc(docRef, newPlace);
 
-			console.log(newPlace);
+			const docRef = doc(restaurantsCol);
+			await setDoc(docRef, newRestaurant);
 
-			console.log("Place added successfully!");
+			console.log(newRestaurant);
+
+			console.log("Restaurant added successfully!");
 			setIsLoading(false);
 		} catch (error) {
-			console.error("Error adding place:", error);
+			console.error("Error adding restaurant:", error);
 
 			setIsError(true);
-			setErrorMessage("An error occurred while adding the place.");
+			setErrorMessage("An error occurred while adding the restaurant.");
 			setIsLoading(false);
 		}
 	};
-
 	return (
-
 		<Container className="py-3 center-y">
 			<Row>
 				<Col md={{ span: 6, offset: 3 }}>
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Admin Place Form
+								Recommend a place to us! 🗣️🍽️
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>
@@ -253,7 +249,7 @@ const AdminPlaceFormPage = () => {
 									/>
 								</Form.Group>
 
-								{/* Add more fields based on your Place type */}
+								{/* Add more fields based on your Restaurant type */}
 
 								<div className="mb-3 d-flex align-items-center">
 									<label className="m-2" htmlFor="category">
@@ -266,8 +262,8 @@ const AdminPlaceFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Place">
-											Place
+										<option value="Restaurant">
+											Restaurant
 										</option>
 										<option value="Fast food">
 											Fast food
@@ -308,10 +304,8 @@ const AdminPlaceFormPage = () => {
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Control
 										type="email"
-										placeholder="Email"
-										{...register("email", {
-											required: "Email missing",
-										})}
+										placeholder="Email (optional)"
+										{...register("email")}
 									/>
 									{errors.email && (
 										<Form.Text className="text-danger">
@@ -327,10 +321,8 @@ const AdminPlaceFormPage = () => {
 								>
 									<Form.Control
 										type="tel"
-										placeholder="Telephone"
-										{...register("telephone", {
-											required: "Telephone missing",
-										})}
+										placeholder="Telephone (optional)"
+										{...register("telephone")}
 									/>
 								</Form.Group>
 
@@ -341,10 +333,8 @@ const AdminPlaceFormPage = () => {
 								>
 									<Form.Control
 										type="url"
-										placeholder="Website"
-										{...register("website", {
-											required: "Website missing",
-										})}
+										placeholder="Website (optional)"
+										{...register("website")}
 									/>
 								</Form.Group>
 
@@ -355,10 +345,8 @@ const AdminPlaceFormPage = () => {
 								>
 									<Form.Control
 										type="text"
-										placeholder="Facebook"
-										{...register("facebook", {
-											required: "Facebook missing",
-										})}
+										placeholder="Facebook (optional)"
+										{...register("facebook")}
 									/>
 								</Form.Group>
 
@@ -369,10 +357,8 @@ const AdminPlaceFormPage = () => {
 								>
 									<Form.Control
 										type="text"
-										placeholder="Instagram"
-										{...register("instagram", {
-											required: "Instagram missing",
-										})}
+										placeholder="Instagram (optional)"
+										{...register("instagram")}
 									/>
 								</Form.Group>
 								{/* Submit Button */}
@@ -382,8 +368,8 @@ const AdminPlaceFormPage = () => {
 									className="mt-3"
 								>
 									{isLoading
-										? "Adding Place..."
-										: "Add Place"}
+										? "Adding Restaurant..."
+										: "Add Restaurant"}
 								</Button>
 							</Form>
 						</Card.Body>
@@ -394,4 +380,4 @@ const AdminPlaceFormPage = () => {
 	);
 };
 
-export default AdminPlaceFormPage;
+export default UserRestaurantFormPage;

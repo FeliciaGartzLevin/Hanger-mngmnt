@@ -11,17 +11,21 @@ import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
 import SignUpPage from './pages/GuestPages/SignUpPage'
+import UserRestaurantFormPage from './pages/UserPages/UserRestaurantFormPage'
 
 const App = () => {
 	return (
-		<div id='App'>
+		<div id="App">
 			<Navigation />
 
 			<Container fluid>
 				<Routes>
 					{/* No Log In Routes */}
 					<Route path="*" element={<NotFoundPage />} />
-					<Route path="/forgot-password" element={<ForgotPasswordPage />} />
+					<Route
+						path="/forgot-password"
+						element={<ForgotPasswordPage />}
+					/>
 					<Route path="/sign-in" element={<SignInPage />} />
 					<Route path="/sign-out" element={<SignOutPage />} />
 					<Route path="/sign-up" element={<SignUpPage />} />
@@ -37,21 +41,32 @@ const App = () => {
 					} />
 
 					{/* User Routes */}
-					<Route path="/update-profile" element={
-						// <RequireAuth>
-						<UpdateProfilePage />
-						// </RequireAuth>
-					} />
+					<Route
+						path="/update-profile"
+						element={
+							// <RequireAuth>
+							<UpdateProfilePage />
+							// </RequireAuth>
+						}
+					/>
+					<Route
+						path="/recommend-place"
+						element={
+							// <RequireAuth>
+							<UserRestaurantFormPage />
+							// </RequireAuth>
+						}
+					/>
 				</Routes>
 
 				<ToastContainer
 					autoClose={3000}
-					theme='colored'
-					position='bottom-right'
+					theme="colored"
+					position="bottom-right"
 				/>
 			</Container>
 		</div>
-	)
-}
+	);
+};
 
-export default App
+export default App;

@@ -1,11 +1,25 @@
-export type Place = {
+type BasePlace = {
 	_id: string;
+	uid: string;
+	isAdmin: boolean;
 	name: string;
 	streetAddress: string;
 	city: string;
 	description: string;
 	category: Category;
-	supply: Supply
+	supply: Supply;
+	location: google.maps.LatLngLiteral;
+};
+
+export type Place = BasePlace & {
+	email: string;
+	telephone: string;
+	website: string;
+	facebook: string;
+	instagram: string;
+};
+
+export type Place_User = BasePlace & {
 	email?: string;
 	telephone?: string;
 	website?: string;
@@ -16,17 +30,10 @@ export type Place = {
 
 export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
 
-export type Supply = 'Lunch' | 'After Work' | 'Middag/Á la carte'
+export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Middag/Á la carte'
 
 
 export type Location = {
 	latitude: number;
 	longitude: number;
-}
-
-export type Recomendation = {
-	_id: string
-	userId: string // ID of the user who made the recommendation
-	restaurantId: string; // ID of the recommended restaurant
-	recommendationText: string;
-}
+};
