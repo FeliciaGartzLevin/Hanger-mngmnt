@@ -12,9 +12,10 @@ import {
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
 import { Restaurant_User } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
-import { Libraries, useLoadScript } from "@react-google-maps/api";
-import { getLatLng } from "use-places-autocomplete";
 import { restaurantsCol } from "../../services/firebase";
+import useAuth from "../../hooks/useAuth";
+import { getLatLng } from "use-places-autocomplete";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 const libraries: Libraries = ["places"];
 
@@ -31,12 +32,12 @@ const UserRestaurantFormPage = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<Restaurant_User>();
+	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	});
-
 	if (!isLoaded)
 		return (
 			<Container>
@@ -59,12 +60,19 @@ const UserRestaurantFormPage = () => {
 				return;
 			}
 
-			// console.log(selectedPlace);
+			// Access the current user's information
+			const user = auth.signedInUser;
+			if (!user) {
+				setIsError(true);
+				setErrorMessage("User not authenticated.");
+				setIsLoading(false);
+				return;
+			}
 
 			const newRestaurant: Restaurant_User = {
 				_id: data._id,
-				uid: data.uid,
-				isAdmin: data.isAdmin,
+				uid: user.uid,
+				isAdmin: false,
 				name: data.name,
 				streetAddress: data.streetAddress,
 				city: data.city,
@@ -78,8 +86,8 @@ const UserRestaurantFormPage = () => {
 				instagram: data.instagram || "",
 				location: selectedPlace,
 			};
+
 			const docRef = doc(restaurantsCol);
-			//   const restaurantsCol = collection(db, 'restaurants');
 			await setDoc(docRef, newRestaurant);
 
 			console.log(newRestaurant);
@@ -94,7 +102,6 @@ const UserRestaurantFormPage = () => {
 			setIsLoading(false);
 		}
 	};
-
 	return (
 		<Container className="py-3 center-y">
 			<Row>
@@ -102,7 +109,7 @@ const UserRestaurantFormPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Admin Restaurant Form
+								Recommend a place to us! 🗣️🍽️
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>

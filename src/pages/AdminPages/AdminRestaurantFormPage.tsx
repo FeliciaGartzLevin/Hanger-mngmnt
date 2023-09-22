@@ -15,6 +15,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import { getLatLng } from "use-places-autocomplete";
 import { restaurantsCol } from "../../services/firebase";
+import useAuth from "../../hooks/useAuth";
 
 const libraries: Libraries = ["places"];
 
@@ -31,6 +32,7 @@ const AdminRestaurantFormPage = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<Restaurant>();
+	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
@@ -59,12 +61,21 @@ const AdminRestaurantFormPage = () => {
 				return;
 			}
 
+			// Access the current user's information
+			const user = auth.signedInUser;
+			if (!user) {
+				setIsError(true);
+				setErrorMessage("User not authenticated.");
+				setIsLoading(false);
+				return;
+			}
+
 			// console.log(selectedPlace);
 
 			const newRestaurant: Restaurant = {
 				_id: data._id,
-				uid: data.uid,
-				isAdmin: data.isAdmin,
+				uid: user.uid,
+				isAdmin: true,
 				name: data.name,
 				streetAddress: data.streetAddress,
 				city: data.city,
