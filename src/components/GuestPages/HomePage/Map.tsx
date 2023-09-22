@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -8,33 +8,12 @@ import {
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-import { getGeocode, getLatLng } from 'use-places-autocomplete'
+import { getLatLng } from 'use-places-autocomplete'
 import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-import { findAdressComponent } from '../../../helpers/locations'
-
-const getCurrentCity = async (position: google.maps.LatLngLiteral | undefined) => {
-	if (!position) return
-	try {
-		// reversed geocoding to get the users address:
-		const usersPositionResults = await getGeocode({ location: position })
-
-		console.log('usersPositionResults', usersPositionResults)
-
-		// getting the city ('postal_town' or 'locality') from the response
-		const foundCity = findAdressComponent(usersPositionResults)
-
-		if (!foundCity) return
-
-		console.log('foundCity:', foundCity)
-		return foundCity
-
-	} catch (error) {
-		console.log('No current city was found:', error)
-	}
-}
+import { findAdressComponent, getCurrentCity } from '../../../helpers/locations'
 
 const Map = () => {
-	const { position: usersPosition, error } = useGetCurrentLocation()
+	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	const [, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
@@ -56,36 +35,26 @@ const Map = () => {
 
 		const foundCity = findAdressComponent(results)
 
-		if (!foundCity) return
+		if (!foundCity) return //error here but how to get it from the function?
 
 		setCity(foundCity)
 		console.log('foundCity:', foundCity)
 	}
 
 	// Finding users location by sending in their position by lat and long
-	const handleFindLocation = () => {
-		if (!usersPosition) return console.log('no position:', error)
+	const handleFindLocation = async () => {
+		if (!usersPosition) return console.log('no position:', currentPositionError)
+
+		// send in users coordinates in order to get the name of the city they're in
+		const foundCity = await getCurrentCity(usersPosition)
+
+		if (!foundCity) return
+
+		setCity(foundCity)
+
+		// Set the center of the map to users position
 		setCenter(usersPosition)
-		console.log('Users current position is:', center)
 	}
-
-	// useEffect(() => {
-
-	// 	console.log('city:', city)
-	// }, [city])
-
-	const getCity = useCallback(async () => {
-		// const foundCity = await getCurrentCity(usersPosition)
-		// if (!foundCity) return
-		// setCity(foundCity)
-		// console.log('foundCity', foundCity)
-		console.log('running getCity function')
-
-	}, [])
-
-	useEffect(() => {
-		getCity()
-	}, [getCity])
 
 	return (
 		<GoogleMap
@@ -103,7 +72,7 @@ const Map = () => {
 			}}
 		>
 			<SearchBox
-				handleLatLng={handleSearchInput}
+				passOnResults={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
 			{places && places.map((place) => (

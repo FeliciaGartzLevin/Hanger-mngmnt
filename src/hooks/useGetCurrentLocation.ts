@@ -20,7 +20,6 @@ const useGetCurrentLocation = () => {
 		setError(error)
 	})
 
-
 	return {
 		position,
 		error
