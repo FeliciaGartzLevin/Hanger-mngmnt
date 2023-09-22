@@ -78,7 +78,7 @@ const App = () => {
 						}
 					/>
 					<Route
-						path="/user-recommendation"
+						path="/recommend-place"
 						element={
 							// <RequireAuth>
 							<UserRestaurantFormPage />

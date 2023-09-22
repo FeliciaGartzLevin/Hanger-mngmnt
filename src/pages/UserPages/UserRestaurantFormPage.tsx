@@ -12,9 +12,10 @@ import {
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
 import { Restaurant_User } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
-import { Libraries, useLoadScript } from "@react-google-maps/api";
+import { restaurantsCol } from "../../services/firebase";
+import useAuth from "../../hooks/useAuth";
 import { getLatLng } from "use-places-autocomplete";
-import { userRestaurantsCol } from "../../services/firebase";
+import { Libraries, useLoadScript } from "@react-google-maps/api";
 
 const libraries: Libraries = ["places"];
 
@@ -31,12 +32,12 @@ const UserRestaurantFormPage = () => {
 		setValue,
 		formState: { errors },
 	} = useForm<Restaurant_User>();
+	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	});
-
 	if (!isLoaded)
 		return (
 			<Container>
@@ -51,41 +52,48 @@ const UserRestaurantFormPage = () => {
 			setErrorMessage(null);
 			setIsLoading(true);
 
-		// Check if a location has been selected
-		if (!selectedPlace) {
-			setIsError(true);
-			setErrorMessage("Please select a location.");
+			// Check if a location has been selected
+			if (!selectedPlace) {
+				setIsError(true);
+				setErrorMessage("Please select a location.");
+				setIsLoading(false);
+				return;
+			}
+
+			// Access the current user's information
+			const user = auth.signedInUser;
+			if (!user) {
+				setIsError(true);
+				setErrorMessage("User not authenticated.");
+				setIsLoading(false);
+				return;
+			}
+
+			const newRestaurant: Restaurant_User = {
+				_id: data._id,
+				uid: user.uid,
+				isAdmin: false,
+				name: data.name,
+				streetAddress: data.streetAddress,
+				city: data.city,
+				description: data.description,
+				category: data.category,
+				supply: data.supply,
+				email: data.email || "",
+				telephone: data.telephone || "",
+				website: data.website || "",
+				facebook: data.facebook || "",
+				instagram: data.instagram || "",
+				location: selectedPlace,
+			};
+
+			const docRef = doc(restaurantsCol);
+			await setDoc(docRef, newRestaurant);
+
+			console.log(newRestaurant);
+
+			console.log("Restaurant added successfully!");
 			setIsLoading(false);
-			return;
-		}
-
-		// console.log(selectedPlace);
-
-		const newRestaurant: Restaurant_User = {
-			_id: data._id,
-			uid: data.uid,
-			isAdmin: data.isAdmin,
-			name: data.name,
-			streetAddress: data.streetAddress,
-			city: data.city,
-			description: data.description,
-			category: data.category,
-			supply: data.supply,
-			email: data.email || "",
-			telephone: data.telephone || "",
-			website: data.website || "",
-			facebook: data.facebook || "",
-			instagram: data.instagram || "",
-			location: selectedPlace,
-		};
-		const docRef = doc(userRestaurantsCol);
-		//   const restaurantsCol = collection(db, 'restaurants');
-		await setDoc(docRef, newRestaurant);
-
-		console.log(newRestaurant);
-
-		console.log("Restaurant added successfully!");
-		setIsLoading(false);
 		} catch (error) {
 			console.error("Error adding restaurant:", error);
 
@@ -94,7 +102,6 @@ const UserRestaurantFormPage = () => {
 			setIsLoading(false);
 		}
 	};
-
 	return (
 		<Container className="py-3 center-y">
 			<Row>
@@ -102,7 +109,7 @@ const UserRestaurantFormPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Admin Restaurant Form
+								Recommend a place to us! 🗣️🍽️
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>
@@ -111,11 +118,7 @@ const UserRestaurantFormPage = () => {
 							{/* Display the selected place data here */}
 							<div className="mb-3">
 								{/* Description */}
-								<Form.Group
-									controlId="name"
-									className="mb-3"
-								>
-
+								<Form.Group controlId="name" className="mb-3">
 									<Form.Control
 										type="name"
 										placeholder="Location Name"
@@ -123,7 +126,8 @@ const UserRestaurantFormPage = () => {
 											required: "Location name missing",
 											minLength: {
 												value: 3,
-												message: "Enter at least 3 characters"
+												message:
+													"Enter at least 3 characters",
 											},
 										})}
 									/>
@@ -140,19 +144,28 @@ const UserRestaurantFormPage = () => {
 										if (!selectedPlace) {
 											// No place selected
 											setIsError(true);
-											setErrorMessage("Please select a valid place.");
+											setErrorMessage(
+												"Please select a valid place."
+											);
 											return;
 										}
 
 										// Check for the type of place (you can customize this based on your requirements)
-										const placeTypes = selectedPlace.types || [];
+										const placeTypes =
+											selectedPlace.types || [];
 										if (
-											!placeTypes.includes("street_address") &&
-											!placeTypes.includes("establishment")
+											!placeTypes.includes(
+												"street_address"
+											) &&
+											!placeTypes.includes(
+												"establishment"
+											)
 										) {
 											// Invalid place type (e.g., country or city)
 											setIsError(true);
-											setErrorMessage("Please select a valid address.");
+											setErrorMessage(
+												"Please select a valid address."
+											);
 											return;
 										}
 
@@ -160,34 +173,55 @@ const UserRestaurantFormPage = () => {
 										setIsError(false);
 										setErrorMessage(null);
 
-										const selectedAddress = selectedPlace.formatted_address || "";
+										const selectedAddress =
+											selectedPlace.formatted_address ||
+											"";
 										// // Set name as the selected address
 										// setValue("name", selectedAddress);
 										// // Set address as the selected address
-										setValue("streetAddress", selectedAddress);
+										setValue(
+											"streetAddress",
+											selectedAddress
+										);
 
 										// Set id to Google's id on the place
 										setValue("_id", selectedPlace.place_id);
 
 										// Get and set the latitude and longitude positions
-										const { lat, lng } = getLatLng(selectedPlace);
+										const { lat, lng } =
+											getLatLng(selectedPlace);
 										setSelectedPlace({ lat, lng });
 
 										// Find the city component in the address_components array
-										selectedPlace.address_components?.find((component) => {
-											if (component.types[0] !== "postal_town") return;
-											setValue("city", component.long_name);
-											// Check for the type of place (you can customize this based on your requirements)
-											const placeTypes = selectedPlace.types || [];
-											if (
-												!placeTypes.includes("street_address") &&
-												!placeTypes.includes("establishment")
-											) {
-												// Invalid place type (e.g., country or city)
-												setIsError(true);
-												setErrorMessage("Please select a valid address.");
-												return;
-											}
+										selectedPlace.address_components?.find(
+											(component) => {
+												if (
+													component.types[0] !==
+													"postal_town"
+												)
+													return;
+												setValue(
+													"city",
+													component.long_name
+												);
+												// Check for the type of place (you can customize this based on your requirements)
+												const placeTypes =
+													selectedPlace.types || [];
+												if (
+													!placeTypes.includes(
+														"street_address"
+													) &&
+													!placeTypes.includes(
+														"establishment"
+													)
+												) {
+													// Invalid place type (e.g., country or city)
+													setIsError(true);
+													setErrorMessage(
+														"Please select a valid address."
+													);
+													return;
+												}
 											}
 										);
 									}}
@@ -200,7 +234,6 @@ const UserRestaurantFormPage = () => {
 									controlId="description"
 									className="mb-3"
 								>
-
 									<Form.Control
 										as="textarea"
 										placeholder="Description"
@@ -209,7 +242,8 @@ const UserRestaurantFormPage = () => {
 											required: "Description missing",
 											minLength: {
 												value: 10,
-												message: "Enter at least 10 characters"
+												message:
+													"Enter at least 10 characters",
 											},
 										})}
 									/>
@@ -228,10 +262,18 @@ const UserRestaurantFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Restaurant">Restaurant</option>
-										<option value="Fast food">Fast food</option>
-										<option value="Kiosk/grill">Kiosk/grill</option>
-										<option value="Food truck">Food truck</option>
+										<option value="Restaurant">
+											Restaurant
+										</option>
+										<option value="Fast food">
+											Fast food
+										</option>
+										<option value="Kiosk/grill">
+											Kiosk/grill
+										</option>
+										<option value="Food truck">
+											Food truck
+										</option>
 									</select>
 								</div>
 
@@ -244,17 +286,25 @@ const UserRestaurantFormPage = () => {
 										{...register("supply")}
 										className="form-select"
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
-									>	<option value="General Menu">General Menu</option>
+									>
+										{" "}
+										<option value="General Menu">
+											General Menu
+										</option>
 										<option value="Lunch">Lunch</option>
-										<option value="After Work">After Work</option>
-										<option value="Middag/Á la carte">Middag/Á la carte</option>
+										<option value="After Work">
+											After Work
+										</option>
+										<option value="Middag/Á la carte">
+											Middag/Á la carte
+										</option>
 									</select>
 								</div>
 								{/* E-mail */}
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Control
 										type="email"
-										placeholder='Email (optional)'
+										placeholder="Email (optional)"
 										{...register("email")}
 									/>
 									{errors.email && (
@@ -269,10 +319,9 @@ const UserRestaurantFormPage = () => {
 									controlId="telephone"
 									className="mb-3"
 								>
-
 									<Form.Control
 										type="tel"
-										placeholder='Telephone (optional)'
+										placeholder="Telephone (optional)"
 										{...register("telephone")}
 									/>
 								</Form.Group>
@@ -282,10 +331,9 @@ const UserRestaurantFormPage = () => {
 									controlId="website"
 									className="mb-3"
 								>
-
 									<Form.Control
 										type="url"
-										placeholder='Website (optional)'
+										placeholder="Website (optional)"
 										{...register("website")}
 									/>
 								</Form.Group>
@@ -295,10 +343,9 @@ const UserRestaurantFormPage = () => {
 									controlId="facebook"
 									className="mb-3"
 								>
-
 									<Form.Control
 										type="text"
-										placeholder='Facebook (optional)'
+										placeholder="Facebook (optional)"
 										{...register("facebook")}
 									/>
 								</Form.Group>
@@ -308,10 +355,9 @@ const UserRestaurantFormPage = () => {
 									controlId="instagram"
 									className="mb-3"
 								>
-
 									<Form.Control
 										type="text"
-										placeholder='Instagram (optional)'
+										placeholder="Instagram (optional)"
 										{...register("instagram")}
 									/>
 								</Form.Group>
