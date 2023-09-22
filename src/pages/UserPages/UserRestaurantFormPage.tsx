@@ -9,7 +9,7 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
+import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
 import { Restaurant_User } from "../../types/Restaurant.types";
 import { doc, setDoc } from "firebase/firestore";
 import { restaurantsCol } from "../../services/firebase";

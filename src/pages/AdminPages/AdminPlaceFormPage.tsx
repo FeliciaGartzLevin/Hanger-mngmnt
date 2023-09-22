@@ -9,7 +9,7 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
+import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
 import { Place } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";

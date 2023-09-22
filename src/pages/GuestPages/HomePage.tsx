@@ -1,5 +1,5 @@
 import { Libraries, useLoadScript } from "@react-google-maps/api"
-import Map from "../../components/NoLogInPages/MapPage.tsx/Map"
+import Map from "../../components/GuestPages/HomePage/Map"
 import Container from "react-bootstrap/Container"
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
