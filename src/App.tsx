@@ -2,7 +2,6 @@ import ForgotPasswordPage from './pages/NoLogInPages/ForgotPasswordPage'
 import HomePage from './pages/NoLogInPages/HomePage'
 import SignInPage from './pages/NoLogInPages/SignInPage'
 import SignOutPage from './pages/NoLogInPages/SignOutPage'
-import MapPage from './pages/NoLogInPages/MapPage'
 import NotFoundPage from './pages/NoLogInPages/NotFoundPage'
 import RestaurantFormPage from './pages/AdminPages/AdminRestaurantFormPage'
 import RestaurantListPage from './pages/NoLogInPages/RestaurantListPage'
@@ -31,7 +30,6 @@ const App = () => {
 					<Route path="/sign-out" element={<SignOutPage />} />
 					<Route path="/sign-up" element={<SignUpPage />} />
 					<Route path="/" element={<HomePage />} />
-					<Route path="/map" element={<MapPage />} />
 					<Route path="/restaurants" element={<RestaurantListPage />} />
 
 					{/* Protected Routes: */}
@@ -48,7 +46,7 @@ const App = () => {
 					} />
 					<Route path="/admin-restaurant-form" element={
 						// <RequireAuth>
-						<RestaurantFormPage/>
+						<RestaurantFormPage />
 						// </RequireAuth>
 					} />
 
