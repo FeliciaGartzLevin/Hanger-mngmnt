@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth'
 import { CollectionReference, collection, DocumentData, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { User } from '../types/User.types'
-import { Restaurant } from '../types/Restaurant.types'
+import { Place } from '../types/Restaurant.types'
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,6 +34,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 // Export collection references
 export const usersCol = createCollection<User>('users')
-export const restaurantsCol = createCollection<Restaurant>('restaurants')
+export const placesCol = createCollection<Place>('places')
 
 export default app

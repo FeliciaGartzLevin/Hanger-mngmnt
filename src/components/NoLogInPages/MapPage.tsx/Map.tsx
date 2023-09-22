@@ -9,7 +9,7 @@ import {
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 import { getLatLng } from 'use-places-autocomplete'
-import useGetRestaurantsByCity from '../../../hooks/useGetRestaurantsByCity'
+import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
 const Map = () => {
 
 	const { position: usersPosition, error } = useGetCurrentLocation()
@@ -17,15 +17,14 @@ const Map = () => {
 	const [, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
 	const {
-		data: restaurants,
+		data: places,
 		// loading
-	} = useGetRestaurantsByCity(city)
+	} = useGetPlacesByCity(city)
 
 	// Finding and showing the location that user requested
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		// console logs for the clarity for now
-		console.log('results:', results)
-		console.log('Address:', results[0].formatted_address)
+		console.log('googleMapAPIresults:', results)
 
 		// setting states
 		setAddress(results[0].formatted_address)
@@ -84,7 +83,7 @@ const Map = () => {
 				handleLatLng={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
-			{restaurants && restaurants.map((restaurant) => (
+			{places && places.map((restaurant) => (
 				<MarkerF
 					key={restaurant._id}
 					position={restaurant.location}

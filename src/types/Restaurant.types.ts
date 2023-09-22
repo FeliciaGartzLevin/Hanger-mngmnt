@@ -1,4 +1,4 @@
-export type Restaurant = {
+export type Place = {
 	_id: string;
 	name: string;
 	streetAddress: string;
