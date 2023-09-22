@@ -8,7 +8,7 @@ import useGetPlaces from "../../hooks/useGetPlaces";
 
 const columns: ColumnDef<Place>[] = [
 	{
-		accessorKey: "Name",
+		accessorKey: "name",
 		header: "Name",
 	},
 	{
@@ -26,11 +26,11 @@ const columns: ColumnDef<Place>[] = [
 ];
 
 const AdminPlacesOverviewPage = () => {
-	const { data: books, isError, isLoading } = useGetPlaces();
+	const { data: places, isError, isLoading } = useGetPlaces();
 
 	return (
 		<>
-			<h1 className="mb-3">Books</h1>
+			<h1 className="mb-3">Places</h1>
 
 			{isError && (
 				<WarningAlert>
@@ -41,7 +41,7 @@ const AdminPlacesOverviewPage = () => {
 
 			{isLoading && <p>Loading places...</p>}
 
-			{books && <TanstackSortableTable columns={columns} data={books} />}
+			{places && <TanstackSortableTable columns={columns} data={places} />}
 
 			<hr className="mb-5" />
 
