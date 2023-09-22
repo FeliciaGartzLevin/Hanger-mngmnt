@@ -10,16 +10,16 @@ import {
 	Row,
 } from "react-bootstrap";
 import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
-import { Restaurant_User } from "../../types/Restaurant.types";
+import { Place } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
-import { restaurantsCol } from "../../services/firebase";
-import useAuth from "../../hooks/useAuth";
-import { getLatLng } from "use-places-autocomplete";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
+import { getLatLng } from "use-places-autocomplete";
+import { placesCol } from "../../services/firebase";
+import useAuth from "../../hooks/useAuth";
 
 const libraries: Libraries = ["places"];
 
-const UserRestaurantFormPage = () => {
+const AdminPlaceFormPage = () => {
 	const [selectedPlace, setSelectedPlace] =
 		useState<google.maps.LatLngLiteral | null>(null);
 	const [isError, setIsError] = useState(false);
@@ -31,13 +31,14 @@ const UserRestaurantFormPage = () => {
 		register,
 		setValue,
 		formState: { errors },
-	} = useForm<Restaurant_User>();
+	} = useForm<Place>();
 	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	});
+
 	if (!isLoaded)
 		return (
 			<Container>
@@ -46,7 +47,7 @@ const UserRestaurantFormPage = () => {
 			</Container>
 		);
 
-	const onSubmit = async (data: Restaurant_User) => {
+	const onSubmit = async (data: Place) => {
 		try {
 			setIsError(false);
 			setErrorMessage(null);
@@ -69,30 +70,32 @@ const UserRestaurantFormPage = () => {
 				return;
 			}
 
-			const newRestaurant: Restaurant_User = {
+			// console.log(selectedPlace);
+
+			const newPlace: Place = {
 				_id: data._id,
 				uid: user.uid,
-				isAdmin: false,
+				isApproved: true,
 				name: data.name,
 				streetAddress: data.streetAddress,
 				city: data.city,
 				description: data.description,
 				category: data.category,
 				supply: data.supply,
-				email: data.email || "",
-				telephone: data.telephone || "",
-				website: data.website || "",
-				facebook: data.facebook || "",
-				instagram: data.instagram || "",
+				email: data.email,
+				telephone: data.telephone,
+				website: data.website,
+				facebook: data.facebook,
+				instagram: data.instagram,
 				location: selectedPlace,
 			};
+			const docRef = doc(placesCol);
+			//   const restaurantsCol = collection(db, 'restaurants');
+			await setDoc(docRef, newPlace);
 
-			const docRef = doc(restaurantsCol);
-			await setDoc(docRef, newRestaurant);
+			console.log(newPlace);
 
-			console.log(newRestaurant);
-
-			console.log("Restaurant added successfully!");
+			console.log("Place added successfully!");
 			setIsLoading(false);
 		} catch (error) {
 			console.error("Error adding restaurant:", error);
@@ -102,6 +105,7 @@ const UserRestaurantFormPage = () => {
 			setIsLoading(false);
 		}
 	};
+
 	return (
 		<Container className="py-3 center-y">
 			<Row>
@@ -109,7 +113,7 @@ const UserRestaurantFormPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">
-								Recommend a place to us! 🗣️🍽️
+								Admin Restaurant Form
 							</Card.Title>
 							{isError && (
 								<Alert variant="danger">{errorMessage}</Alert>
@@ -304,8 +308,10 @@ const UserRestaurantFormPage = () => {
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Control
 										type="email"
-										placeholder="Email (optional)"
-										{...register("email")}
+										placeholder="Email"
+										{...register("email", {
+											required: "Email missing",
+										})}
 									/>
 									{errors.email && (
 										<Form.Text className="text-danger">
@@ -321,8 +327,10 @@ const UserRestaurantFormPage = () => {
 								>
 									<Form.Control
 										type="tel"
-										placeholder="Telephone (optional)"
-										{...register("telephone")}
+										placeholder="Telephone"
+										{...register("telephone", {
+											required: "Telephone missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -333,8 +341,10 @@ const UserRestaurantFormPage = () => {
 								>
 									<Form.Control
 										type="url"
-										placeholder="Website (optional)"
-										{...register("website")}
+										placeholder="Website"
+										{...register("website", {
+											required: "Website missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -345,8 +355,10 @@ const UserRestaurantFormPage = () => {
 								>
 									<Form.Control
 										type="text"
-										placeholder="Facebook (optional)"
-										{...register("facebook")}
+										placeholder="Facebook"
+										{...register("facebook", {
+											required: "Facebook missing",
+										})}
 									/>
 								</Form.Group>
 
@@ -357,8 +369,10 @@ const UserRestaurantFormPage = () => {
 								>
 									<Form.Control
 										type="text"
-										placeholder="Instagram (optional)"
-										{...register("instagram")}
+										placeholder="Instagram"
+										{...register("instagram", {
+											required: "Instagram missing",
+										})}
 									/>
 								</Form.Group>
 								{/* Submit Button */}
@@ -380,4 +394,4 @@ const UserRestaurantFormPage = () => {
 	);
 };
 
-export default UserRestaurantFormPage;
+export default AdminPlaceFormPage;

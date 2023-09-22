@@ -9,7 +9,7 @@ import {
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 import { getLatLng } from 'use-places-autocomplete'
-import useGetRestaurantsByCity from '../../../hooks/useGetRestaurantsByCity'
+import useGetRestaurantsByCity from '../../../hooks/useGetPlacesByCity'
 
 const Map = () => {
 	const { position: usersPosition, error } = useGetCurrentLocation()

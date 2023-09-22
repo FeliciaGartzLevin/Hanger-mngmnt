@@ -1,7 +1,7 @@
-type BaseRestaurant = {
+type BasePlace = {
 	_id: string;
 	uid: string;
-	isAdmin: boolean;
+	isApproved: boolean;
 	name: string;
 	streetAddress: string;
 	city: string;
@@ -11,7 +11,7 @@ type BaseRestaurant = {
 	location: google.maps.LatLngLiteral;
   };
 
-  export type Restaurant = BaseRestaurant & {
+  export type Place = BasePlace & {
 	email: string;
 	telephone: string;
 	website: string;
@@ -19,7 +19,7 @@ type BaseRestaurant = {
 	instagram: string;
   };
 
-  export type Restaurant_User = BaseRestaurant & {
+  export type Place_User = BasePlace & {
 	email?: string;
 	telephone?: string;
 	website?: string;
