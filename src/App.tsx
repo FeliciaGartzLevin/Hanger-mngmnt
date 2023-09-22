@@ -11,9 +11,10 @@ import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
 import SignUpPage from './pages/GuestPages/SignUpPage'
-import UserRestaurantFormPage from './pages/UserPages/UserRestaurantFormPage'
+import UserPlaceFormPage from './pages/UserPages/UserPlaceFormPage'
 import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
+import AdminPlacesOverviewPage from './pages/AdminPages/AdminPlacesOverviewPage'
 
 const App = () => {
 	return (
@@ -42,6 +43,12 @@ const App = () => {
 						</RequireAuthAdmin>
 					} />
 
+					<Route path="/admin-places" element={
+						<RequireAuthAdmin>
+							<AdminPlacesOverviewPage />
+						</RequireAuthAdmin>
+					} />
+
 					{/* User Routes */}
 					<Route
 						path='/update-profile'
@@ -55,7 +62,7 @@ const App = () => {
 						path='/recommend-place'
 						element={
 							<RequireAuth>
-								<UserRestaurantFormPage />
+								<UserPlaceFormPage />
 							</RequireAuth>
 						}
 					/>

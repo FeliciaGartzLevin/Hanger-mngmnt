@@ -1,7 +1,7 @@
 type BasePlace = {
 	_id: string;
 	uid: string;
-	isAdmin: boolean;
+	isApproved: boolean;
 	name: string;
 	streetAddress: string;
 	city: string;
@@ -28,7 +28,7 @@ export type Place_User = BasePlace & {
 	location: google.maps.LatLngLiteral;
 }
 
-export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
+export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Middag/Á la carte'
 
