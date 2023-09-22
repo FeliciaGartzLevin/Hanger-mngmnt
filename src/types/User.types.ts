@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore'
 
-export type User = {
+export type UserDoc = {
 	createdAt: Timestamp
 	displayName: string
 	email: string,
