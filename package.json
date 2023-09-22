@@ -15,6 +15,8 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@googlemaps/react-wrapper": "^1.1.35",
     "@react-google-maps/api": "^2.19.2",
+    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-table": "^8.10.1",
     "@types/google.maps": "^3.54.1",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.2",
@@ -33,6 +35,7 @@
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.32.5",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

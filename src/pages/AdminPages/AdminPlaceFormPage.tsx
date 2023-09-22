@@ -74,7 +74,7 @@ const AdminPlaceFormPage = () => {
 			const newPlace: Place = {
 				_id: data._id,
 				uid: user.uid,
-				isAdmin: true,
+				isApproved: true,
 				name: data.name,
 				streetAddress: data.streetAddress,
 				city: data.city,

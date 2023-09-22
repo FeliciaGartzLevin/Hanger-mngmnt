@@ -96,5 +96,3 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 }
 
 export default PlacesAutoComplete
-
-
