@@ -4,7 +4,6 @@ import SignInPage from './pages/GuestPages/SignInPage'
 import SignOutPage from './pages/GuestPages/SignOutPage'
 import NotFoundPage from './pages/GuestPages/NotFoundPage'
 import AdminPlaceFormPage from './pages/AdminPages/AdminPlaceFormPage'
-import AdminPlacesOverviewPage from './pages/AdminPages/AdminPlacesOverviewPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
 import Navigation from './pages/Partials/Navigation'
 import Container from 'react-bootstrap/Container'
@@ -40,11 +39,6 @@ const App = () => {
 					<Route path="/admin-place-form" element={
 						<RequireAuthAdmin>
 							<AdminPlaceFormPage />
-						</RequireAuthAdmin>
-					} />
-					<Route path="/admin-places" element={
-						<RequireAuthAdmin>
-							<AdminPlacesOverviewPage />
 						</RequireAuthAdmin>
 					} />
 

@@ -1,13 +1,13 @@
-import { Place } from "../types/Place.types";
-import { where } from "firebase/firestore";
-import useStreamCollection from "./useStreamCollection";
-import { placesCol } from "../services/firebase";
+import { Place } from '../types/Place.types'
+import { where } from 'firebase/firestore'
+import useStreamCollection from './useStreamCollection'
+import { placesCol } from '../services/firebase'
 
 const useGetPlacesByCity = (city: string | null) => {
 	return useStreamCollection<Place>(
 		placesCol,
-		where("city", "==", city)
-	);
-};
+		where("city", "==", city),
+	)
+}
 
-export default useGetPlacesByCity;
+export default useGetPlacesByCity

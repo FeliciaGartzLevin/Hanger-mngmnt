@@ -9,27 +9,28 @@ type BasePlace = {
 	category: Category;
 	supply: Supply;
 	location: google.maps.LatLngLiteral;
-  };
+};
 
-  export type Place = BasePlace & {
+export type Place = BasePlace & {
 	email: string;
 	telephone: string;
 	website: string;
 	facebook: string;
 	instagram: string;
-  };
+};
 
-  export type Place_User = BasePlace & {
+export type Place_User = BasePlace & {
 	email?: string;
 	telephone?: string;
 	website?: string;
 	facebook?: string;
 	instagram?: string;
-  };
+	location: google.maps.LatLngLiteral;
+}
 
-export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck';
+export type Category = 'Café' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
 
-export type Supply = 'General Menu'|'Lunch' | 'After Work' | 'Middag/Á la carte'
+export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Middag/Á la carte'
 
 
 export type Location = {

@@ -6,15 +6,17 @@
  */
 export const findAdressComponent = (results: google.maps.GeocoderResult[]) => {
 
-    const component = results[0]?.address_components.find((component) => {
-        if (component.types.includes("postal_town") ||
-            (component.types.includes("locality"))) {
-            return true
-        } else {
-            return false
-        }
-    })
+	const component = results[0]?.address_components.find((component) => {
+		if (component.types.includes("postal_town") ||
+			(component.types.includes("locality"))) {
+			return true
+		} else {
+			return false
+		}
+	})
 
-    if (!component) return
-    return component.long_name
+	if (!component) return
+	return component.long_name
 }
+
+
