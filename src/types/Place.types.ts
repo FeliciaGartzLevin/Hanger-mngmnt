@@ -1,17 +1,17 @@
 type BasePlace = {
 	_id: string;
 	uid: string;
-	isApproved: boolean;
 	name: string;
 	streetAddress: string;
 	city: string;
 	description: string;
 	category: Category;
-	supply: Supply;
+	supply: Supply
 	location: google.maps.LatLngLiteral;
 };
 
 export type Place = BasePlace & {
+	isApproved: true,
 	email: string;
 	telephone: string;
 	website: string;
@@ -20,6 +20,7 @@ export type Place = BasePlace & {
 };
 
 export type Place_User = BasePlace & {
+	isApproved: false,
 	email?: string;
 	telephone?: string;
 	website?: string;

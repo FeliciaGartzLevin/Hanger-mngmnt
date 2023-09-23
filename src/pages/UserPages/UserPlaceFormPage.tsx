@@ -70,21 +70,21 @@ const UserPlaceFormPage = () => {
 			}
 
 			const newPlace: Place_User = {
-				_id: data._id,
-				uid: user.uid,
-				isApproved: false,
-				name: data.name,
-				streetAddress: data.streetAddress,
-				city: data.city,
-				description: data.description,
-				category: data.category,
-				supply: data.supply,
-				email: data.email || "",
-				telephone: data.telephone || "",
-				website: data.website || "",
-				facebook: data.facebook || "",
-				instagram: data.instagram || "",
-				location: selectedPlace,
+				// isApproved: false,
+				...data
+				// _id: data._id,
+				// name: data.name,
+				// streetAddress: data.streetAddress,
+				// city: data.city,
+				// description: data.description,
+				// category: data.category,
+				// supply: data.supply,
+				// email: data.email || "",
+				// telephone: data.telephone || "",
+				// website: data.website || "",
+				// facebook: data.facebook || "",
+				// instagram: data.instagram || "",
+				// location: selectedPlace,
 			};
 
 			const docRef = doc(placesCol);

@@ -3,10 +3,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import WarningAlert from "../../components/Alerts/WarningAlert";
 // import CreatePlaceForm from '../components/forms/CreatePlaceForm'
 import TanstackSortableTable from "../../components/AdminPages/tables/TanstackSortableTable";
-import { Place } from "../../types/Place.types";
+import { Place, Place_User } from "../../types/Place.types";
 import useGetPlaces from "../../hooks/useGetPlaces";
 
-const columns: ColumnDef<Place>[] = [
+const columns: ColumnDef<Place | Place_User>[] = [
 	{
 		accessorKey: "name",
 		header: "Name",

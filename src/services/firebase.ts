@@ -3,7 +3,7 @@ import { getAuth } from 'firebase/auth'
 import { CollectionReference, collection, DocumentData, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import { UserDoc } from '../types/User.types'
-import { Place } from '../types/Place.types'
+import { Place, Place_User } from '../types/Place.types'
 
 // Firebase configuration
 const firebaseConfig = {
@@ -34,6 +34,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 // Export collection references
 export const usersCol = createCollection<UserDoc>('users')
-export const placesCol = createCollection<Place>('places')
+export const placesCol = createCollection<Place | Place_User>('places')
 
 export default app
