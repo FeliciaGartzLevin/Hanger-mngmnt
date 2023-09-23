@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
@@ -8,61 +8,124 @@ import {
 } from '@react-google-maps/api'
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-import { getLatLng } from 'use-places-autocomplete'
+import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-const Map = () => {
+import { findAdressComponent } from '../../../helpers/locations'
+import { useSearchParams } from 'react-router-dom'
 
-	const { position: usersPosition, error } = useGetCurrentLocation()
+const Map = () => {
+	const [searchParams, setSearchParams] = useSearchParams()
+	const locality = searchParams.get("locality") ?? ''
+	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
-	const [, setAddress] = useState<string | null>(null)
+	// const [address, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
+	const [error, setError] = useState<string | null>(null)
 	const {
 		data: places,
 		// loading
 	} = useGetPlacesByCity(city)
 
-	// Finding and showing the location that user requested
+	const basicActions = (results: google.maps.GeocoderResult[]) => {
+		// getting coordinates
+		const { lat, lng } = getLatLng(results[0])
+
+		// setAddress(results[0].formatted_address)
+		// center the map on the searched city
+		setCenter({ lat, lng })
+
+		// getting the city ('postal_town' or 'locality') from the response
+		const foundCity = findAdressComponent(results)
+
+		if (!foundCity) return
+		console.log('foundCity:', foundCity)
+		setCity(foundCity)
+		setSearchParams({ locality: foundCity })
+	}
+
+	// Getting users position by reverse geocoding (by coordinates)
+	const getCurrentCity = async (position: google.maps.LatLngLiteral | undefined) => {
+		if (!position) return
+		try {
+			// reversed geocoding to get the users address:
+			const results = await getGeocode({ location: position })
+			console.log('usersPositionResults', results)
+
+			basicActions(results)
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			setError(error.message)
+			console.log('No current city was found:', error)
+		}
+	}
+
+	// Handling click on localisation button
+	const handleFindLocation = async () => {
+		if (!usersPosition) return console.log('no position:', currentPositionError)
+		try {
+			getCurrentCity(usersPosition)
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			setError(error.message)
+		}
+	}
+
+	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		// console logs for the clarity for now
 		console.log('googleMapAPIresults:', results)
+		try {
+			basicActions(results)
 
-		// setting states
-		setAddress(results[0].formatted_address)
-		const { lat, lng } = getLatLng(results[0])
-
-		setCenter({ lat, lng })
-
-		const component = results[0]?.address_components.find((component) => {
-			if (component.types.includes("postal_town") ||
-				(component.types.includes("locality"))) {
-				console.log("did contain 'postal_town' or 'locality' ")
-				return true
-			} else {
-				console.log("didn't contain 'postal_town' or 'locality' ")
-				return false
-			}
-		})
-
-		if (!component) return
-
-		setCity(component.long_name)
-		console.log('component:', component)
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			setError(error.message)
+		}
 	}
 
-	// Finding users location by sending in their position by lat and long
-	const handleFindLocation = () => {
-		if (!usersPosition) return console.log('no position:', error)
-		setCenter(usersPosition)
+	// Getting city info by city name
+	const queryCity = useCallback(async (city: string) => {
+		try {
+			// querying the geocoding API in order to get the users address
+			const results = await getGeocode({ address: city + ', Sverige' })
+			console.log('results', results)
 
-		// reversed geocoding to get the users address: if needed?? not now at least
+			// getting coordinates
+			const { lat, lng } = getLatLng(results[0])
 
-		console.log('Users current position is:', center)
-	}
+			// setAddress(results[0].formatted_address)
+			// center the map on the searched city
+			setCenter({ lat, lng })
+
+			// getting the city ('postal_town' or 'locality') from the response
+			const foundCity = findAdressComponent(results)
+
+			if (!foundCity) return
+			console.log('foundCity:', foundCity)
+			setCity(foundCity)
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			console.log('No city was found:', error.message)
+			setError('No  city was found: ' + error.message)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []
+	)
 
 	useEffect(() => {
+		if (!city) return
+		queryCity(city)
+	}, [city, queryCity])
 
-		console.log('city:', city)
-	}, [city])
+	useEffect(() => {
+		if (!locality) return
+		queryCity(locality)
+	}, [locality, queryCity])
+	// I want this to trigger a search for the previous/posterior city when using the browser arrows f ex
+
 
 	return (
 		<GoogleMap
@@ -80,7 +143,7 @@ const Map = () => {
 			}}
 		>
 			<SearchBox
-				handleLatLng={handleSearchInput}
+				passOnResults={handleSearchInput}
 				handleFindLocation={handleFindLocation}
 			/>
 			{places && places.map((place) => (
