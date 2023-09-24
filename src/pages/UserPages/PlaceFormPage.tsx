@@ -25,7 +25,7 @@ const PlaceFormPage = () => {
 	const [isError, setIsError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-
+	const [placeName, setPlaceName] = useState<string | undefined>(undefined)
 	const {
 		handleSubmit,
 		register,
@@ -40,7 +40,7 @@ const PlaceFormPage = () => {
 		libraries
 	})
 
-	if (!isLoaded) return<div>Loading...</div>
+	if (!isLoaded) return <div>Loading...</div>
 
 	const onSubmit = async (data: Place) => {
 		try {
@@ -74,6 +74,7 @@ const PlaceFormPage = () => {
 			toast.dark("Place added successfully!")
 
 			setValue('name', '')
+			setPlaceName(undefined)
 			setValue('description', '')
 			setValue('email', '')
 			setValue('telephone', '')
@@ -107,7 +108,8 @@ const PlaceFormPage = () => {
 							{isError && <Alert variant='danger'>{errorMessage}</Alert>}
 
 							<div className='mb-3'>
-								<Form.Group controlId='name' className='mb-3'>
+								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
+								{/* <Form.Group controlId='name' className='mb-3'>
 									<Form.Control
 										type='name'
 										placeholder="Location Name*"
@@ -125,9 +127,10 @@ const PlaceFormPage = () => {
 											{errors.name.message}
 										</Form.Text>
 									)}
-								</Form.Group>
+								</Form.Group> */}
 
 								<PlacesAutoComplete
+									onPlaceName={(name) => setPlaceName(name)}
 									onClickedPlace={(results) => {
 										const selectedPlace = results[0]
 
@@ -147,6 +150,10 @@ const PlaceFormPage = () => {
 
 										setIsError(false)
 										setErrorMessage(null)
+
+										if (placeName) {
+											setValue('name', placeName)
+										}
 
 										const selectedAddress = selectedPlace.formatted_address || ''
 										setValue('streetAddress', selectedAddress)
