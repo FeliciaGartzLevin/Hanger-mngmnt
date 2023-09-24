@@ -14,6 +14,7 @@ import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
+import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
 
 const App = () => {
 	return (
@@ -38,9 +39,9 @@ const App = () => {
 						</RequireAuthAdmin>
 					} />
 
-					<Route path='/admin-pending-places' element={
+					<Route path='/admin-places-list' element={
 						<RequireAuthAdmin>
-							<PlaceFormPage />
+							<AdminPlacesListPage />
 						</RequireAuthAdmin>
 					} />
 

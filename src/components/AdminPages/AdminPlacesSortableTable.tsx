@@ -34,12 +34,14 @@ const AdminUsersSortableTable = <TData, TValue>({
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	})
+
 	const toggleApproval = (PlaceData: Place) => {
 		const docRef = doc(placesCol, PlaceData._id)
 		updateDoc(docRef, {
 			isApproved: !PlaceData.isApproved
 		})
 	}
+
 	const renderApprovalCell = (PlaceData: Place) => (
 		<Form>
 			<Form.Check

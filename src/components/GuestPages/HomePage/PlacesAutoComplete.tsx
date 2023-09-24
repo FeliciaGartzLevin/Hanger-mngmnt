@@ -1,14 +1,16 @@
 import React from 'react'
+import { Form, ListGroup, ListGroupItem } from 'react-bootstrap'
+import useOnclickOutside from 'react-cool-onclickoutside'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
-import useOnclickOutside from "react-cool-onclickoutside";
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
 	onPlaceName?: (placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
+	required?: boolean
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName, required }) => {
 	const {
 		ready,
 		value,
@@ -31,11 +33,10 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 
 	const handleSelect = ({ description }: { description: string }) => (
 		async () => {
-
 			// When the user selects a place, we can replace the keyword without request data from API
-			// by setting the second parameter to "false"
-			setValue(description, false);
-			clearSuggestions();
+			// by setting the second parameter to 'false'
+			setValue(description, false)
+			clearSuggestions()
 
 			// Get the google.maps.GeocoderResult[] response
 			const results = await getGeocode({
@@ -58,49 +59,33 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		}
 	)
 
-	const renderSuggestions = () => (
-
-		data.map((suggestion) => {
-			const {
-				place_id,
-				structured_formatting: { main_text, secondary_text },
-			} = suggestion
-
-			return (
-				<React.Fragment key={place_id}>
-					<li
-						key={place_id}
-						className='autoComplete-options'
-						onClick={handleSelect(suggestion)}>
-						<strong>{main_text}</strong> <small>{secondary_text}</small>
-					</li>
-					<hr />
-				</React.Fragment>
-			)
-		})
-	)
-
 	return (
 		<div ref={ref}>
-			<input
-				style={{
-					padding: '0.2rem 0.5rem',
-				}}
+			<Form.Control
 				onClick={() => setValue('')}
 				value={value}
 				onChange={e => setValue(e.target.value)}
-				disabled={!ready
-				}
-				placeholder="Search location"
+				disabled={!ready}
+				placeholder={`Search Location${required ? '*' : ''}`}
 			/>
-			{status === "OK" &&
-				<ul style={{
-					listStyle: 'none',
-					padding: '0 0.5rem',
-					backgroundColor: 'black',
-				}}>
-					{renderSuggestions()}
-				</ul>}
+			{status === 'OK' &&
+				<ListGroup>
+					{data.map((suggestion) => {
+						const {
+							place_id,
+							structured_formatting: { main_text, secondary_text }
+						} = suggestion
+
+						return (
+							<ListGroupItem
+								key={place_id}
+								onClick={handleSelect(suggestion)}>
+								<strong>{main_text}</strong> <small>{secondary_text}</small>
+							</ListGroupItem>
+						)
+					})}
+				</ListGroup>
+			}
 		</div >
 	)
 }

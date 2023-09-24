@@ -16,7 +16,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 		<Container style={{
 			position: 'relative',
 			top: '4rem',
-			width: '20rem',
+			maxWidth: '25em'
 		}}>
 
 			<Container
@@ -24,7 +24,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 				style={{
 					background: 'white',
 					padding: '0.5rem',
-					boxShadow: ' 8px 8px 5px rgba(0, 0, 0, 0.56)',
+					boxShadow: '8px 8px 5px rgba(0, 0, 0, 0.56)'
 				}}>
 				<PlacesAutoComplete
 					onClickedPlace={(results) => passOnResults(results)}
@@ -32,11 +32,13 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 				/>
 				<Button
 					onClick={handleFindLocation}
-					aria-label='Use my location'
-					className='mx-2 rounded-circle'
+					aria-label="Use my location"
+					className='rounded-circle'
 					style={{
-						marginLeft: '2rem',
 						background: 'rgb(134, 0, 85)',
+						position: 'absolute',
+						top: '8px',
+						right: '18px'
 					}}
 					type='submit'
 				>

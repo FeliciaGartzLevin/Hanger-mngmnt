@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import AdminUsersSortableTable from '../../components/AdminPages/AdminUsersSortableTable'
 import { UserDoc } from '../../types/User.types';
 import useGetUsers from '../../hooks/useGetUsers';
+import { Alert } from 'react-bootstrap';
 
 const columns: ColumnDef<UserDoc>[] = [
 	{
@@ -31,12 +32,17 @@ const columns: ColumnDef<UserDoc>[] = [
 ]
 
 const AdminUsersListPage = () => {
-	const { data, loading } = useGetUsers()
+	const { data, error, isError, isLoading } = useGetUsers()
 
-	{loading && <div>Loading users...</div>}
+	if (isLoading) return <div>Loading users...</div>
+
+	if (isError) return <Alert variant='danger'>{error}</Alert>
 
 	if (data) return (
-		<AdminUsersSortableTable columns={columns} data={data} />
+		<>
+			<h3 className='mb-3'>Users</h3>
+			<AdminUsersSortableTable columns={columns} data={data} />
+		</>
 	)
 }
 
