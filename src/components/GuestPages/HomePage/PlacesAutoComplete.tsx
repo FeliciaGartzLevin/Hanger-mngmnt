@@ -7,9 +7,10 @@ type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
 	onPlaceName?: (placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
+	required?: boolean
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName, required }) => {
 	const {
 		ready,
 		value,
@@ -65,7 +66,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready}
-				placeholder='Search Location*'
+				placeholder={`Search Location${required ? '*' : ''}`}
 			/>
 			{status === 'OK' &&
 				<ListGroup>

@@ -172,6 +172,7 @@ const PlaceFormPage = () => {
 											}
 										)
 									}}
+									required={true}
 								/>
 							</div>
 
