@@ -4,10 +4,11 @@ import useOnclickOutside from "react-cool-onclickoutside";
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
+	onPlaceName?: (placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName }) => {
 	const {
 		ready,
 		value,
@@ -29,8 +30,8 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 	})
 
 	const handleSelect = ({ description }: { description: string }) => (
-
 		async () => {
+
 			// When the user selects a place, we can replace the keyword without request data from API
 			// by setting the second parameter to "false"
 			setValue(description, false);
@@ -39,12 +40,21 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 			// Get the google.maps.GeocoderResult[] response
 			const results = await getGeocode({
 				address: description,
-				componentRestrictions: { country: 'SE' } //giving only results in Sweden
+				componentRestrictions: { country: 'SE' } //(supposed to be) giving only results in Sweden
 				// but I also don't even wanna show autocomplete results that is not in sweden
 			})
 
 			onClickedPlace(results)
 
+			// Taking the description (f. ex 'Big Ben Pub, Folkungagatan, Stockholm, Sverige') and splitting it by ','
+			const splitDescription = description.split(',')
+			// if it had the right format(three parts array), move on
+			if (splitDescription.length > 2) {
+				if (!onPlaceName) return
+				const placeName = splitDescription[0].trim()
+				console.log('placeName', placeName)
+				onPlaceName(placeName)
+			}
 		}
 	)
 

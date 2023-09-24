@@ -20,27 +20,32 @@ const Map = () => {
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	// const [address, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
-	const [error, setError] = useState<string | null>(null)
+	const [/* error */, setError] = useState<string | null>(null)
 	const {
 		data: places,
-		// loading
+		// isLoading: isLoadingPlaces,
 	} = useGetPlacesByCity(city)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
-		// getting coordinates
-		const { lat, lng } = getLatLng(results[0])
+		try {
+			// getting coordinates
+			const { lat, lng } = getLatLng(results[0])
 
-		// setAddress(results[0].formatted_address)
-		// center the map on the searched city
-		setCenter({ lat, lng })
+			// setAddress(results[0].formatted_address)
+			// center the map on the searched city
+			setCenter({ lat, lng })
 
-		// getting the city ('postal_town' or 'locality') from the response
-		const foundCity = findAdressComponent(results)
+			// getting the city ('postal_town' or 'locality') from the response
+			const foundCity = findAdressComponent(results)
 
-		if (!foundCity) return
-		console.log('foundCity:', foundCity)
-		setCity(foundCity)
-		setSearchParams({ locality: foundCity })
+			if (!foundCity) return
+			console.log('foundCity:', foundCity)
+			setCity(foundCity)
+			setSearchParams({ locality: foundCity })
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			setError(error.message)
+		}
 	}
 
 	// Getting users position by reverse geocoding (by coordinates)
@@ -118,14 +123,13 @@ const Map = () => {
 	useEffect(() => {
 		if (!city) return
 		queryCity(city)
+		console.log('places', places)
 	}, [city, queryCity])
 
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
 	}, [locality, queryCity])
-	// I want this to trigger a search for the previous/posterior city when using the browser arrows f ex
-
 
 	return (
 		<GoogleMap
