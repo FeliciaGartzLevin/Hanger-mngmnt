@@ -22,9 +22,9 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 			<Container
 				className='rounded d-flex flex-row align-items-center justify-content-between'
 				style={{
-					background: 'rgba(255,255,255,0.7)',
+					background: 'white',
 					padding: '0.5rem',
-					boxShadow: ' 8px 8px 5px rgba(0, 0, 0, 0.56)'
+					boxShadow: '8px 8px 5px rgba(0, 0, 0, 0.56)'
 				}}>
 				<PlacesAutoComplete
 					onClickedPlace={(results) => passOnResults(results)}
