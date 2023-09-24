@@ -9,13 +9,13 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
 import { Place_User } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { placesCol } from "../../services/firebase";
 import useAuth from "../../hooks/useAuth";
 import { getLatLng } from "use-places-autocomplete";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
+import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
 
 const libraries: Libraries = ["places"];
 
@@ -70,21 +70,21 @@ const UserPlaceFormPage = () => {
 			}
 
 			const newPlace: Place_User = {
-				_id: data._id,
-				uid: user.uid,
-				isAdmin: false,
-				name: data.name,
-				streetAddress: data.streetAddress,
-				city: data.city,
-				description: data.description,
-				category: data.category,
-				supply: data.supply,
-				email: data.email || "",
-				telephone: data.telephone || "",
-				website: data.website || "",
-				facebook: data.facebook || "",
-				instagram: data.instagram || "",
-				location: selectedPlace,
+				// isApproved: false,
+				...data
+				// _id: data._id,
+				// name: data.name,
+				// streetAddress: data.streetAddress,
+				// city: data.city,
+				// description: data.description,
+				// category: data.category,
+				// supply: data.supply,
+				// email: data.email || "",
+				// telephone: data.telephone || "",
+				// website: data.website || "",
+				// facebook: data.facebook || "",
+				// instagram: data.instagram || "",
+				// location: selectedPlace,
 			};
 
 			const docRef = doc(placesCol);
@@ -249,7 +249,7 @@ const UserPlaceFormPage = () => {
 									/>
 								</Form.Group>
 
-								{/* Add more fields based on your Place type */}
+								{/* Add more fields based on your Restaurant type */}
 
 								<div className="mb-3 d-flex align-items-center">
 									<label className="m-2" htmlFor="category">
@@ -262,11 +262,14 @@ const UserPlaceFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Place">
-											Place
+										<option value="Restaurant">
+											Restaurant
 										</option>
 										<option value="Fast food">
 											Fast food
+										</option>
+										<option value="Pub">
+											Pub
 										</option>
 										<option value="Kiosk/grill">
 											Kiosk/grill
@@ -368,8 +371,8 @@ const UserPlaceFormPage = () => {
 									className="mt-3"
 								>
 									{isLoading
-										? "Adding Place..."
-										: "Add Place"}
+										? "Adding Restaurant..."
+										: "Add Restaurant"}
 								</Button>
 							</Form>
 						</Card.Body>

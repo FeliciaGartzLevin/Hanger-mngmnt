@@ -10,7 +10,7 @@ import SignOutPage from './pages/GuestPages/SignOutPage'
 import SignUpPage from './pages/GuestPages/SignUpPage'
 import Navigation from './pages/Partials/Navigation'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
-import UserRestaurantFormPage from './pages/UserPages/UserRestaurantFormPage'
+import UserPlaceFormPage from './pages/UserPages/UserPlaceFormPage'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -64,7 +64,7 @@ const App = () => {
 						path='/recommend-place'
 						element={
 							<RequireAuth>
-								<UserRestaurantFormPage />
+								<UserPlaceFormPage />
 							</RequireAuth>
 						}
 					/>

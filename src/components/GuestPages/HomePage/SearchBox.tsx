@@ -7,10 +7,10 @@ import PlacesAutoComplete from './PlacesAutoComplete'
 
 type Props = {
 	handleFindLocation: () => void
-	handleLatLng: (results: google.maps.GeocoderResult[]) => void
+	passOnResults: (results: google.maps.GeocoderResult[]) => void
 }
 
-const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
+const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 
 	return (
 		<Container style={{
@@ -27,7 +27,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, handleLatLng }) => {
 					boxShadow: ' 8px 8px 5px rgba(0, 0, 0, 0.56)',
 				}}>
 				<PlacesAutoComplete
-					onClickedPlace={(results) => handleLatLng(results)}
+					onClickedPlace={(results) => passOnResults(results)}
 					searchPlacesOfTypes={['postal_town']}
 				/>
 				<Button

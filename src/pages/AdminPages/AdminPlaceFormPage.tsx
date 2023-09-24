@@ -9,7 +9,7 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import PlacesAutoComplete from "../../components/NoLogInPages/MapPage.tsx/PlacesAutoComplete";
+import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
 import { Place } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
@@ -72,21 +72,22 @@ const AdminPlaceFormPage = () => {
 			// console.log(selectedPlace);
 
 			const newPlace: Place = {
-				_id: data._id,
-				uid: user.uid,
-				isAdmin: true,
-				name: data.name,
-				streetAddress: data.streetAddress,
-				city: data.city,
-				description: data.description,
-				category: data.category,
-				supply: data.supply,
-				email: data.email,
-				telephone: data.telephone,
-				website: data.website,
-				facebook: data.facebook,
-				instagram: data.instagram,
-				location: selectedPlace,
+				...data,
+				// uid: user.uid,
+				// isApproved: true,
+				// _id: data._id,
+				// name: data.name,
+				// streetAddress: data.streetAddress,
+				// city: data.city,
+				// description: data.description,
+				// category: data.category,
+				// supply: data.supply,
+				// email: data.email,
+				// telephone: data.telephone,
+				// website: data.website,
+				// facebook: data.facebook,
+				// instagram: data.instagram,
+				// location: selectedPlace,
 			};
 			const docRef = doc(placesCol);
 			//   const  = collection(db, 'places');
@@ -266,8 +267,8 @@ const AdminPlaceFormPage = () => {
 										style={{ flex: 0.7, maxWidth: "150px" }} // Adjust flex and maxWidth as needed
 									>
 										<option value="Café">Café</option>
-										<option value="Place">
-											Place
+										<option value="Restaurant">
+											Restaurant
 										</option>
 										<option value="Fast food">
 											Fast food

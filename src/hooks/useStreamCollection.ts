@@ -2,40 +2,41 @@ import { CollectionReference, QueryConstraint, onSnapshot, query } from 'firebas
 import { useEffect, useState } from 'react'
 
 const useStreamCollection = <T>(
-	colRef: CollectionReference<T>,
-	...queryConstraints: QueryConstraint[]
+  colRef: CollectionReference<T>,
+  ...queryConstraints: QueryConstraint[]
 ) => {
-	const [data, setData] = useState<T[] | null>(null)
-	const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<T[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [error, setError] = useState<any>(null);
 
-	// Get data on component mount
-	useEffect(() => {
-		// Construct a query reference
-		const queryRef = query(colRef, ...queryConstraints)
+  useEffect(() => {
+    const queryRef = query(colRef, ...queryConstraints);
 
-		// Subscribe to changes in the collection
-		const unsubscribe = onSnapshot(queryRef, (snapshot) => {
-			// loop over all docs
-			const data: T[] = snapshot.docs.map(doc => {
-				return {
-					...doc.data(),
-					_id: doc.id,
-				}
-			})
+    const unsubscribe = onSnapshot(queryRef, (snapshot) => {
+      const data: T[] = snapshot.docs.map(doc => {
+        return {
+          ...doc.data(),
+          _id: doc.id,
+        };
+      });
 
-			setData(data)
-			setLoading(false)
-		})
+      setData(data);
+      setIsLoading(false);
+    }, (err) => {
+      setError(err);
+      setIsLoading(false);
+    });
 
-		// Return unsubscribe function as cleanup
-		return unsubscribe
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [colRef])
+    return unsubscribe;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colRef]);
 
-	return {
-		data,
-		loading,
-	}
-}
+  return {
+    data,
+    isLoading,
+    error,
+  };
+};
 
-export default useStreamCollection
+export default useStreamCollection;
