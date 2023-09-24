@@ -13,7 +13,7 @@ import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { findAdressComponent } from '../../../helpers/locations'
 import { useSearchParams } from 'react-router-dom'
 import { placesCol } from '../../../services/firebase'
-import { FirestoreError, onSnapshot, query, where } from 'firebase/firestore'
+import { FirestoreError, QueryConstraint, onSnapshot, query, where } from 'firebase/firestore'
 import { Place } from '../../../types/Place.types'
 
 const Map = () => {
@@ -148,26 +148,32 @@ const Map = () => {
 		console.log('places', places)
 	}, [locality, queryCity, places])
 
+	const queryConstraints: QueryConstraint[] = [
+		where("city", "==", city)
+
+	]
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
-		const queryRef = query(placesCol, where("city", "==", city));
-
+		const queryRef = query(
+			placesCol,
+			...queryConstraints
+		)
 		const unsubscribe = onSnapshot(queryRef, (snapshot) => {
 			const data: Place[] = snapshot.docs.map(doc => {
 				return {
 					...doc.data(),
 					_id: doc.id,
-				};
-			});
+				}
+			})
 			setStates(data)
 
 		}, (error) => {
 			setErrorStates(error)
-		});
+		})
 
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [placesCol, locality, city]);
+	}, [locality, city, /* filter */])
 
 	return (
 		<GoogleMap
@@ -193,7 +199,7 @@ const Map = () => {
 					key={place._id}
 					position={place.location}
 					clickable={true}
-					opacity={0.8}
+					opacity={0.9}
 					title={place.name}
 					onClick={() => handleMarkerClick(place)}
 
