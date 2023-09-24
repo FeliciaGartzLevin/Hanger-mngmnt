@@ -16,7 +16,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 		<Container style={{
 			position: 'relative',
 			top: '4rem',
-			width: '25rem',
+			maxWidth: '25em'
 		}}>
 
 			<Container
