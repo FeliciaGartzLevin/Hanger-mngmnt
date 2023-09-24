@@ -10,6 +10,7 @@ import { NavLink, Link } from 'react-router-dom'
 const Navigation = () => {
 	const {
 		signedInUser,
+		signedInUserDoc,
 		signedInUserEmail,
 		signedInUserName,
 		signedInUserPhotoUrl
@@ -59,6 +60,27 @@ const Navigation = () => {
 								>Update Profile</NavDropdown.Item>
 
 								<NavDropdown.Divider />
+
+								{signedInUserDoc && signedInUserDoc.isAdmin && (
+									<>
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-place-form'
+										>Add Place</NavDropdown.Item>
+
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-pending-places'
+										>Pending Places</NavDropdown.Item>
+
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-users-list'
+										>List of Users</NavDropdown.Item>
+
+										<NavDropdown.Divider />
+									</>
+								)}
 
 								<NavDropdown.Item
 									as={NavLink}
