@@ -52,6 +52,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 			if (splitDescription.length > 2) {
 				if (!onPlaceName) return
 				const placeName = splitDescription[0].trim()
+				console.log('placeName', placeName)
 				onPlaceName(placeName)
 			}
 		}
