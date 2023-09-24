@@ -81,6 +81,11 @@ const Map = () => {
 		}
 	}
 
+	// Handling click on map marker
+	const handleMarkerClick = (place: Place) => {
+		console.log('Clicked marker for place_id:', place._id)
+	}
+
 	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -190,6 +195,7 @@ const Map = () => {
 					clickable={true}
 					opacity={0.8}
 					title={place.name}
+					onClick={() => handleMarkerClick(place)}
 
 				/>
 			))}
