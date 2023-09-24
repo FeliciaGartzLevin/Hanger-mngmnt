@@ -1,12 +1,11 @@
-// import { orderBy, where } from 'firebase/firestore'
-import { placesCol } from "../services/firebase";
-import { Place, Place_User } from "../types/Place.types";
-import useStreamCollection from "./useStreamCollection";
+import useStreamCollection from './useStreamCollection'
+import { placesCol } from '../services/firebase'
+import { Place } from '../types/Place.types'
 
-const useGetPlaces = (/* uid: string */) => {
-	return useStreamCollection<Place | Place_User>(
-		placesCol /* , where('uid', '==', uid), orderBy('completed'), orderBy('title') */
-	);
-};
+const useGetPlaces = () => {
+	return useStreamCollection<Place>(
+		placesCol
+	)
+}
 
-export default useGetPlaces;
+export default useGetPlaces

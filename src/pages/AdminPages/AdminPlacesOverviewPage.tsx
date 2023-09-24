@@ -2,11 +2,11 @@ import { ColumnDef } from "@tanstack/react-table";
 // import Card from 'react-bootstrap/Card'
 import WarningAlert from "../../components/Alerts/WarningAlert";
 // import CreatePlaceForm from '../components/forms/CreatePlaceForm'
-import TanstackSortableTable from "../../components/AdminPages/tables/TanstackSortableTable";
-import { Place, Place_User } from "../../types/Place.types";
+import AdminPlacesSortableTable from "../../components/AdminPages/AdminPlacesSortableTable";
+import { Place } from "../../types/Place.types";
 import useGetPlaces from "../../hooks/useGetPlaces";
 
-const columns: ColumnDef<Place | Place_User>[] = [
+const columns: ColumnDef<Place>[] = [
 	{
 		accessorKey: "name",
 		header: "Name",
@@ -41,7 +41,7 @@ const AdminPlacesOverviewPage = () => {
 
 			{isLoading && <p>Loading places...</p>}
 
-			{places && <TanstackSortableTable columns={columns} data={places} />}
+			{places && <AdminPlacesSortableTable columns={columns} data={places} />}
 
 			<hr className="mb-5" />
 

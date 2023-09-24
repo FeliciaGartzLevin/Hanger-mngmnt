@@ -49,8 +49,8 @@ const Navigation = () => {
 								>See Map</NavDropdown.Item>
 								<NavDropdown.Item
 									as={NavLink}
-									to='/recommend-place'
-								>Recommend Place</NavDropdown.Item>
+									to='/place-form'
+								>{signedInUserDoc && signedInUserDoc.isAdmin ? "Add" : "Recommend"} Place</NavDropdown.Item>
 
 								<NavDropdown.Divider />
 
@@ -63,11 +63,6 @@ const Navigation = () => {
 
 								{signedInUserDoc && signedInUserDoc.isAdmin && (
 									<>
-										<NavDropdown.Item
-											as={NavLink}
-											to='/admin-place-form'
-										>Add Place</NavDropdown.Item>
-
 										<NavDropdown.Item
 											as={NavLink}
 											to='/admin-pending-places'
