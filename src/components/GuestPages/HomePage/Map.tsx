@@ -9,9 +9,12 @@ import {
 import SearchBox from './SearchBox'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
-import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
+// import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
 import { findAdressComponent } from '../../../helpers/locations'
 import { useSearchParams } from 'react-router-dom'
+import { placesCol } from '../../../services/firebase'
+import { FirestoreError, onSnapshot, query, where } from 'firebase/firestore'
+import { Place } from '../../../types/Place.types'
 
 const Map = () => {
 	const [searchParams, setSearchParams] = useSearchParams()
@@ -20,11 +23,14 @@ const Map = () => {
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
 	// const [address, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
-	const [/* error */, setError] = useState<string | null>(null)
-	const {
-		data: places,
-		// isLoading: isLoadingPlaces,
-	} = useGetPlacesByCity(city)
+	const [/* error */, setError] = useState<FirestoreError | string | null>(null)
+	const [places, setPlaces] = useState<Place[] | null>(null)
+	const [/* isLoading */, setIsLoading] = useState<boolean>(false)
+	// const [firestoreError, setFireStoreError] = useState<FirestoreError | null>(null)
+	// const {
+	// 	data: places,
+	// 	// isLoading: isLoadingPlaces,
+	// } = useGetPlacesByCity(city)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -112,20 +118,51 @@ const Map = () => {
 			setError('No  city was found: ' + error.message)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []
-	)
+	}, [])
 
+	const setStates = (data: Place[]) => {
+		setPlaces(data);
+		setIsLoading(false);
+	}
+
+	const setErrorStates = (error: FirestoreError) => {
+		setError(error);
+		setIsLoading(false);
+	}
+
+	// Get info of city every time city changes
 	useEffect(() => {
 		if (!city) return
 		queryCity(city)
-		console.log('places', places)
-	}, [city, queryCity, places])
+	}, [city, queryCity])
 
+	// Get info of city every time locality changes
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
 		console.log('places', places)
 	}, [locality, queryCity, places])
+
+	// Querying the firestore db for all the places in current city
+	useEffect(() => {
+		const queryRef = query(placesCol, where("city", "==", city));
+
+		const unsubscribe = onSnapshot(queryRef, (snapshot) => {
+			const data: Place[] = snapshot.docs.map(doc => {
+				return {
+					...doc.data(),
+					_id: doc.id,
+				};
+			});
+			setStates(data)
+
+		}, (error) => {
+			setErrorStates(error)
+		});
+
+		return unsubscribe;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [placesCol, locality, city]);
 
 	return (
 		<GoogleMap
