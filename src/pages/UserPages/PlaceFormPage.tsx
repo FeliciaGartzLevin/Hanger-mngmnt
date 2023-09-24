@@ -37,13 +37,10 @@ const PlaceFormPage = () => {
 
 	const { isLoaded } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
-		libraries: libraries
+		libraries
 	})
 
-	if (!isLoaded)
-		return (
-			<div>Loading...</div>
-		)
+	if (!isLoaded) return<div>Loading...</div>
 
 	const onSubmit = async (data: Place) => {
 		try {
@@ -67,7 +64,8 @@ const PlaceFormPage = () => {
 
 			const newPlace = {
 				...data,
-				isApproved: signedInUserDoc && signedInUserDoc.isAdmin
+				isApproved: signedInUserDoc && signedInUserDoc.isAdmin,
+				uid: signedInUser.uid
 			}
 
 			const docRef = doc(placesCol, data._id)
@@ -212,7 +210,7 @@ const PlaceFormPage = () => {
 											required: "Category missing"
 										})}
 									>
-										<option value='' selected>Select Category*</option>
+										<option value='' defaultChecked>Select Category*</option>
 										<option value='Café'>Café</option>
 										<option value='Fast Food'>Fast Food</option>
 										<option value='Food Truck'>Food Truck</option>
@@ -238,7 +236,7 @@ const PlaceFormPage = () => {
 											required: "Supply missing"
 										})}
 									>
-										<option value='' selected>Select Supply*</option>
+										<option value='' defaultChecked>Select Supply*</option>
 										<option value='After Work'>After Work</option>
 										<option value='Breakfast/Brunch'>Breakfast/Brunch</option>
 										<option value='Dinner'>Dinner</option>
