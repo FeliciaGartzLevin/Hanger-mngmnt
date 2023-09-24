@@ -1,6 +1,5 @@
 import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
-import AdminPlaceFormPage from './pages/AdminPages/AdminPlaceFormPage'
 import AdminUsersListPage from './pages/AdminPages/AdminUsersListPage'
 import ForgotPasswordPage from './pages/GuestPages/ForgotPasswordPage'
 import HomePage from './pages/GuestPages/HomePage'
@@ -9,8 +8,8 @@ import SignInPage from './pages/GuestPages/SignInPage'
 import SignOutPage from './pages/GuestPages/SignOutPage'
 import SignUpPage from './pages/GuestPages/SignUpPage'
 import Navigation from './pages/Partials/Navigation'
+import PlaceFormPage from './pages/UserPages/PlaceFormPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
-import UserPlaceFormPage from './pages/UserPages/UserPlaceFormPage'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
@@ -35,13 +34,13 @@ const App = () => {
 					{/* Admin Routes */}
 					<Route path='/admin-place-form' element={
 						<RequireAuthAdmin>
-							<AdminPlaceFormPage />
+							<PlaceFormPage />
 						</RequireAuthAdmin>
 					} />
 
 					<Route path='/admin-pending-places' element={
 						<RequireAuthAdmin>
-							<AdminPlaceFormPage />
+							<PlaceFormPage />
 						</RequireAuthAdmin>
 					} />
 
@@ -61,10 +60,10 @@ const App = () => {
 						}
 					/>
 					<Route
-						path='/recommend-place'
+						path='/place-form'
 						element={
 							<RequireAuth>
-								<UserPlaceFormPage />
+								<PlaceFormPage />
 							</RequireAuth>
 						}
 					/>

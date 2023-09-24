@@ -9,13 +9,13 @@ import {
 	Form,
 	Row,
 } from "react-bootstrap";
-import { Place_User } from "../../types/Place.types";
 import { doc, setDoc } from "firebase/firestore";
 import { placesCol } from "../../services/firebase";
 import useAuth from "../../hooks/useAuth";
 import { getLatLng } from "use-places-autocomplete";
 import { Libraries, useLoadScript } from "@react-google-maps/api";
 import PlacesAutoComplete from "../../components/GuestPages/HomePage/PlacesAutoComplete";
+import { Place } from "../../types/Place.types";
 
 const libraries: Libraries = ["places"];
 
@@ -31,7 +31,7 @@ const UserPlaceFormPage = () => {
 		register,
 		setValue,
 		formState: { errors },
-	} = useForm<Place_User>();
+	} = useForm<Place>();
 	const auth = useAuth();
 
 	const { isLoaded } = useLoadScript({
@@ -46,7 +46,7 @@ const UserPlaceFormPage = () => {
 			</Container>
 		);
 
-	const onSubmit = async (data: Place_User) => {
+	const onSubmit = async (data: Place) => {
 		try {
 			setIsError(false);
 			setErrorMessage(null);
@@ -69,7 +69,7 @@ const UserPlaceFormPage = () => {
 				return;
 			}
 
-			const newPlace: Place_User = {
+			const newPlace: Place = {
 				// isApproved: false,
 				...data
 				// _id: data._id,

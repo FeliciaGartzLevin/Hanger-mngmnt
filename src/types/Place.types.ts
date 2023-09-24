@@ -1,40 +1,26 @@
-type BasePlace = {
-	_id: string;
-	uid: string;
-	name: string;
-	streetAddress: string;
-	city: string;
-	description: string;
-	category: Category;
-	supply: Supply
-	location: google.maps.LatLngLiteral;
-};
-
-export type Place = BasePlace & {
-	isApproved: true,
-	email: string;
-	telephone: string;
-	website: string;
-	facebook: string;
-	instagram: string;
-};
-
-export type Place_User = BasePlace & {
-	isApproved: false,
-	email?: string;
-	telephone?: string;
-	website?: string;
-	facebook?: string;
-	instagram?: string;
-	location: google.maps.LatLngLiteral;
-}
-
-export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast food' | 'Kiosk/grill' | 'Food truck'
-
-export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Middag/Á la carte'
-
+type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/grill' | 'Food Truck'
 
 export type Location = {
-	latitude: number;
-	longitude: number;
-};
+	latitude: number
+	longitude: number
+}
+
+export type Place = {
+	_id: string
+	category: Category
+	city: string
+	description: string
+	email?: string
+	facebook?: string
+	instagram?: string
+	isApproved: true
+	location: google.maps.LatLngLiteral
+	name: string
+	streetAddress: string
+	supply: Supply
+	telephone?: string
+	uid: string
+	website?: string
+}
+
+type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
