@@ -31,7 +31,6 @@ const Map = () => {
 			// getting coordinates
 			const { lat, lng } = getLatLng(results[0])
 
-			// setAddress(results[0].formatted_address)
 			// center the map on the searched city
 			setCenter({ lat, lng })
 
@@ -54,7 +53,6 @@ const Map = () => {
 		try {
 			// reversed geocoding to get the users address:
 			const results = await getGeocode({ location: position })
-			console.log('usersPositionResults', results)
 
 			basicActions(results)
 
@@ -79,8 +77,6 @@ const Map = () => {
 
 	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
-		// console logs for the clarity for now
-		console.log('googleMapAPIresults:', results)
 		try {
 			basicActions(results)
 
@@ -95,7 +91,6 @@ const Map = () => {
 		try {
 			// querying the geocoding API in order to get the users address
 			const results = await getGeocode({ address: city + ', Sverige' })
-			console.log('results', results)
 
 			// getting coordinates
 			const { lat, lng } = getLatLng(results[0])
@@ -124,12 +119,13 @@ const Map = () => {
 		if (!city) return
 		queryCity(city)
 		console.log('places', places)
-	}, [city, queryCity])
+	}, [city, queryCity, places])
 
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
-	}, [locality, queryCity])
+		console.log('places', places)
+	}, [locality, queryCity, places])
 
 	return (
 		<GoogleMap

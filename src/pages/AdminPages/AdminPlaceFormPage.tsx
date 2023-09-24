@@ -196,6 +196,7 @@ const AdminPlaceFormPage = () => {
 										const { lat, lng } =
 											getLatLng(selectedPlace);
 										setSelectedPlace({ lat, lng });
+										setValue('location', { lat, lng })
 
 										// Find the city component in the address_components array
 										selectedPlace.address_components?.find(
