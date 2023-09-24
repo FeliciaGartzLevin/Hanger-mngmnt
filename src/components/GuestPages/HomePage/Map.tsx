@@ -16,7 +16,11 @@ import { placesCol } from '../../../services/firebase'
 import { FirestoreError, QueryConstraint, onSnapshot, query, where } from 'firebase/firestore'
 import { Place } from '../../../types/Place.types'
 
-const Map = () => {
+type Props = {
+	placesFound: (places: Place[]) => void
+}
+
+const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const locality = searchParams.get("locality") ?? ''
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
@@ -119,13 +123,14 @@ const Map = () => {
 	}, [])
 
 	const setStates = (data: Place[]) => {
-		setPlaces(data);
-		setIsLoading(false);
+		setPlaces(data)
+		placesFound(data)
+		setIsLoading(false)
 	}
 
 	const setErrorStates = (error: FirestoreError) => {
-		setError(error);
-		setIsLoading(false);
+		setError(error)
+		setIsLoading(false)
 	}
 
 	// Get info of city every time city changes
@@ -143,7 +148,7 @@ const Map = () => {
 
 	const queryConstraints: QueryConstraint[] = [
 		where("city", "==", city)
-
+		// add filters here
 	]
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
@@ -170,10 +175,12 @@ const Map = () => {
 
 	return (
 		<GoogleMap
+
 			zoom={14}
 			center={center}
 			options={{
 				clickableIcons: true,
+				mapTypeControl: false,
 			}}
 			mapContainerClassName='map-container'
 			mapContainerStyle={{
@@ -192,7 +199,6 @@ const Map = () => {
 					key={place._id}
 					position={place.location}
 					clickable={true}
-					opacity={0.9}
 					title={place.name}
 					onClick={() => handleMarkerClick(place)}
 
