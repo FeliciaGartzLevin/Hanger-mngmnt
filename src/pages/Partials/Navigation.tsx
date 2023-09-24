@@ -65,13 +65,13 @@ const Navigation = () => {
 									<>
 										<NavDropdown.Item
 											as={NavLink}
-											to='/admin-pending-places'
-										>Pending Places</NavDropdown.Item>
+											to='/admin-places-list'
+										>Places List</NavDropdown.Item>
 
 										<NavDropdown.Item
 											as={NavLink}
 											to='/admin-users-list'
-										>List of Users</NavDropdown.Item>
+										>Users List</NavDropdown.Item>
 
 										<NavDropdown.Divider />
 									</>
