@@ -35,5 +35,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 // Export collection references
 export const usersCol = createCollection<UserDoc>('users')
 export const placesCol = createCollection<Place | Place_User>('places')
+export const placesOnlyCol = createCollection<Place>('places')
 
 export default app
