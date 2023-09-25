@@ -319,8 +319,8 @@ const PlaceFormPage = () => {
 								</Form.Group>
 
 								<Button
-									className='mt-3'
 									disabled={isSubmitting}
+									size='sm'
 									type='submit'
 									variant='primary'
 								>

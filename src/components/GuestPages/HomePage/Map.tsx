@@ -1,3 +1,9 @@
+import PlaceModal from './PlaceModal'
+import SearchBox from './SearchBox'
+import { findAdressComponent } from '../../../helpers/locations'
+import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
+// import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
+import { FirestoreError, onSnapshot, query, where } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
 import {
 	GoogleMap,
@@ -6,14 +12,9 @@ import {
 	// Circle,
 	// MarkerClusterer,
 } from '@react-google-maps/api'
-import SearchBox from './SearchBox'
-import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
-// import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-import { findAdressComponent } from '../../../helpers/locations'
 import { useSearchParams } from 'react-router-dom'
 import { placesCol } from '../../../services/firebase'
-import { FirestoreError, QueryConstraint, onSnapshot, query, where } from 'firebase/firestore'
 import { Place } from '../../../types/Place.types'
 
 const Map = () => {
@@ -25,6 +26,9 @@ const Map = () => {
 	const [/* error */, setError] = useState<FirestoreError | string | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [/* isLoading */, setIsLoading] = useState<boolean>(false)
+	const [showPlaceModal, setShowPlaceModal] = useState(false)
+	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
+
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -77,8 +81,11 @@ const Map = () => {
 
 	// Handling click on map marker
 	const handleMarkerClick = (place: Place) => {
-		console.log('Clicked marker for place_id:', place._id)
+		setShowPlaceModal(true)
+		setClickedPlace(place)
 	}
+
+	const handleClosePlaceModal = () => setShowPlaceModal(false)
 
 	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
@@ -195,9 +202,13 @@ const Map = () => {
 					opacity={0.9}
 					title={place.name}
 					onClick={() => handleMarkerClick(place)}
-
 				/>
 			))}
+			<PlaceModal
+				onClose={handleClosePlaceModal}
+				place={clickedPlace}
+				show={showPlaceModal}
+			/>
 		</GoogleMap>
 
 	)
