@@ -13,7 +13,7 @@ export type Place = {
 	email?: string
 	facebook?: string
 	instagram?: string
-	isApproved: true
+	isApproved: boolean
 	location: google.maps.LatLngLiteral
 	name: string
 	streetAddress: string
