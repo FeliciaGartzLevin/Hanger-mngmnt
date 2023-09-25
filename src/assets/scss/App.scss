@@ -1,6 +1,7 @@
 @import "bootstrap/scss/bootstrap";
 @import "react-toastify/scss/main";
 @import "toastify";
+@import "styles";
 
 #App {
 	display: flex;
@@ -10,21 +11,42 @@
 
 }
 
+.offcanvas {
+
+	overflow: scroll;
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
 .offcanvas-btn {
 	border-radius: 0 15rem 15rem 0;
 	position: fixed;
 	left: 0;
-	top: 8vh;
-	padding: 10px 20px;
-	background-color: #007bff;
-	/* Button background color */
+	top: 12vh;
+	padding: 0.4rem 1rem;
 	color: #fff;
+	font-size: 1.5rem;
 	z-index: 999;
 
-	/* Adjust the z-index as needed to ensure it's above other elements */
 	&:hover {
 		background-color: #0056b3;
-		/* Button background color on hover */
+	}
+}
+
+.card-links {
+	a {
+		text-decoration: none;
+		color: $linkColor;
+
+		&:hover {
+			color: $linkHoverColor;
+		}
 	}
 }
 
