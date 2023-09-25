@@ -1,6 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquareFacebook, faSquareInstagram } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
+import { GoMail } from 'react-icons/go'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
@@ -15,6 +14,8 @@ interface IProps {
 }
 
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
+	const iconSize = 25
+
 	if (place) return (
 		<Modal
 			centered
@@ -35,35 +36,35 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 					<Col>
 						{place.website && (
 							<Link to={place.website} target='_blank'>
-								<FontAwesomeIcon icon={faGlobe} size='xl' />
+								<BsGlobe size={iconSize} />
 							</Link>
 						)}
 					</Col>
 					<Col>
 						{place.facebook && (
 							<Link to={place.facebook} target='_blank'>
-								<FontAwesomeIcon icon={faSquareFacebook} size='xl' />
+								<BsFacebook size={iconSize} />
 							</Link>
 						)}
 					</Col>
 					<Col>
 						{place.instagram && (
 							<Link to={place.instagram} target='_blank'>
-								<FontAwesomeIcon icon={faSquareInstagram} size='xl' />
+								<BsInstagram size={iconSize} />
 							</Link>
 						)}
 					</Col>
 					<Col>
 						{place.telephone && (
 							<Link to={`tel:${place.telephone}`} target='_blank'>
-								<FontAwesomeIcon icon={faPhone} size='xl' />
+								<BsFillTelephoneFill size={iconSize} />
 							</Link>
 						)}
 					</Col>
 					<Col>
 						{place.email && (
 							<Link to={`mailto:${place.email}`}>
-								<FontAwesomeIcon icon={faEnvelope} size='xl' />
+								<GoMail size={iconSize} />
 							</Link>
 						)}
 					</Col>
