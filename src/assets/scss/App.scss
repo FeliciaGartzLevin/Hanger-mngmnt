@@ -2,6 +2,12 @@
 @import "react-toastify/scss/main";
 @import "toastify";
 @import "styles";
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+
+body {
+	font-family: 'Caveat Brush', cursive;
+
+}
 
 #App {
 	display: flex;
