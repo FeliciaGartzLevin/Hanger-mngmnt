@@ -44,7 +44,7 @@ const HomePage = () => {
 		<>
 			{/* Offcanvas and button to launch it showing in all below large screens */}
 			<Offcanvas
-				className="d-block d-md-none offcanvas"
+				className="d-block d-lg-none offcanvas"
 				lg={() => setShow(false)}
 				show={show}
 				onHide={() => setShow(false)}>
