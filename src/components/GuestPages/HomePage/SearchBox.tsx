@@ -33,10 +33,9 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 				<Button
 					onClick={handleFindLocation}
 					aria-label="Use my location"
+					variant='secondary'
 					className='rounded-circle'
 					style={{
-						background: 'rgb(134, 0, 85)',
-						borderColor: 'rgb(134, 0, 85)',
 						position: 'absolute',
 						top: '8px',
 						right: '18px'
