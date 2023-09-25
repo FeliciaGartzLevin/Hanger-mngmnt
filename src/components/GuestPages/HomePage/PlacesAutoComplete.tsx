@@ -30,7 +30,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		clearSuggestions()
 	})
 
-	const handleSelect = ({ description, structured_formatting }: google.maps.places.AutocompletePrediction) => (
+	const handleSelect = ({ description, structured_formatting, distance_meters }: google.maps.places.AutocompletePrediction) => (
 		async () => {
 			// When the user selects a place, we can replace the keyword without request data from API
 			// by setting the second parameter to 'false'
@@ -42,7 +42,6 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 				address: description,
 				componentRestrictions: { country: 'SE' } //(supposed to be) giving only results in Sweden
 			})
-
 			const placeName = structured_formatting.main_text
 			onClickedPlace(results, placeName)
 		}
