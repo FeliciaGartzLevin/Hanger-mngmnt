@@ -2,15 +2,11 @@ import PlaceModal from './PlaceModal'
 import SearchBox from './SearchBox'
 import { findAdressComponent } from '../../../helpers/locations'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-// import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-import { FirestoreError, onSnapshot, query, where } from 'firebase/firestore'
+import { FirestoreError, QueryConstraint, onSnapshot, query, where } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
-	// DirectionsRenderer,
-	// Circle,
-	// MarkerClusterer,
 } from '@react-google-maps/api'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { useSearchParams } from 'react-router-dom'

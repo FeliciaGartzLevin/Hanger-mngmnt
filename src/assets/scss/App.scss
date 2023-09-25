@@ -6,13 +6,13 @@
 #App {
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
+	max-height: 100vh;
 	position: relative;
 
 }
 
-.offcanvas {
-
+.offcanvas,
+.places-sidebar {
 	overflow: scroll;
 	-ms-overflow-style: none;
 	/* IE and Edge */
@@ -22,6 +22,10 @@
 	&::-webkit-scrollbar {
 		display: none;
 	}
+}
+
+.places-sidebar {
+	max-height: 100vh;
 }
 
 .offcanvas-btn {

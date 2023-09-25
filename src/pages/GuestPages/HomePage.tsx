@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useState } from "react"
-import { Place, Supply } from "../../types/Place.types"
+import { Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
 import PlaceCards from "../../components/GuestPages/HomePage/PlaceCards"
 
@@ -16,7 +16,7 @@ import PlaceCards from "../../components/GuestPages/HomePage/PlaceCards"
 const libraries: Libraries = ['places']
 
 const HomePage = () => {
-	const [filter, setFilter] = useState<Supply | null>(null)
+	// const [filter, setFilter] = useState<Supply | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [show, setShow] = useState(false);
 
@@ -74,7 +74,7 @@ const HomePage = () => {
 			<Container fluid id="App" className="py-3 center-y">
 				<Row className='d-flex justify-content-center'>
 					{/* Fix a scroll here for overflow */}
-					<Col className="d-none d-lg-block" lg={{ span: 3 }} >
+					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>
 						{places && places.map((place) =>
 						(
