@@ -6,15 +6,18 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import { NavLink, Link } from 'react-router-dom'
-import hangry from '../../../public/hangry-3.svg'
+import hangry from '../../assets/images/hangry.svg'
 
 const Hangry = () => {
 	return (
-
-		<Image src={hangry} alt='Logo' width={40} height={40} />
-
-	);
-  };
+		<Image
+			alt='Hanger Management Logo'
+			className='img-square me-2'
+			height={35}
+			src={hangry}
+		/>
+	)
+}
 
 const Navigation = () => {
 	const {
@@ -31,10 +34,11 @@ const Navigation = () => {
 				<Navbar.Brand
 					as={Link}
 					to='/'
-				>	<Hangry/>
-					{/* 🍔 😡 Hanger  THE HANGRY APP */}
-					{/* <span className='d-none d-sm-inline'> Management</span>
-					<span className='d-inline d-sm-none'> Mgmt</span> */}
+				>
+					<Hangry />
+					Hanger
+					<span className='d-none d-sm-inline'> Management</span>
+					<span className='d-inline d-sm-none'> Mgmt</span>
 				</Navbar.Brand>
 					<Nav>
 						{signedInUser ? (
@@ -43,12 +47,13 @@ const Navigation = () => {
 								title={
 									signedInUserPhotoUrl
 									? <Image
-										src={signedInUserPhotoUrl}
-										width={30}
-										title={(signedInUserName || signedInUserEmail) ?? ''}
 										className='img-square'
 										fluid
-										roundedCircle />
+										roundedCircle
+										src={signedInUserPhotoUrl}
+										title={(signedInUserName || signedInUserEmail) ?? ''}
+										width={35}
+									/>
 									: signedInUserName || signedInUserEmail
 								}
 							>
