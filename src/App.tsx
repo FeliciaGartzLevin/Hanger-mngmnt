@@ -1,5 +1,7 @@
 import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import AdminUsersListPage from './pages/AdminPages/AdminUsersListPage'
 import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
 import ForgotPasswordPage from './pages/GuestPages/ForgotPasswordPage'
