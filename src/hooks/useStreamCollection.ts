@@ -1,6 +1,6 @@
 import { FirebaseError } from 'firebase/app'
 import { CollectionReference, QueryConstraint, onSnapshot, query } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const useStreamCollection = <T>(
 	colRef: CollectionReference<T>,
@@ -11,7 +11,7 @@ const useStreamCollection = <T>(
 	const [isError, setIsError] = useState(false)
 	const [isLoading, setIsLoading] = useState(true)
 
-	useEffect(() => {
+	const getCollection = useCallback(() => {
 		const queryRef = query(colRef, ...queryConstraints)
 
 		const unsubscribe = onSnapshot(queryRef, (snapshot) => {
@@ -37,6 +37,10 @@ const useStreamCollection = <T>(
 
 		return unsubscribe
 	}, [colRef, queryConstraints])
+
+	useEffect(() => {
+		getCollection()
+	}, [getCollection])
 
 	return {
 		data,
