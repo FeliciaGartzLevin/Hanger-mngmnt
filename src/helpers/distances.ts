@@ -1,3 +1,5 @@
+import { Place } from "../types/Place.types";
+
 const rad = function (x: number) {
 	return x * Math.PI / 180;
 }
@@ -18,4 +20,15 @@ export const getDistanceInMetresOrKm = (distance: number | null) => {
 	if (!distance) return
 	if (distance < 1000) return distance + ' meters'
 	return (distance / 1000).toFixed(1) + ' kms'
+}
+
+
+export const getPlacesWithDistances = (position: google.maps.LatLngLiteral, places: Place[]) => {
+	return places
+		.map((place) => {
+			const distance = Math.round(getHaversineDistance(position, place.location))
+			const distanceText = getDistanceInMetresOrKm(distance)
+			return { ...place, distance, distanceText }
+		})
+		.sort((a, b) => a.distance - b.distance)
 }

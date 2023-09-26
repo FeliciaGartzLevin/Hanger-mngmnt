@@ -2,7 +2,7 @@ import React from 'react'
 import { Place } from '../../../types/Place.types'
 import PlaceCards from './PlaceCards'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-import { getDistanceInMetresOrKm, getHaversineDistance } from '../../../helpers/distances'
+import { getPlacesWithDistances } from '../../../helpers/distances'
 
 type Props = {
 	places: Place[]
@@ -23,16 +23,7 @@ const SortAndMapPlaces: React.FC<Props> = ({ places }) => {
 		)
 	}
 
-	const placesWithDistance = places
-		.map((place) => {
-			const distance = Math.round(getHaversineDistance(position, place.location))
-			console.log('The distance to ' + place.name + ' is ' + distance + 'm')
-			const distanceText = getDistanceInMetresOrKm(distance)
-			return { ...place, distance, distanceText }
-		})
-		.sort((a, b) => a.distance - b.distance)
-
-	console.log('New places array with distance added, and sorted by it: ', placesWithDistance)
+	const placesWithDistance = getPlacesWithDistances(position, places)
 
 	return placesWithDistance
 		.map((place) =>
