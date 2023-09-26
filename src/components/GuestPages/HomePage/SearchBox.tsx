@@ -1,8 +1,9 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationArrow as LocationIcon } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faLocationArrow as LocationIcon } from '@fortawesome/free-solid-svg-icons'
+import { FaLocationArrow } from 'react-icons/fa'
 import PlacesAutoComplete from './PlacesAutoComplete'
 
 type Props = {
@@ -42,7 +43,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 					}}
 					type='submit'
 				>
-					<FontAwesomeIcon icon={LocationIcon} />
+					<FaLocationArrow />
 				</Button>
 			</Container>
 		</Container>
