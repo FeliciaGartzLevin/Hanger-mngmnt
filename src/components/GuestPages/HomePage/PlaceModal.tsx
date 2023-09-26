@@ -4,8 +4,9 @@ import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
+import { Link, useNavigate } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
-import { Link } from 'react-router-dom'
+
 
 interface IProps {
 	onClose: () => void
@@ -14,6 +15,8 @@ interface IProps {
 }
 
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
+	const navigate = useNavigate()
+
 	const iconSize = 25
 
 	if (place) return (
@@ -76,7 +79,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 			</Modal.Body>
 			<Modal.Footer>
 				<Button
-					// onClick={onClose}
+					onClick={() => navigate('/upload-photo/' + place._id)}
 					size='sm'
 					variant='primary'
 				>Upload Photos</Button>
