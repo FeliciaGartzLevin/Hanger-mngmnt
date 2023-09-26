@@ -1,7 +1,10 @@
+import ImageGallery from '../../components/ImageGallery'
 import { FirebaseError } from 'firebase/app'
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
-import useAuth from '../../hooks/useAuth'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import useAuth from '../../hooks/useAuth'
+import useGetPlace from '../../hooks/useGetPlace'
+import useGetPhotosByPlace from '../../hooks/useGetPhotosByPlace'
 import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
@@ -17,7 +20,6 @@ import { useParams } from 'react-router-dom'
 import { photosCol, storage } from '../../services/firebase'
 import { PhotoUpload } from '../../types/Photo.types'
 import { v4 } from 'uuid'
-import useGetPlace from '../../hooks/useGetPlace'
 
 const UploadPhotoPage = () => {
 	const [isError, setIsError] = useState(false)
@@ -35,6 +37,8 @@ const UploadPhotoPage = () => {
 
 	const { placeId } = useParams()
 	const place = useGetPlace(placeId)
+
+	const placePhotos = useGetPhotosByPlace(placeId)
 
 	const photoRef = useRef<FileList|null>(null)
 	photoRef.current = watch('photoFile')
@@ -78,9 +82,6 @@ const UploadPhotoPage = () => {
 					setErrorMessage(error.message)
 
 				}, async () => {
-					setUploadProgress(null)
-					resetField('photoFile')
-
 					const url = await getDownloadURL(fileRef)
 
 					const docRef = doc(photosCol, _id)
@@ -98,6 +99,8 @@ const UploadPhotoPage = () => {
 					if (photoRef.current) photoRef.current = null
 
 					toast.dark(signedInUserDoc && signedInUserDoc.isAdmin ? "Photo added" : "Photo under review")
+					setUploadProgress(null)
+					resetField('photoFile')
 				})
 			}
 
@@ -171,6 +174,7 @@ const UploadPhotoPage = () => {
 							</Form>
 						</Card.Body>
 					</Card>
+					{placePhotos.data && <ImageGallery photos={placePhotos.data} />}
 				</Col>
 			</Row>
 		</Container>
