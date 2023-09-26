@@ -6,7 +6,6 @@
 
 body {
 	font-family: 'Caveat Brush', cursive;
-
 }
 
 #App {
@@ -14,7 +13,6 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 	position: relative;
-
 }
 
 .offcanvas,
@@ -23,8 +21,8 @@ body {
 	-ms-overflow-style: none;
 	/* IE and Edge */
 	scrollbar-width: none;
-	/* Firefox */
 
+	/* Firefox */
 	&::-webkit-scrollbar {
 		display: none;
 	}
@@ -43,7 +41,6 @@ body {
 	color: #fff;
 	font-size: 1.5rem;
 	z-index: 999;
-
 }
 
 .card-links {
@@ -55,10 +52,6 @@ body {
 			color: $linkHoverColor;
 		}
 	}
-}
-
-.navbar-expand .navbar-nav .nav-link {
-	padding-right: 0;
 }
 
 .img-square {
