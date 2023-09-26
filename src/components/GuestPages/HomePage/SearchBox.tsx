@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import FormSelect from 'react-bootstrap/FormSelect'
-import { FaLocationArrow } from 'react-icons/fa'
+import { BiCurrentLocation as FaLocationArrow } from 'react-icons/bi'
 import PlacesAutoComplete from './PlacesAutoComplete'
 import { SelectCategory } from '../../../types/Place.types'
 
@@ -57,13 +57,16 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 				</Col>
 				<Col xs={2}>
 					<Button
+						// style={{
+						// 	backgroundColor: '#3B4C73',
+						// 	borderColor: '#3B4C73',
+						// }}
 						onClick={handleFindLocation}
 						aria-label="Use my location"
-						variant='secondary'
-						className='rounded-circle'
+						variant='dark'
 						type='submit'
 					>
-						<FaLocationArrow />
+						<FaLocationArrow style={{ fontSize: '1.5rem' }} />
 					</Button>
 				</Col>
 			</Row>
