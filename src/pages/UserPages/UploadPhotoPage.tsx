@@ -38,7 +38,7 @@ const UploadPhotoPage = () => {
 	const { placeId } = useParams()
 	const place = useGetPlace(placeId)
 
-	const placePhotos = useGetPhotosByPlace(placeId)
+	const { data: photos } = useGetPhotosByPlace(placeId)
 
 	const photoRef = useRef<FileList|null>(null)
 	photoRef.current = watch('photoFile')
@@ -174,7 +174,7 @@ const UploadPhotoPage = () => {
 							</Form>
 						</Card.Body>
 					</Card>
-					{placePhotos.data && <ImageGallery photos={placePhotos.data} />}
+					{photos && <ImageGallery photos={photos} />}
 				</Col>
 			</Row>
 		</Container>

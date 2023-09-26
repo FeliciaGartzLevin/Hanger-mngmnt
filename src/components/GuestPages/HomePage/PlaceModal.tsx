@@ -17,7 +17,7 @@ interface IProps {
 
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 	const navigate = useNavigate()
-	const iconSize = 25
+	const iconSize = 20
 	const { data: photos } = useGetPhotosByPlace(place?._id)
 
 	if (place) return (
@@ -43,8 +43,11 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
+				{photos && <ImageGallery photos={photos} />}
+			</Modal.Body>
+			<Modal.Footer className='position-relative'>
 				<Row
-					className='justify-content-end position-absolute top-0 end-0 p-3'
+					className='justify-content-end position-absolute start-0'
 					xs='auto'
 				>
 					{place.website && (
@@ -87,9 +90,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 						</Col>
 					)}
 				</Row>
-				{photos && <ImageGallery photos={photos} />}
-			</Modal.Body>
-			<Modal.Footer>
+
 				<Button
 					onClick={() => navigate('/upload-photo/' + place._id)}
 					size='sm'
