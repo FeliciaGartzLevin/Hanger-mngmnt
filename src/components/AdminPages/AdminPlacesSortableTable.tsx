@@ -25,8 +25,8 @@ const AdminUsersSortableTable = <TData, TValue>({
 	const [sorting, setSorting] = useState<SortingState>([])
 
 	const table = useReactTable({
-		data,
 		columns,
+		data,
 		state: {
 			sorting,
 		},
