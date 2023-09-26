@@ -13,7 +13,7 @@ const Hangry = () => {
 		<Image
 			alt='Hanger Management Logo'
 			className='img-square me-2'
-			height={35}
+			height={60}
 			src={hangry}
 		/>
 	)
@@ -52,7 +52,7 @@ const Navigation = () => {
 										roundedCircle
 										src={signedInUserPhotoUrl}
 										title={(signedInUserName || signedInUserEmail) ?? ''}
-										width={35}
+										width={60}
 									/>
 									: signedInUserName || signedInUserEmail
 								}

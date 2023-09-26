@@ -19,7 +19,7 @@ import { getLatLng } from 'use-places-autocomplete'
 
 const libraries: Libraries = ['places']
 
-// Constants for Categories
+
 const categories: Category[] = [
   'Café',
   'Pub',
@@ -29,7 +29,6 @@ const categories: Category[] = [
   'Food Truck',
 ];
 
-// Constants for Supply
 const supplyOptions: Supply[] = [
   'General Menu',
   'Lunch',
