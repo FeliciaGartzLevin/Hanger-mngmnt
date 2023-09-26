@@ -7,11 +7,11 @@ import Row from 'react-bootstrap/Row'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
-import { Place } from '../../../types/Place.types'
+import { PlaceWithDistance } from '../../../types/Place.types'
 
 interface IProps {
 	onClose: () => void
-	place: Place | null
+	place: PlaceWithDistance | null
 	show: boolean
 }
 
@@ -27,10 +27,20 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 			show={show}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title>{place.name}</Modal.Title>
+				<Modal.Title >
+					{place.name}
+
+				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<div>{place.supply} | {place.category}</div>
+				<div className='d-flex justify-content-between'>
+					<div>{place.supply} | {place.category}</div>
+					{place.distanceText &&
+						<small style={{ fontSize: '0.9rem' }}>
+							{place.distanceText} away
+						</small>
+					}
+				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
 				<Row

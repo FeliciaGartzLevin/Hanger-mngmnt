@@ -9,7 +9,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useState } from "react"
 import { Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
-import PlaceCards from "../../components/GuestPages/HomePage/PlaceCards"
+import SortAndMapPlaces from "../../components/GuestPages/HomePage/SortAndMapPlaces"
 
 // defining used libraries outside page so
 // it wont rerender and give a performance warning
@@ -18,7 +18,8 @@ const libraries: Libraries = ['places']
 const HomePage = () => {
 	// const [filter, setFilter] = useState<Supply | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
-	const [show, setShow] = useState(false);
+	const [show, setShow] = useState(false)
+
 
 	// connect to maps API
 	const { isLoaded, loadError } = useLoadScript({
@@ -52,14 +53,10 @@ const HomePage = () => {
 					<Offcanvas.Title>Places</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
-					{places && places.map((place) =>
-					(
-						<PlaceCards
-							key={place._id}
-							place={place}
-						/>
-					)
-					)}
+					{places &&
+						<SortAndMapPlaces
+							places={places} />
+					}
 				</Offcanvas.Body>
 			</ Offcanvas>
 			<Button
@@ -73,17 +70,12 @@ const HomePage = () => {
 			{/* Sidebar showing in all above large screens */}
 			<Container fluid id="App" className="py-3 center-y">
 				<Row className='d-flex justify-content-center'>
-					{/* Fix a scroll here for overflow */}
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>
-						{places && places.map((place) =>
-						(
-							<PlaceCards
-								key={place._id}
-								place={place}
-							/>
-						)
-						)}
+						{places &&
+							<SortAndMapPlaces
+								places={places} />
+						}
 					</Col>
 					<Col lg={{ span: 9 }}>
 						<Map

@@ -14,10 +14,28 @@ import { Libraries, useLoadScript } from '@react-google-maps/api'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { placesCol } from '../../services/firebase'
-import { Place } from '../../types/Place.types'
+import { Category, Place, Supply } from '../../types/Place.types'
 import { getLatLng } from 'use-places-autocomplete'
 
 const libraries: Libraries = ['places']
+
+
+const categories: Category[] = [
+	'Café',
+	'Pub',
+	'Restaurant',
+	'Fast Food',
+	'Kiosk/grill',
+	'Food Truck',
+]
+
+const supplyOptions: Supply[] = [
+	'General Menu',
+	'Lunch',
+	'After Work',
+	'Dinner',
+	'Breakfast/Brunch',
+]
 
 const PlaceFormPage = () => {
 	const [selectedPlace, setSelectedPlace] = useState<google.maps.LatLngLiteral | null>(null)
@@ -179,13 +197,11 @@ const PlaceFormPage = () => {
 											required: "Description missing",
 											minLength: {
 												value: 10,
-												message:
-													"Enter at least 10 characters",
+												message: "Enter at least 10 characters",
 											},
 											maxLength: {
 												value: 300,
-												message:
-													"Maximum character limit exceeded (300 characters)",
+												message: "Maximum character limit exceeded (300 characters)",
 											},
 										})}
 									/>
@@ -208,12 +224,11 @@ const PlaceFormPage = () => {
 										})}
 									>
 										<option value='' defaultChecked>Select Category*</option>
-										<option value='Café'>Café</option>
-										<option value='Fast Food'>Fast Food</option>
-										<option value='Food Truck'>Food Truck</option>
-										<option value='Kiosk/Grill'>Kiosk/Grill</option>
-										<option value='Pub'>Pub</option>
-										<option value='Restaurant'>Restaurant</option>
+										{categories.map((category) => (
+											<option key={category} value={category}>
+												{category}
+											</option>
+										))}
 									</Form.Select>
 									{errors.category && (
 										<Form.Text className='invalid-value'>
@@ -234,11 +249,11 @@ const PlaceFormPage = () => {
 										})}
 									>
 										<option value='' defaultChecked>Select Supply*</option>
-										<option value='After Work'>After Work</option>
-										<option value='Breakfast/Brunch'>Breakfast/Brunch</option>
-										<option value='Dinner'>Dinner</option>
-										<option value='General Menu'>General Menu</option>
-										<option value='Lunch'>Lunch</option>
+										{supplyOptions.map((supply) => (
+											<option key={supply} value={supply}>
+												{supply}
+											</option>
+										))}
 									</Form.Select>
 									{errors.supply && (
 										<Form.Text className='invalid-value'>
@@ -327,3 +342,4 @@ const PlaceFormPage = () => {
 }
 
 export default PlaceFormPage
+
