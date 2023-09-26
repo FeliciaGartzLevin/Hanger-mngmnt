@@ -150,7 +150,9 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}, [locality, queryCity, places])
 
 	const queryConstraints: QueryConstraint[] = [
-		where("city", "==", city)
+		where("city", "==", city),
+		where("isApproved", "==", true),
+		// visa bara places som är approved
 		// add filters here
 	]
 	// Querying the firestore db for all the places in current city
