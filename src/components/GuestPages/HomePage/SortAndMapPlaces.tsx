@@ -9,7 +9,6 @@ type Props = {
 }
 
 const SortAndMapPlaces: React.FC<Props> = ({ places }) => {
-	// getting distance to my position and also send it to Placecard to be rendered
 	const { position } = useGetCurrentLocation()
 
 	if (!position) {

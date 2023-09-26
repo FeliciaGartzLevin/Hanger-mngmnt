@@ -11,7 +11,8 @@ import {
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { useSearchParams } from 'react-router-dom'
 import { placesCol } from '../../../services/firebase'
-import { Place } from '../../../types/Place.types'
+import { Place, PlaceWithDistance } from '../../../types/Place.types'
+import { getDistanceInMetresOrKm, getHaversineDistance } from '../../../helpers/distances'
 
 type Props = {
 	placesFound: (places: Place[]) => void
@@ -27,7 +28,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [/* isLoading */, setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
-	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
+	const [clickedPlace, setClickedPlace] = useState<Place | PlaceWithDistance | null>(null)
 
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
@@ -82,7 +83,10 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	// Handling click on map marker
 	const handleMarkerClick = (place: Place) => {
 		setShowPlaceModal(true)
-		setClickedPlace(place)
+		if (!usersPosition) return setClickedPlace(place)
+		const distance = Math.round(getHaversineDistance(usersPosition, place.location))
+		const distanceText = getDistanceInMetresOrKm(distance)
+		setClickedPlace({ ...place, distance, distanceText })
 	}
 
 	const handleClosePlaceModal = () => setShowPlaceModal(false)
@@ -152,7 +156,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const queryConstraints: QueryConstraint[] = [
 		where("city", "==", city),
 		where("isApproved", "==", true),
-		// visa bara places som är approved
 		// add filters here
 	]
 	// Querying the firestore db for all the places in current city
