@@ -1,6 +1,6 @@
 import PlacesAutoComplete from '../../components/GuestPages/HomePage/PlacesAutoComplete'
 import { FirebaseError } from 'firebase/app'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import useAuth from '../../hooks/useAuth'
 import { useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
@@ -62,13 +62,21 @@ const PlaceFormPage = () => {
 				return
 			}
 
+			const docRef = doc(placesCol, data._id)
+			const checkDoc = await getDoc(docRef)
+			if (checkDoc.exists()) {
+				setIsError(true)
+				setErrorMessage("Place already exists")
+				setIsSubmitting(false)
+				return
+			}
+
 			const newPlace = {
 				...data,
 				isApproved: signedInUserDoc && signedInUserDoc.isAdmin,
 				uid: signedInUser.uid
 			}
 
-			const docRef = doc(placesCol, data._id)
 			await setDoc(docRef, newPlace)
 
 			toast.dark("Place added successfully!")
