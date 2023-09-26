@@ -116,7 +116,6 @@ const PlaceFormPage = () => {
 							<div className='mb-3'>
 								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
 								<PlacesAutoComplete
-									// onPlaceName={(name) => setPlaceName(name)}
 									onClickedPlace={(results, name) => {
 										const selectedPlace = results[0]
 
