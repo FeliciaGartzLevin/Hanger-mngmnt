@@ -12,7 +12,7 @@ const Hangry = () => <Image
 	className='me-2 img-square'
 	src={hangry}
 	alt='Logo'
-	width={40}
+	height={35}
 />
 
 const Navigation = () => {
