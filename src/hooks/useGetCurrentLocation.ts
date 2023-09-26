@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * A hook for getting the current location of the device
@@ -10,15 +10,22 @@ const useGetCurrentLocation = () => {
 	const [error, setError] = useState<GeolocationPositionError | null>(null)
 
 	// get and use the current position of user
-	navigator.geolocation.getCurrentPosition((position) => {
-		// getting current long and lat
-		const { latitude, longitude } = position.coords;
-		setPosition({ lat: latitude, lng: longitude });
 
-	}, (error) => {
-		console.error('Error getting user location:', error);
-		setError(error)
-	})
+	const getCurrentLocation = () => {
+		navigator.geolocation.getCurrentPosition((position) => {
+			// getting current long and lat
+			const { latitude, longitude } = position.coords;
+			setPosition({ lat: latitude, lng: longitude });
+
+		}, (error) => {
+			console.error('Error getting user location:', error);
+			setError(error)
+		})
+	}
+
+	useEffect(() => {
+		getCurrentLocation()
+	}, [])
 
 	return {
 		position,

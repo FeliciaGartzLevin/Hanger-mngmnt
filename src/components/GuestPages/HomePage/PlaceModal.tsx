@@ -33,41 +33,45 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 					className='mt-3 justify-content-end'
 					xs='auto'
 				>
-					<Col>
-						{place.website && (
+					{place.website && (
+						<Col>
 							<Link to={place.website} target='_blank'>
 								<BsGlobe size={iconSize} />
 							</Link>
-						)}
-					</Col>
-					<Col>
-						{place.facebook && (
+						</Col>
+					)}
+
+					{place.facebook && (
+						<Col>
 							<Link to={place.facebook} target='_blank'>
 								<BsFacebook size={iconSize} />
 							</Link>
-						)}
-					</Col>
-					<Col>
-						{place.instagram && (
+						</Col>
+					)}
+
+					{place.instagram && (
+						<Col>
 							<Link to={place.instagram} target='_blank'>
 								<BsInstagram size={iconSize} />
 							</Link>
-						)}
-					</Col>
-					<Col>
-						{place.telephone && (
+						</Col>
+					)}
+
+					{place.telephone && (
+						<Col>
 							<Link to={`tel:${place.telephone}`} target='_blank'>
 								<BsFillTelephoneFill size={iconSize} />
 							</Link>
-						)}
-					</Col>
-					<Col>
-						{place.email && (
+						</Col>
+					)}
+
+					{place.email && (
+						<Col>
 							<Link to={`mailto:${place.email}`}>
 								<GoMail size={iconSize} />
 							</Link>
-						)}
-					</Col>
+						</Col>
+					)}
 				</Row>
 			</Modal.Body>
 			<Modal.Footer>

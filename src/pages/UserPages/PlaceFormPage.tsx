@@ -25,7 +25,7 @@ const PlaceFormPage = () => {
 	const [isError, setIsError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-
+	const [placeName, setPlaceName] = useState<string | undefined>(undefined)
 	const {
 		handleSubmit,
 		register,
@@ -40,7 +40,7 @@ const PlaceFormPage = () => {
 		libraries
 	})
 
-	if (!isLoaded) return<div>Loading...</div>
+	if (!isLoaded) return <div>Loading...</div>
 
 	const onSubmit = async (data: Place) => {
 		try {
@@ -80,8 +80,9 @@ const PlaceFormPage = () => {
 			await setDoc(docRef, newPlace)
 
 			toast.dark("Place added successfully!")
-
+			console.log('placeName', placeName)
 			setValue('name', '')
+			// setPlaceName(undefined)
 			setValue('description', '')
 			setValue('email', '')
 			setValue('telephone', '')
@@ -115,28 +116,10 @@ const PlaceFormPage = () => {
 							{isError && <Alert variant='danger'>{errorMessage}</Alert>}
 
 							<div className='mb-3'>
-								<Form.Group controlId='name' className='mb-3'>
-									<Form.Control
-										type='name'
-										placeholder="Location Name*"
-										{...register('name', {
-											required: "Location name missing",
-											minLength: {
-												value: 3,
-												message:
-													"Enter at least 3 characters"
-											},
-										})}
-									/>
-									{errors.name && (
-										<Form.Text className='invalid-value'>
-											{errors.name.message}
-										</Form.Text>
-									)}
-								</Form.Group>
-
+								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
 								<PlacesAutoComplete
-									onClickedPlace={(results) => {
+									// onPlaceName={(name) => setPlaceName(name)}
+									onClickedPlace={(results, name) => {
 										const selectedPlace = results[0]
 
 										if (!selectedPlace) {
@@ -156,10 +139,12 @@ const PlaceFormPage = () => {
 										setIsError(false)
 										setErrorMessage(null)
 
+										setValue('_id', selectedPlace.place_id)
+										setValue('name', name)
+										setPlaceName(name)
+
 										const selectedAddress = selectedPlace.formatted_address || ''
 										setValue('streetAddress', selectedAddress)
-
-										setValue('_id', selectedPlace.place_id)
 
 										const { lat, lng } = getLatLng(selectedPlace)
 										setSelectedPlace({ lat, lng })

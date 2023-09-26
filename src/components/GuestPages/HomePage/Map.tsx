@@ -2,38 +2,33 @@ import PlaceModal from './PlaceModal'
 import SearchBox from './SearchBox'
 import { findAdressComponent } from '../../../helpers/locations'
 import useGetCurrentLocation from '../../../hooks/useGetCurrentLocation'
-// import useGetPlacesByCity from '../../../hooks/useGetPlacesByCity'
-import { FirestoreError, onSnapshot, query, where } from 'firebase/firestore'
+import { FirestoreError, QueryConstraint, onSnapshot, query, where } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
 import {
 	GoogleMap,
 	MarkerF,
-	// DirectionsRenderer,
-	// Circle,
-	// MarkerClusterer,
 } from '@react-google-maps/api'
 import { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { useSearchParams } from 'react-router-dom'
 import { placesCol } from '../../../services/firebase'
 import { Place } from '../../../types/Place.types'
 
-const Map = () => {
+type Props = {
+	placesFound: (places: Place[]) => void
+}
+
+const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const locality = searchParams.get("locality") ?? ''
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13 }) //Malmö as default
-	// const [address, setAddress] = useState<string | null>(null)
 	const [city, setCity] = useState('')
 	const [/* error */, setError] = useState<FirestoreError | string | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [/* isLoading */, setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
-	const [clickedPlace, setClickedPlace] = useState<Place|null>(null)
-	// const [firestoreError, setFireStoreError] = useState<FirestoreError | null>(null)
-	// const {
-	// 	data: places,
-	// 	// isLoading: isLoadingPlaces,
-	// } = useGetPlacesByCity(city)
+	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
+
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -112,7 +107,6 @@ const Map = () => {
 			// getting coordinates
 			const { lat, lng } = getLatLng(results[0])
 
-			// setAddress(results[0].formatted_address)
 			// center the map on the searched city
 			setCenter({ lat, lng })
 
@@ -132,13 +126,14 @@ const Map = () => {
 	}, [])
 
 	const setStates = (data: Place[]) => {
-		setPlaces(data);
-		setIsLoading(false);
+		setPlaces(data)
+		placesFound(data)
+		setIsLoading(false)
 	}
 
 	const setErrorStates = (error: FirestoreError) => {
-		setError(error);
-		setIsLoading(false);
+		setError(error)
+		setIsLoading(false)
 	}
 
 	// Get info of city every time city changes
@@ -154,33 +149,41 @@ const Map = () => {
 		console.log('places', places)
 	}, [locality, queryCity, places])
 
+	const queryConstraints: QueryConstraint[] = [
+		where("city", "==", city)
+		// add filters here
+	]
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
-		const queryRef = query(placesCol, where("city", "==", city));
-
+		const queryRef = query(
+			placesCol,
+			...queryConstraints
+		)
 		const unsubscribe = onSnapshot(queryRef, (snapshot) => {
 			const data: Place[] = snapshot.docs.map(doc => {
 				return {
 					...doc.data(),
 					_id: doc.id,
-				};
-			});
+				}
+			})
 			setStates(data)
 
 		}, (error) => {
 			setErrorStates(error)
-		});
+		})
 
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [placesCol, locality, city]);
+	}, [locality, city, /* filter */])
 
 	return (
 		<GoogleMap
+
 			zoom={14}
 			center={center}
 			options={{
 				clickableIcons: true,
+				mapTypeControl: false,
 			}}
 			mapContainerClassName='map-container'
 			mapContainerStyle={{
@@ -199,7 +202,6 @@ const Map = () => {
 					key={place._id}
 					position={place.location}
 					clickable={true}
-					opacity={0.8}
 					title={place.name}
 					onClick={() => handleMarkerClick(place)}
 				/>

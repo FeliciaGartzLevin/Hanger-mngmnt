@@ -1,9 +1,60 @@
 @import "bootstrap/scss/bootstrap";
 @import "react-toastify/scss/main";
 @import "toastify";
+@import "styles";
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+
+body {
+	font-family: 'Caveat Brush', cursive;
+
+}
 
 #App {
+	display: flex;
+	flex-direction: column;
 	min-height: 100vh;
+	position: relative;
+
+}
+
+.offcanvas,
+.places-sidebar {
+	overflow: scroll;
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.places-sidebar {
+	max-height: 100vh;
+}
+
+.offcanvas-btn {
+	border-radius: 0 15rem 15rem 0;
+	position: fixed;
+	left: 0;
+	top: 12vh;
+	padding: 0.4rem 1rem;
+	color: #fff;
+	font-size: 1.5rem;
+	z-index: 999;
+
+}
+
+.card-links {
+	a {
+		text-decoration: none;
+		color: $linkColor;
+
+		&:hover {
+			color: $linkHoverColor;
+		}
+	}
 }
 
 .navbar-expand .navbar-nav .nav-link {

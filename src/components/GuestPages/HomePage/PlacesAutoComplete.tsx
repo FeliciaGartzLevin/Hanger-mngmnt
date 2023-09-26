@@ -4,13 +4,12 @@ import useOnclickOutside from 'react-cool-onclickoutside'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 
 type Props = {
-	onClickedPlace: (results: google.maps.GeocoderResult[]) => void
-	onPlaceName?: (placeName: string) => void
+	onClickedPlace: (results: google.maps.GeocoderResult[], placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
 	required?: boolean
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, onPlaceName, required }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, required }) => {
 	const {
 		ready,
 		value,
@@ -31,7 +30,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		clearSuggestions()
 	})
 
-	const handleSelect = ({ description }: { description: string }) => (
+	const handleSelect = ({ description, structured_formatting, distance_meters }: google.maps.places.AutocompletePrediction) => (
 		async () => {
 			// When the user selects a place, we can replace the keyword without request data from API
 			// by setting the second parameter to 'false'
@@ -42,20 +41,9 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 			const results = await getGeocode({
 				address: description,
 				componentRestrictions: { country: 'SE' } //(supposed to be) giving only results in Sweden
-				// but I also don't even wanna show autocomplete results that is not in sweden
 			})
-
-			onClickedPlace(results)
-
-			// Taking the description (f. ex 'Big Ben Pub, Folkungagatan, Stockholm, Sverige') and splitting it by ','
-			const splitDescription = description.split(',')
-			// if it had the right format(three parts array), move on
-			if (splitDescription.length > 2) {
-				if (!onPlaceName) return
-				const placeName = splitDescription[0].trim()
-				console.log('placeName', placeName)
-				onPlaceName(placeName)
-			}
+			const placeName = structured_formatting.main_text
+			onClickedPlace(results, placeName)
 		}
 	)
 
