@@ -20,8 +20,7 @@ import { getLatLng } from 'use-places-autocomplete'
 const libraries: Libraries = ['places']
 
 const PlaceFormPage = () => {
-	const [selectedPlace, setSelectedPlace] =
-		useState<google.maps.LatLngLiteral | null>(null)
+	const [selectedPlace, setSelectedPlace] = useState<google.maps.LatLngLiteral | null>(null)
 	const [isError, setIsError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -82,7 +81,6 @@ const PlaceFormPage = () => {
 			toast.dark("Place added successfully!")
 			console.log('placeName', placeName)
 			setValue('name', '')
-			// setPlaceName(undefined)
 			setValue('description', '')
 			setValue('email', '')
 			setValue('telephone', '')
