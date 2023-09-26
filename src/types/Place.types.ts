@@ -24,3 +24,8 @@ export type Place = {
 }
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
+
+export type PlaceWithDistance = Place & {
+	distance?: number
+	distanceText?: string
+}

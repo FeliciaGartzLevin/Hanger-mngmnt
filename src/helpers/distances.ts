@@ -1,6 +1,6 @@
 const rad = function (x: number) {
 	return x * Math.PI / 180;
-};
+}
 
 export const getHaversineDistance = (p1: google.maps.LatLngLiteral, p2: google.maps.LatLngLiteral) => {
 	const R = 6378137; // Earth’s mean radius in meter
@@ -12,16 +12,10 @@ export const getHaversineDistance = (p1: google.maps.LatLngLiteral, p2: google.m
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	const d = R * c;
 	return d; // returns the distance in meter
-};
-
-export const getDistanceInKm = (distance: number) => {
-	if (distance < 1000) return
-	return distance / 1000
 }
-// Use this to render distance on the place-cards ltr:
-// // shortest distance (haversine_disctance) between userCurrentposition, and place
-// if (usersPosition) {
-// 	setDistance(getHaversineDistance(LatLngOfPlace, usersPosition))
-// 	console.log('distance:', distance + ' meters')
 
-// }
+export const getDistanceInMetresOrKm = (distance: number | null) => {
+	if (!distance) return
+	if (distance < 1000) return distance + ' meters'
+	return (distance / 1000).toFixed(1) + ' kms'
+}
