@@ -1,5 +1,3 @@
-type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/grill' | 'Food Truck'
-
 export type Location = {
 	latitude: number
 	longitude: number
@@ -22,6 +20,8 @@ export type Place = {
 	uid: string
 	website?: string
 }
+
+export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/grill' | 'Food Truck'
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
 
