@@ -29,3 +29,5 @@ export type PlaceWithDistance = Place & {
 	distance?: number
 	distanceText?: string
 }
+
+export type SelectCategory = Category | 'All'

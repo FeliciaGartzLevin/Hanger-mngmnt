@@ -57,7 +57,11 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 				placeholder={`Search Location${required ? '*' : ''}`}
 			/>
 			{status === 'OK' &&
-				<ListGroup>
+				<ListGroup
+					style={{
+						position: 'absolute',
+					}}
+				>
 					{data.map((suggestion) => {
 						const {
 							place_id,
