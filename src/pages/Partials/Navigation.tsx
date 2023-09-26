@@ -8,13 +8,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import { NavLink, Link } from 'react-router-dom'
 import hangry from '../../../public/hangry-3.svg'
 
-const Hangry = () => {
-	return (
-
-		<Image src={hangry} alt='Logo' width={40} height={40} />
-
-	);
-  };
+const Hangry = () => <Image
+	className='me-2 img-square'
+	src={hangry}
+	alt='Logo'
+	width={40}
+/>
 
 const Navigation = () => {
 	const {
@@ -31,10 +30,11 @@ const Navigation = () => {
 				<Navbar.Brand
 					as={Link}
 					to='/'
-				>	<Hangry/>
-					{/* 🍔 😡 Hanger  THE HANGRY APP */}
-					{/* <span className='d-none d-sm-inline'> Management</span>
-					<span className='d-inline d-sm-none'> Mgmt</span> */}
+				>
+					<Hangry />
+					Hanger
+					<span className='d-none d-sm-inline'> Management</span>
+					<span className='d-inline d-sm-none'> Mgmt</span>
 				</Navbar.Brand>
 					<Nav>
 						{signedInUser ? (
