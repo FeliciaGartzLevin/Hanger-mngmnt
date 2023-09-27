@@ -21,6 +21,7 @@ type Props = {
 const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const locality = searchParams.get("locality") ?? ""
+	const filter = searchParams.get("filter") ?? 'All'
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
 	const [city, setCity] = useState("")
@@ -29,7 +30,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const [, /* isLoading */ setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
 	const [clickedPlace, setClickedPlace] = useState<Place | PlaceWithDistance | null>(null)
-	const [filter, setFilter] = useState<string>('All')
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -44,7 +44,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			if (!foundCity) return
 			setCity(foundCity)
-			setSearchParams({ locality: foundCity })
+			setSearchParams({ locality: foundCity, filter: chosenFilter ?? filter })
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			setError(error.message)
@@ -52,9 +52,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}
 
 	// Getting users position by reverse geocoding (by coordinates)
-	const getCurrentCity = async (
-		position: google.maps.LatLngLiteral | undefined
-	) => {
+	const getCurrentCity = async (position: google.maps.LatLngLiteral | undefined) => {
 		if (!position) return
 		try {
 			// reversed geocoding to get the users address:
@@ -67,6 +65,12 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			setError(error.message)
 			console.log("No current city was found:", error)
 		}
+	}
+	// Handling choice of filter
+	const handleFilterChoice = (passedFilter: string) => {
+		setSearchParams({ locality: city, filter: passedFilter })
+		console.log('filter param:', filter)
+		console.log('passedFilter:', passedFilter)
 	}
 
 	// Handling click on localisation button
@@ -106,6 +110,17 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		}
 	}
 
+	const setStates = (data: Place[]) => {
+		setPlaces(data)
+		placesFound(data)
+		setIsLoading(false)
+	}
+
+	const setErrorStates = (error: FirestoreError) => {
+		setError(error)
+		setIsLoading(false)
+	}
+
 	// Getting city info by city name
 	const queryCity = useCallback(async (city: string) => {
 		try {
@@ -122,7 +137,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			const foundCity = findAdressComponent(results)
 
 			if (!foundCity) return
-			console.log("foundCity:", foundCity)
 			setCity(foundCity)
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -133,16 +147,13 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const setStates = (data: Place[]) => {
-		setPlaces(data)
-		placesFound(data)
-		setIsLoading(false)
-	}
-
-	const setErrorStates = (error: FirestoreError) => {
-		setError(error)
-		setIsLoading(false)
-	}
+	const queryConstraints: QueryConstraint[] = [
+		where("city", "==", city),
+		where("isApproved", "==", true),
+		where("category", "in", filter === 'All'
+			? ['Café', 'Pub', 'Restaurant', 'Fast Food', 'Kiosk/grill', 'Food Truck']
+			: [filter]),
+	]
 
 	// Get info of city every time city changes
 	useEffect(() => {
@@ -157,15 +168,11 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		console.log("places", places)
 	}, [locality, queryCity, places])
 
-	const queryConstraints: QueryConstraint[] = [
-		where("city", "==", city),
-		where("isApproved", "==", true),
-		// if(filter ===)
-		// add filters here
-	]
+
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
 		const queryRef = query(placesCol, ...queryConstraints)
+		console.log('queryConstraints', ...queryConstraints)
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -184,7 +191,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 		return unsubscribe
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, city /* filter */])
+	}, [locality, city, filter])
 
 	return (
 		<GoogleMap
@@ -205,6 +212,8 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			<SearchBox
 				passOnResults={handleSearchInput}
 				handleFindLocation={handleFindLocation}
+				passFilter={handleFilterChoice}
+				filter={filter}
 			/>
 			{places &&
 				places.map((place) => (

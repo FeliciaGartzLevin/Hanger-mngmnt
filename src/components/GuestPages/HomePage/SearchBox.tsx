@@ -11,19 +11,13 @@ import { SelectCategory } from '../../../types/Place.types'
 type Props = {
 	handleFindLocation: () => void
 	passOnResults: (results: google.maps.GeocoderResult[]) => void
-	passFilter?: (filter: string) => void
+	passFilter: (filter: string) => void
+	filter: string
 }
 
 const categoriesArr: SelectCategory[] = ['All', 'Café', 'Pub', 'Restaurant', 'Fast Food', 'Kiosk/grill', 'Food Truck']
 
-const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFilter }) => {
-	const [filter, setFilter] = useState<string>('All')
-
-	const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setFilter(e.target.value)
-		if (!passFilter) return
-		passFilter(filter)
-	}
+const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFilter, filter }) => {
 
 	return (
 		<Container
@@ -47,7 +41,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFil
 					<FormSelect
 						id='select'
 						name='select'
-						onChange={handleOnChange}
+						onChange={e => passFilter(e.target.value)}
 						value={filter}
 						title="select"
 						aria-label="Choose a genre">
