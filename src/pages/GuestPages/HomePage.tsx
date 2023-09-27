@@ -17,7 +17,6 @@ import RingLoader from "react-spinners/RingLoader";
 const libraries: Libraries = ['places']
 
 const HomePage = () => {
-	// const [filter, setFilter] = useState<Supply | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [show, setShow] = useState(false)
 
@@ -58,13 +57,16 @@ const HomePage = () => {
 			{/* Offcanvas and button to launch it showing in all below large screens */}
 			<Offcanvas
 				className="d-block d-lg-none offcanvas"
-				lg={() => setShow(false)}
 				show={show}
 				onHide={() => setShow(false)}>
 				<Offcanvas.Header closeButton>
 					<Offcanvas.Title>Places</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
+					{places && places.length <= 0 &&
+						<Alert variant="warning">
+							No places to show.
+						</Alert>}
 					{places &&
 						<SortAndMapPlaces
 							places={places} />
@@ -84,6 +86,10 @@ const HomePage = () => {
 				<Row className='d-flex justify-content-center'>
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>
+						{places && places.length <= 0 &&
+							<Alert variant="warning">
+								No places to show.
+							</Alert>}
 						{places &&
 							<SortAndMapPlaces
 								places={places} />

@@ -12,13 +12,13 @@ type Props = {
 }
 
 const PlaceCards: React.FC<Props> = ({ place }) => {
-	const {data: photos, getCollection } = useStreamPhotosByPlace(place._id)
+	const { data: photos, getCollection } = useStreamPhotosByPlace(place._id)
 
 	useEffect(() => {
 		if (place) {
 			getCollection()
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [place])
 
 	return (
@@ -40,8 +40,7 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 
 				<Card.Footer className="card-links d-flex justify-content-between align-items-center">
 					<div className="d-flex align-items-centers">
-						{/* This will be a link ltr: <Link to={<UploadPhotoPage />}>
-						needa check here if user is authorized and conditionally render*/}
+						{/* needa check here if user is authorized and conditionally render*/}
 						<Link
 							to={'/upload-photo/' + place._id}
 							className="add-photo-links">
