@@ -3,12 +3,24 @@ import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-ico
 import { GoMail } from "react-icons/go";
 import { Place } from '../../../types/Place.types';
 import { Link } from 'react-router-dom';
+import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace';
+import { useEffect } from 'react';
+import ImageGallery from '../../ImageGallery';
 
 type Props = {
 	place: Place
 }
 
 const PlaceCards: React.FC<Props> = ({ place }) => {
+	const { data: photos, getCollection } = useStreamPhotosByPlace(place._id)
+
+	useEffect(() => {
+		if (place) {
+			getCollection()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [place])
+
 	return (
 		<Card className="mb-3">
 			<Card.Body>
@@ -23,6 +35,9 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 				<hr />
 				<Card.Subtitle className="mb-2 text-muted">{place.streetAddress}</Card.Subtitle>
 				<Card.Text>{place.description}</Card.Text>
+
+				{photos && !!photos.length && <ImageGallery photos={photos} />}
+
 				<Card.Footer className="card-links d-flex justify-content-between align-items-center">
 					<div className="d-flex align-items-centers">
 						{/* needa check here if user is authorized and conditionally render*/}
@@ -31,7 +46,6 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 							className="add-photo-links">
 							+ Add photo
 						</Link>
-
 					</div>
 					<div>
 						{place.website && <Card.Link target="_blank" href={place.website}><BsGlobe /></Card.Link>}
