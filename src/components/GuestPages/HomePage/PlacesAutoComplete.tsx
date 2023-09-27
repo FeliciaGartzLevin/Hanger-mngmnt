@@ -6,10 +6,10 @@ import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[], placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
-	required?: boolean
+	placeHolderText: string
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, required }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText }) => {
 	const {
 		ready,
 		value,
@@ -54,7 +54,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready}
-				placeholder={`Search Location${required ? '*' : ''}`}
+				placeholder={placeHolderText}
 			/>
 			{status === 'OK' &&
 				<ListGroup

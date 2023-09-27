@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -33,6 +33,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFil
 			<Row className='d-flex align-items-center justify-content-between'>
 				<Col xs={6}>
 					<PlacesAutoComplete
+						placeHolderText={'Search location'}
 						onClickedPlace={(results) => passOnResults(results)}
 						searchPlacesOfTypes={['postal_town']}
 					/>
@@ -58,10 +59,6 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFil
 				</Col>
 				<Col xs={2}>
 					<Button
-						// style={{
-						// 	backgroundColor: '#3B4C73',
-						// 	borderColor: '#3B4C73',
-						// }}
 						onClick={handleFindLocation}
 						aria-label="Use my location"
 						variant='dark'
