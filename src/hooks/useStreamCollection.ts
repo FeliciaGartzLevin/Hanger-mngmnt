@@ -49,6 +49,7 @@ const useStreamCollection = <T>(
 	return {
 		data,
 		error,
+		getCollection,
 		isError,
 		isLoading
 	}

@@ -8,6 +8,7 @@ import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-ico
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
+import { useEffect } from 'react'
 
 interface IProps {
 	onClose: () => void
@@ -18,9 +19,17 @@ interface IProps {
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 	const navigate = useNavigate()
 	const iconSize = 20
-	const { data: photos } = useStreamPhotosByPlace(place._id)
+	const { data: photos, getCollection } = useStreamPhotosByPlace(place._id)
 
-	if (place) return (
+	useEffect(() => {
+		if (place) {
+			getCollection()
+		}
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [place])
+
+	return (
 		<Modal
 			centered
 			onHide={onClose}
@@ -44,7 +53,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
 
-				{photos && <ImageGallery photos={photos} />}
+				{photos && !!photos.length && <ImageGallery photos={photos} />}
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
 				<Row
