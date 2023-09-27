@@ -22,9 +22,10 @@ const ImageGallery: React.FC<IProps> = ({ photos }) => {
 	for (let i = photos.length; i < imagesVisible; i++) {
 		elements.push(
 			<Image
-				className='img-square p-1'
+				className='img-square'
 				fluid
-				src={'https://firebasestorage.googleapis.com/v0/b/the-hangry-app.appspot.com/o/places%2FChIJ78Wol-SjU0YRMmTNTQP42vc%2F72adbfcb-8544-4f50-b582-953eef8893d7.png?alt=media&token=89e7f6d5-a3ef-4c71-a6c1-f62830209a80'}
+				key={i}
+				src={'https://firebasestorage.googleapis.com/v0/b/the-hangry-app.appspot.com/o/places%2Fplaceholder%2Fplaceholder.png?alt=media&token=ea01596b-de27-48e1-b761-59f6a03a03a9'}
 			/>
 		)
 	}
@@ -41,7 +42,7 @@ const ImageGallery: React.FC<IProps> = ({ photos }) => {
 						src={photo.url}
 					/>
 				))}
-				{!elements.length && elements}
+				{elements}
 			</Slider>
 		</div>
 	)
