@@ -6,10 +6,23 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import { NavLink, Link } from 'react-router-dom'
+import hangry from '../../assets/images/hangry.svg'
+
+const Hangry = () => {
+	return (
+		<Image
+			alt='Hanger Management Logo'
+			className='img-square me-2'
+			height={60}
+			src={hangry}
+		/>
+	)
+}
 
 const Navigation = () => {
 	const {
 		signedInUser,
+		signedInUserDoc,
 		signedInUserEmail,
 		signedInUserName,
 		signedInUserPhotoUrl
@@ -22,7 +35,8 @@ const Navigation = () => {
 					as={Link}
 					to='/'
 				>
-					🍔 😡 Hanger
+					<Hangry />
+					Hanger
 					<span className='d-none d-sm-inline'> Management</span>
 					<span className='d-inline d-sm-none'> Mgmt</span>
 				</Navbar.Brand>
@@ -33,12 +47,13 @@ const Navigation = () => {
 								title={
 									signedInUserPhotoUrl
 									? <Image
-										src={signedInUserPhotoUrl}
-										width={30}
-										title={(signedInUserName || signedInUserEmail) ?? ''}
 										className='img-square'
 										fluid
-										roundedCircle />
+										roundedCircle
+										src={signedInUserPhotoUrl}
+										title={(signedInUserName || signedInUserEmail) ?? ''}
+										width={60}
+									/>
 									: signedInUserName || signedInUserEmail
 								}
 							>
@@ -48,8 +63,8 @@ const Navigation = () => {
 								>See Map</NavDropdown.Item>
 								<NavDropdown.Item
 									as={NavLink}
-									to='/recommend-place'
-								>Recommend Place</NavDropdown.Item>
+									to='/place-form'
+								>{signedInUserDoc && signedInUserDoc.isAdmin ? "Add" : "Recommend"} Place</NavDropdown.Item>
 
 								<NavDropdown.Divider />
 
@@ -59,6 +74,22 @@ const Navigation = () => {
 								>Update Profile</NavDropdown.Item>
 
 								<NavDropdown.Divider />
+
+								{signedInUserDoc && signedInUserDoc.isAdmin && (
+									<>
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-places-list'
+										>Places List</NavDropdown.Item>
+
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-users-list'
+										>Users List</NavDropdown.Item>
+
+										<NavDropdown.Divider />
+									</>
+								)}
 
 								<NavDropdown.Item
 									as={NavLink}

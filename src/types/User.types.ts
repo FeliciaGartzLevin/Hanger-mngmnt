@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore'
 
-export type User = {
+export type UserDoc = {
 	createdAt: Timestamp
 	displayName: string
 	email: string,
@@ -28,4 +28,8 @@ export type UserUpdate = {
 	photoFile: FileList
 	password: string
 	passwordConfirm: string
+}
+
+export type ForgotPassword ={
+	email: string
 }
