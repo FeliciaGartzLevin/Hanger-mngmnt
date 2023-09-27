@@ -7,33 +7,41 @@ interface IProps {
 }
 
 const ImageGallery: React.FC<IProps> = ({ photos }) => {
+	const imagesVisible = 3
+
 	const settings = {
-		autoplay: true,
+		autoplay: photos.length > imagesVisible,
 		dots: true,
 		infinite: true,
 		slidesToScroll: 1,
-		slidesToShow: 3
+		slidesToShow: imagesVisible,
+		className: 'my-3'
+	}
+
+	const elements = []
+	for (let i = photos.length; i < imagesVisible; i++) {
+		elements.push(
+			<Image
+				className='img-square p-1'
+				fluid
+				src={'https://firebasestorage.googleapis.com/v0/b/the-hangry-app.appspot.com/o/places%2FChIJ78Wol-SjU0YRMmTNTQP42vc%2F72adbfcb-8544-4f50-b582-953eef8893d7.png?alt=media&token=89e7f6d5-a3ef-4c71-a6c1-f62830209a80'}
+			/>
+		)
 	}
 
 	return (
 		<div className='px-3'>
-			<Slider
-				className='my-3'
-				{...settings}
-			>
+			<Slider {...settings}>
 				{photos.map(photo => (
-					<div
-						className='p-1'
+					<Image
+						className='img-square p-1'
+						fluid
 						key={photo._id}
-					>
-						<Image
-							className='img-square'
-							fluid
-							rounded
-							src={photo.url}
-						/>
-					</div>
+						rounded
+						src={photo.url}
+					/>
 				))}
+				{!elements.length && elements}
 			</Slider>
 		</div>
 	)
