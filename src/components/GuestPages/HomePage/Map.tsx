@@ -47,6 +47,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
 
 
+
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
 			// getting coordinates
@@ -235,9 +236,9 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 				// check johans video about it
 			}}
 		>
-			{userLocation && (
+			{usersPosition && (
 				<MarkerF
-				position={userLocation}
+				position={usersPosition}
 				icon={{
 					url: userIcon,
 					scaledSize: new window.google.maps.Size(32, 32),
