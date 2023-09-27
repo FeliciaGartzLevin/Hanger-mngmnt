@@ -96,7 +96,12 @@ const SignInPage = () => {
 					</Card>
 
 					<div className='text-center mt-3'>
-						Need an account? <Link to='/sign-up'>Sign Up</Link>
+						<span className=' account sign-up'>
+							Need an account?<br />
+							<Link to='/sign-up' className='sign-up-link'>
+								Sign Up
+							</Link>
+						</span>
 					</div>
 				</Col>
 			</Row>

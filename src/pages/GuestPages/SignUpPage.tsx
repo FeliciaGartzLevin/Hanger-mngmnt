@@ -124,7 +124,12 @@ const SignUpPage = () => {
 					</Card>
 
 					<div className='text-center mt-3'>
-						Already have an account? <Link to='/sign-in'>Sign In</Link>
+					<span className=' account sign-in'>
+						Already have an account?<br />
+						<Link to='/sign-in' className='sign-in-link'>
+							Sign In
+						</Link>
+					</span>
 					</div>
 				</Col>
 			</Row>
