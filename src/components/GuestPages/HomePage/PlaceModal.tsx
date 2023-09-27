@@ -51,13 +51,13 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 					}
 				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
-				<div className='small'>{place.description}</div>
+				<div className='small roboto'>{place.description}</div>
 
 				{photos && !!photos.length && <ImageGallery photos={photos} />}
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
 				<Row
-					className='position-absolute start-0 g-3 pb-3'
+					className='position-absolute start-0 g-3 pb-3 social-icons'
 					xs='auto'
 				>
 					{place.website && (

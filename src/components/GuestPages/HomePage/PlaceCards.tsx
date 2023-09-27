@@ -34,7 +34,7 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 				</Card.Title>
 				<hr />
 				<Card.Subtitle className="mb-2 text-muted">{place.streetAddress}</Card.Subtitle>
-				<Card.Text>{place.description}</Card.Text>
+				<Card.Text className='roboto'>{place.description}</Card.Text>
 
 				{photos && !!photos.length && <ImageGallery photos={photos} />}
 
@@ -47,7 +47,7 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 							+ Add photo
 						</Link>
 					</div>
-					<div>
+					<div className="social-icons">
 						{place.website && <Card.Link target="_blank" href={place.website}><BsGlobe /></Card.Link>}
 						{place.email && <Card.Link target="_blank" href={`mailto:${place.email}`}><GoMail /></Card.Link>}
 						{place.instagram && <Card.Link target="_blank" href={place.instagram}><BsInstagram /></Card.Link>}

@@ -2,12 +2,20 @@
 @import "react-toastify/scss/main";
 @import "toastify";
 @import "styles";
-@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Roboto:wght@300&display=swap');
 
 body {
 	font-family: $fontPrimary;
 	background-color: $darkerBlueBackground;
 	color: $primaryTextColor;
+}
+
+.caveat-brush-font {
+  font-family: 'Caveat Brush', cursive;
+}
+
+.roboto{
+	font-family: 'Roboto', sans-serif;;
 }
 
 #App {
@@ -158,6 +166,10 @@ textarea {
 }
 
 
+.forgot-password{
+	color: white;
+}
+
 .account,
 .need-account {
 	color: #ffffff;
@@ -182,6 +194,23 @@ a.sign-up-link {
 	font-weight: bold; // Make the text bold for better readability
 
 	&:hover {
-		color: #ffcc00; // Slightly darker yellow color on hover
+		color: #c5a526; // Slightly darker yellow color on hover
 	}
 }
+
+.title-table{
+	color: #feb414;
+
+}
+
+
+.social-icons {
+	a {
+	  text-decoration: none;
+	  color: #feb414; /* Set the initial color */
+
+	  &:hover {
+		color: #ff9900; /* Change to your desired hover color */
+	  }
+	}
+  }
