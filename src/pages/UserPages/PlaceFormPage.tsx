@@ -134,6 +134,7 @@ const PlaceFormPage = () => {
 							<div className='mb-3'>
 								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
 								<PlacesAutoComplete
+									placeHolderText='Search place*'
 									onClickedPlace={(results, name) => {
 										const selectedPlace = results[0]
 
@@ -180,7 +181,6 @@ const PlaceFormPage = () => {
 											}
 										)
 									}}
-									required={true}
 								/>
 							</div>
 

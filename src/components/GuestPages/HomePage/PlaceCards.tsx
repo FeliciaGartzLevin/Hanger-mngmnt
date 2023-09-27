@@ -1,14 +1,15 @@
 import Card from 'react-bootstrap/Card'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-icons/bs";
 import { GoMail } from "react-icons/go";
-// import { Link } from "react-router-dom"
-import { PlaceWithDistance } from '../../../types/Place.types';
+import { Place } from '../../../types/Place.types';
+import { Link, useNavigate } from 'react-router-dom';
 
 type Props = {
-	place: PlaceWithDistance
+	place: Place
 }
 
 const PlaceCards: React.FC<Props> = ({ place }) => {
+	const navigate = useNavigate()
 	return (
 		<Card className="mb-3">
 			<Card.Body>
@@ -27,8 +28,12 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 					<div className="d-flex align-items-centers">
 						{/* This will be a link ltr: <Link to={<UploadPhotoPage />}>
 						needa check here if user is authorized and conditionally render*/}
-						+ Add photo
-						{/* </Link> */}
+						<Link
+							to={'/upload-photo/' + place._id}
+							className="add-photo-links">
+							+ Add photo
+						</Link>
+
 					</div>
 					<div>
 						{place.website && <Card.Link target="_blank" href={place.website}><BsGlobe /></Card.Link>}

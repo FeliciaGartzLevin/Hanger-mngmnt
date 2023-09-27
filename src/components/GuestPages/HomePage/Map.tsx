@@ -10,9 +10,10 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api"
 import { getGeocode, getLatLng } from "use-places-autocomplete"
 import { useSearchParams } from "react-router-dom"
 import { placesCol } from "../../../services/firebase"
-import { Place, PlaceWithDistance } from "../../../types/Place.types"
+import { Place } from "../../../types/Place.types"
 import { getDistanceInMetresOrKm, getHaversineDistance } from "../../../helpers/distances"
 import { getIconForCategory } from "../../../helpers/icons"
+import { Alert } from "react-bootstrap"
 
 type Props = {
 	placesFound: (places: Place[]) => void
@@ -20,16 +21,15 @@ type Props = {
 
 const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
-	const locality = searchParams.get("locality") ?? ""
+	const locality = searchParams.get("locality") ?? "Malmö"
 	const filter = searchParams.get("filter") ?? 'All'
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
-	const [city, setCity] = useState("")
-	const [, /* error */ setError] = useState<FirestoreError | string | null>(null)
+	const [errorMsg, setErrorMsg] = useState<string | null>(null)
+	const [firestoreError, setFirestoreError] = useState<FirestoreError | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
-	const [, /* isLoading */ setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
-	const [clickedPlace, setClickedPlace] = useState<Place | PlaceWithDistance | null>(null)
+	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -43,11 +43,11 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			const foundCity = findAdressComponent(results)
 
 			if (!foundCity) return
-			setCity(foundCity)
+			// setCity(foundCity)
 			setSearchParams({ locality: foundCity, filter: filter })
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg(error.message)
 		}
 	}
 
@@ -62,15 +62,12 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
-			// console.log("No current city was found:", error)
+			setErrorMsg(error.message)
 		}
 	}
 	// Handling choice of filter
 	const handleFilterChoice = (passedFilter: string) => {
 		setSearchParams({ locality: locality, filter: passedFilter })
-		// console.log('filter param:', filter)
-		// console.log('passedFilter:', passedFilter)
 	}
 
 	// Handling click on localisation button
@@ -82,7 +79,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg('Position access denied. ' + error.message ?? '')
 		}
 	}
 
@@ -97,8 +94,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		setClickedPlace({ ...place, distance, distanceText })
 	}
 
-	const handleClosePlaceModal = () => setShowPlaceModal(false)
-
 	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -106,19 +101,13 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg(error.message)
 		}
 	}
 
 	const setStates = (data: Place[]) => {
 		setPlaces(data)
 		placesFound(data)
-		setIsLoading(false)
-	}
-
-	const setErrorStates = (error: FirestoreError) => {
-		setError(error)
-		setIsLoading(false)
 	}
 
 	// Getting city info by city name
@@ -133,33 +122,21 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			// center the map on the searched city
 			setCenter({ lat, lng })
 
-			// getting the city ('postal_town' or 'locality') from the response
-			const foundCity = findAdressComponent(results)
-
-			if (!foundCity) return
-			setCity(foundCity)
-
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.log("No city was found:", error.message)
-			setError("No  city was found: " + error.message)
+			setErrorMsg("No  city was found: " + error.message)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const queryConstraints: QueryConstraint[] = [
-		where("city", "==", city),
+		where("city", "==", locality),
 		where("isApproved", "==", true),
 		where("category", "in", filter === 'All'
 			? ['Café', 'Pub', 'Restaurant', 'Fast Food', 'Kiosk/grill', 'Food Truck']
 			: [filter]),
 	]
-
-	// Get info of city every time city changes
-	useEffect(() => {
-		if (!city) return
-		queryCity(city)
-	}, [city, queryCity])
 
 	// Get info of city every time locality changes
 	useEffect(() => {
@@ -172,7 +149,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
 		const queryRef = query(placesCol, ...queryConstraints)
-		// console.log('queryConstraints', ...queryConstraints)
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -185,13 +161,13 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 				setStates(data)
 			},
 			(error) => {
-				setErrorStates(error)
+				setFirestoreError(error)
 			}
 		)
 
 		return unsubscribe
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, city, filter])
+	}, [locality, filter])
 
 	return (
 		<GoogleMap
@@ -230,14 +206,37 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 					/>
 				))
 			}
-
 			{clickedPlace && (
 				<PlaceModal
-					onClose={handleClosePlaceModal}
+					onClose={() => setShowPlaceModal(false)}
 					place={clickedPlace}
 					show={showPlaceModal}
 				/>
 			)}
+
+			{errorMsg &&
+				<Alert
+					style={{
+						position: "absolute",
+						left: '50%',
+						bottom: '4rem',
+					}}
+					variant="danger"
+				>
+					An error occured. {errorMsg}
+				</Alert>}
+
+			{firestoreError &&
+				<Alert
+					style={{
+						position: "absolute",
+						left: '50%',
+						bottom: '4rem',
+					}}
+					variant="danger"
+				>
+					Places could not be loaded from the database. {firestoreError.message}
+				</Alert>}
 		</GoogleMap>
 	)
 }
