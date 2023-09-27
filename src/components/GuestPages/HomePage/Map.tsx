@@ -44,7 +44,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			if (!foundCity) return
 			setCity(foundCity)
-			setSearchParams({ locality: foundCity, filter: chosenFilter ?? filter })
+			setSearchParams({ locality: foundCity, filter: filter })
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			setError(error.message)
@@ -68,7 +68,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}
 	// Handling choice of filter
 	const handleFilterChoice = (passedFilter: string) => {
-		setSearchParams({ locality: city, filter: passedFilter })
+		setSearchParams({ locality: locality, filter: passedFilter })
 		console.log('filter param:', filter)
 		console.log('passedFilter:', passedFilter)
 	}
