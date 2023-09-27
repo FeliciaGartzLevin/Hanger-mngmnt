@@ -36,7 +36,7 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 				<Card.Subtitle className="mb-2 text-muted">{place.streetAddress}</Card.Subtitle>
 				<Card.Text>{place.description}</Card.Text>
 
-				{photos && !!photos.length && <ImageGallery photos={photos} />}
+				{photos && !!photos.filter(photo => photo.isApproved).length && <ImageGallery photos={photos.filter(photo => photo.isApproved)} />}
 
 				<Card.Footer className="card-links d-flex justify-content-between align-items-center">
 					<div className="d-flex align-items-centers">

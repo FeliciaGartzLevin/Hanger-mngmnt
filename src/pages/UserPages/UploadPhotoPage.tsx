@@ -175,7 +175,7 @@ const UploadPhotoPage = () => {
 							</Form>
 						</Card.Body>
 					</Card>
-					{photos && !!photos.length && <ImageGallery photos={photos} />}
+					{photos && !!photos.filter(photo => photo.isApproved).length && <ImageGallery photos={photos.filter(photo => photo.isApproved).filter(photo => photo.isApproved)} />}
 				</Col>
 			</Row>
 		</Container>

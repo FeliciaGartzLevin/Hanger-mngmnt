@@ -53,7 +53,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
 
-				{photos && !!photos.length && <ImageGallery photos={photos} />}
+				{photos && !!photos.filter(photo => photo.isApproved).length && <ImageGallery photos={photos.filter(photo => photo.isApproved)} />}
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
 				<Row
