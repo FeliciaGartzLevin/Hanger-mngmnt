@@ -1,80 +1,77 @@
-import { useState } from 'react'; // Import useState
-import { ColumnDef } from '@tanstack/react-table';
 import AdminUsersSortableTable from '../../components/AdminPages/AdminUsersSortableTable'
-import { UserDoc } from '../../types/User.types';
-import useStreamUsers from '../../hooks/useStreamUsers';
-import { Alert } from 'react-bootstrap';
-import PaginationComponent from '../../components/PaginationComponent';
+import PaginationComponent from '../../components/PaginationComponent'
+import useStreamUsers from '../../hooks/useStreamUsers'
+import { useState } from 'react'
+import { Alert } from 'react-bootstrap'
+import { ColumnDef } from '@tanstack/react-table'
+import { UserDoc } from '../../types/User.types'
 
 const columns: ColumnDef<UserDoc>[] = [
-  {
-    accessorKey: 'photoURL',
-    header: 'Photo'
-  },
-  {
-    accessorKey: 'displayName',
-    header: 'Name'
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email'
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created'
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated'
-  },
-  {
-    accessorKey: 'isAdmin',
-    header: 'Admin'
-  }
+	{
+		accessorKey: 'photoURL',
+		header: 'Photo'
+	},
+	{
+		accessorKey: 'displayName',
+		header: 'Name'
+	},
+	{
+		accessorKey: 'email',
+		header: 'Email'
+	},
+	{
+		accessorKey: 'createdAt',
+		header: 'Created'
+	},
+	{
+		accessorKey: 'updatedAt',
+		header: 'Updated'
+	},
+	{
+		accessorKey: 'isAdmin',
+		header: 'Admin'
+	}
 ]
 
 const AdminUsersListPage = () => {
-  const { data, error, isError, isLoading } = useStreamUsers();
+	const { data, error, isError, isLoading } = useStreamUsers()
 
+	const [currentPage, setCurrentPage] = useState(1)
+	const itemsPerPage = 10
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+	if (isLoading) return <div>Loading users...</div>
 
-  if (isLoading) return <div>Loading users...</div>;
+	if (isError) return <Alert variant='danger'>{error}</Alert>
 
-  if (isError) return <Alert variant='danger'>{error}</Alert>;
+	if (data) {
+		const totalPages = Math.ceil(data.length / itemsPerPage)
 
-  if (data) {
+		const indexOfLastItem = currentPage * itemsPerPage
+		const indexOfFirstItem = indexOfLastItem - itemsPerPage
+		const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
 
-    const totalPages = Math.ceil(data.length / itemsPerPage);
+		const handlePageChange = (pageNumber:number) => {
+			setCurrentPage(pageNumber)
+		}
 
+		return (
+			<>
+				<h3 className='mb-3'>Users</h3>
+				<AdminUsersSortableTable
+					columns={columns}
+					data={currentItems}
+				/>
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-
-    const handlePageChange = (pageNumber:number) => {
-      setCurrentPage(pageNumber);
-    };
-
-    return (
-      <>
-        <h3 className='mb-3'>Users</h3>
-        <AdminUsersSortableTable columns={columns} data={currentItems} />
-        <div className="d-flex flex-column align-items-center">
-
-          {/* Pass currentPage, totalPages, and handlePageChange to PaginationComponent */}
-          <PaginationComponent
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-
-        </div>
-      </>
-    );
-  }
+				<div className="d-flex flex-column align-items-center">
+					<PaginationComponent
+						currentPage={currentPage}
+						totalPages={totalPages}
+						onPageChange={handlePageChange}
+					/>
+				</div>
+			</>
+		)
+	}
 }
 
-export default AdminUsersListPage;
+export default AdminUsersListPage

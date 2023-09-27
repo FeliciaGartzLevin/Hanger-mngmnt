@@ -142,7 +142,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
-		console.log("places", places)
+		// console.log("places", places)
 	}, [locality, queryCity, places])
 
 
@@ -204,12 +204,15 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 							scaledSize: new window.google.maps.Size(32, 32), // Adjust the icon size
 						}}
 					/>
-				))}
-			<PlaceModal
-				onClose={() => setShowPlaceModal(false)}
-				place={clickedPlace}
-				show={showPlaceModal}
-			/>
+				))
+			}
+			{clickedPlace && (
+				<PlaceModal
+					onClose={() => setShowPlaceModal(false)}
+					place={clickedPlace}
+					show={showPlaceModal}
+				/>
+			)}
 
 			{errorMsg &&
 				<Alert

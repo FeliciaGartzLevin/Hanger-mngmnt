@@ -20,7 +20,7 @@ const useStreamCollection = <T>(
 				const data: T[] = snapshot.docs.map((doc) => {
 					return {
 						...doc.data(),
-						_id: doc.id,
+						_id: doc.id
 					}
 				})
 
@@ -43,13 +43,15 @@ const useStreamCollection = <T>(
 
 	useEffect(() => {
 		getCollection()
-	}, [getCollection])
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	return {
 		data,
 		error,
+		getCollection,
 		isError,
-		isLoading,
+		isLoading
 	}
 }
 

@@ -92,6 +92,7 @@ const UploadPhotoPage = () => {
 						isApproved: (signedInUserDoc && signedInUserDoc.isAdmin) || false,
 						name: photo.name,
 						placeId,
+						placeName: place.data?.name,
 						uid: signedInUser.uid,
 						url
 					})
@@ -174,7 +175,7 @@ const UploadPhotoPage = () => {
 							</Form>
 						</Card.Body>
 					</Card>
-					{photos && <ImageGallery photos={photos} />}
+					{photos && !!photos.length && <ImageGallery photos={photos} />}
 				</Col>
 			</Row>
 		</Container>

@@ -7,6 +7,7 @@ export type Photo = {
 	isApproved: boolean
 	name: string
 	placeId: string
+	placeName: string
 	uid: string
 	url: string
 }
