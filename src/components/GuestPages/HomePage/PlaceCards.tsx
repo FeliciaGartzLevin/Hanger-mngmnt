@@ -2,14 +2,13 @@ import Card from 'react-bootstrap/Card'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-icons/bs";
 import { GoMail } from "react-icons/go";
 import { Place } from '../../../types/Place.types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type Props = {
 	place: Place
 }
 
 const PlaceCards: React.FC<Props> = ({ place }) => {
-	const navigate = useNavigate()
 	return (
 		<Card className="mb-3">
 			<Card.Body>

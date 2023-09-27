@@ -45,7 +45,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFil
 						onChange={e => passFilter(e.target.value)}
 						value={filter}
 						title="select"
-						aria-label="Choose a genre">
+						aria-label="Select a place">
 
 						{categoriesArr.map(category => {
 							return <option

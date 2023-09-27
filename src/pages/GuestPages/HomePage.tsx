@@ -17,7 +17,6 @@ import RingLoader from "react-spinners/RingLoader";
 const libraries: Libraries = ['places']
 
 const HomePage = () => {
-	// const [filter, setFilter] = useState<Supply | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [show, setShow] = useState(false)
 

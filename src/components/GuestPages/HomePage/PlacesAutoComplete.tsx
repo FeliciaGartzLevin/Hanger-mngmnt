@@ -50,6 +50,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 	return (
 		<div ref={ref}>
 			<Form.Control
+				role='combobox'
 				onClick={() => setValue('')}
 				value={value}
 				onChange={e => setValue(e.target.value)}
@@ -70,6 +71,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 
 						return (
 							<ListGroupItem
+
 								key={place_id}
 								onClick={handleSelect(suggestion)}>
 								<strong>{main_text}</strong> <small>{secondary_text}</small>
