@@ -10,8 +10,9 @@ import { useState } from "react"
 import { Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
 import SortAndMapPlaces from "../../components/GuestPages/HomePage/SortAndMapPlaces"
+import RingLoader from "react-spinners/RingLoader";
 
-// defining used libraries outside page so
+// defining used libraries outside page component so
 // it wont rerender and give a performance warning
 const libraries: Libraries = ['places']
 
@@ -20,21 +21,32 @@ const HomePage = () => {
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [show, setShow] = useState(false)
 
-
-	// connect to maps API
+	// connect to Google Maps API, using the 'places' library
 	const { isLoaded, loadError } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	})
 
 	if (!isLoaded) return (
-		<Container className="justify-content-center">
-			<Alert variant="warning">Loading...</Alert>
+		<Container
+			style={{
+				height: '100vh',
+			}}
+			className="d-flex justify-content-center align-items-center">
+			<RingLoader
+				color="#3B4C73"
+				size={140}
+			/>
 		</Container>
 	)
 
 	if (loadError) return (
-		<Container className="justify-content-center">
+		<Container
+			style={{
+				maxWidth: '34rem',
+				height: '100vh',
+			}}
+			className="d-flex justify-content-center align-items-center">
 			<Alert variant="warning">
 				The was an error loading the page. Error: {loadError.message}
 			</Alert>
@@ -68,7 +80,7 @@ const HomePage = () => {
 			</Button >
 
 			{/* Sidebar showing in all above large screens */}
-			<Container fluid id="App" className="py-3 center-y">
+			<Container fluid className="py-3 center-y">
 				<Row className='d-flex justify-content-center'>
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>

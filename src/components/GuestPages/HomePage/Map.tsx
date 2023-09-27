@@ -13,6 +13,7 @@ import { placesCol } from "../../../services/firebase"
 import { Place } from "../../../types/Place.types"
 import { getDistanceInMetresOrKm, getHaversineDistance } from "../../../helpers/distances"
 import { getIconForCategory } from "../../../helpers/icons"
+import { Alert } from "react-bootstrap"
 
 type Props = {
 	placesFound: (places: Place[]) => void
@@ -24,9 +25,9 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const filter = searchParams.get("filter") ?? 'All'
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
-	const [, /* error */ setError] = useState<FirestoreError | string | null>(null)
+	const [errorMsg, setErrorMsg] = useState<string | null>(null)
+	const [firestoreError, setFirestoreError] = useState<FirestoreError | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
-	const [, /* isLoading */ setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
 	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
 
@@ -46,7 +47,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			setSearchParams({ locality: foundCity, filter: filter })
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg(error.message)
 		}
 	}
 
@@ -61,8 +62,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
-			console.log("No current city was found:", error)
+			setErrorMsg(error.message)
 		}
 	}
 	// Handling choice of filter
@@ -79,7 +79,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg('Position access denied. ' + error.message ?? '')
 		}
 	}
 
@@ -101,19 +101,13 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setError(error.message)
+			setErrorMsg(error.message)
 		}
 	}
 
 	const setStates = (data: Place[]) => {
 		setPlaces(data)
 		placesFound(data)
-		setIsLoading(false)
-	}
-
-	const setErrorStates = (error: FirestoreError) => {
-		setError(error)
-		setIsLoading(false)
 	}
 
 	// Getting city info by city name
@@ -131,7 +125,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.log("No city was found:", error.message)
-			setError("No  city was found: " + error.message)
+			setErrorMsg("No  city was found: " + error.message)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
@@ -167,7 +161,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 				setStates(data)
 			},
 			(error) => {
-				setErrorStates(error)
+				setFirestoreError(error)
 			}
 		)
 
@@ -216,6 +210,30 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 				place={clickedPlace}
 				show={showPlaceModal}
 			/>
+
+			{errorMsg &&
+				<Alert
+					style={{
+						position: "absolute",
+						left: '50%',
+						bottom: '4rem',
+					}}
+					variant="danger"
+				>
+					An error occured. {errorMsg}
+				</Alert>}
+
+			{firestoreError &&
+				<Alert
+					style={{
+						position: "absolute",
+						left: '50%',
+						bottom: '4rem',
+					}}
+					variant="danger"
+				>
+					Places could not be loaded from the database. {firestoreError.message}
+				</Alert>}
 		</GoogleMap>
 	)
 }
