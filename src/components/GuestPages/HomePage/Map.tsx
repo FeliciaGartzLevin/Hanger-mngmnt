@@ -68,8 +68,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	// Handling choice of filter
 	const handleFilterChoice = (passedFilter: string) => {
 		setSearchParams({ locality: locality, filter: passedFilter })
-		console.log('filter param:', filter)
-		console.log('passedFilter:', passedFilter)
 	}
 
 	// Handling click on localisation button
