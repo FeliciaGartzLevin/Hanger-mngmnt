@@ -44,7 +44,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const [places, setPlaces] = useState<Place[] | null>(null);
 	const [showPlaceModal, setShowPlaceModal] = useState(false);
 	const [clickedPlace, setClickedPlace] = useState<Place | null>(null);
-	const [userLocation, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
+	const [, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null);
 
 
 
