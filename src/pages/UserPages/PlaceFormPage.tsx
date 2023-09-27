@@ -204,6 +204,7 @@ const PlaceFormPage = () => {
 												message: "Maximum character limit exceeded (300 characters)",
 											},
 										})}
+										className='roboto'
 									/>
 									{errors.description && (
 										<Form.Text className='invalid-value'>
@@ -307,6 +308,7 @@ const PlaceFormPage = () => {
 									<Form.Control
 										placeholder="Facebook"
 										type='text'
+										className='caveat-brush-font'
 										{...register('facebook')}
 									/>
 								</Form.Group>
@@ -318,6 +320,7 @@ const PlaceFormPage = () => {
 									<Form.Control
 										placeholder="Instagram"
 										type='text'
+										className='caveat-brush-font'
 										{...register('instagram')}
 									/>
 								</Form.Group>
@@ -342,4 +345,3 @@ const PlaceFormPage = () => {
 }
 
 export default PlaceFormPage
-

@@ -56,7 +56,7 @@ const AdminUsersListPage = () => {
 
 		return (
 			<>
-				<h3 className='mb-3'>Users</h3>
+				<h3 className='mb-3 title-table'>Users</h3>
 				<AdminUsersSortableTable
 					columns={columns}
 					data={currentItems}

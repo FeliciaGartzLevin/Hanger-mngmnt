@@ -118,7 +118,7 @@ const Navigation = () => {
 								>
 									<Button
 										size='sm'
-										variant='primary'
+										variant='outline-light'
 									>Sign Up</Button>
 								</Nav.Link>
 							</>

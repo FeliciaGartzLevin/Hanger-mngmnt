@@ -83,9 +83,9 @@ const ForgotPasswordPage = () => {
             </Card.Body>
           </Card>
 
-          <div className="text-center mt-3">
+          <div className="text-center mt-3 forgot-password">
 			Did your memory just do a happy dance with your password? If so, you're welcome to glide back into your account.<br />
-            <Link to="/login">Log In</Link>
+            <Link className="sign-in-link" to="/sign-in">Log In</Link>
           </div>
         </Col>
       </Row>

@@ -52,7 +52,7 @@ const AdminPlacesListPage = () => {
 
 		return (
 			<>
-				<h3 className='mb-3'>Places</h3>
+				<h3 className='mb-3 title-table'>Places</h3>
 				<AdminPlacesSortableTable
 					columns={columns}
 					data={currentItems}
