@@ -10,7 +10,7 @@ import { GoogleMap, MarkerF } from "@react-google-maps/api"
 import { getGeocode, getLatLng } from "use-places-autocomplete"
 import { useSearchParams } from "react-router-dom"
 import { placesCol } from "../../../services/firebase"
-import { Place, PlaceWithDistance } from "../../../types/Place.types"
+import { Place } from "../../../types/Place.types"
 import { getDistanceInMetresOrKm, getHaversineDistance } from "../../../helpers/distances"
 import { getIconForCategory } from "../../../helpers/icons"
 
@@ -28,7 +28,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [, /* isLoading */ setIsLoading] = useState<boolean>(false)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
-	const [clickedPlace, setClickedPlace] = useState<Place | PlaceWithDistance | null>(null)
+	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {

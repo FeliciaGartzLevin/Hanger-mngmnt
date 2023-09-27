@@ -7,11 +7,11 @@ import Row from 'react-bootstrap/Row'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
-import { PlaceWithDistance } from '../../../types/Place.types'
+import { Place } from '../../../types/Place.types'
 
 interface IProps {
 	onClose: () => void
-	place: PlaceWithDistance | null
+	place: Place | null
 	show: boolean
 }
 

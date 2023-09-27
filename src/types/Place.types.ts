@@ -19,15 +19,13 @@ export type Place = {
 	telephone?: string
 	uid: string
 	website?: string
+	distance?: number
+	distanceText?: string
 }
 
 export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/grill' | 'Food Truck'
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
 
-export type PlaceWithDistance = Place & {
-	distance?: number
-	distanceText?: string
-}
 
 export type SelectCategory = Category | 'All'

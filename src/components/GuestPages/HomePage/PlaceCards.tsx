@@ -2,10 +2,10 @@ import Card from 'react-bootstrap/Card'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-icons/bs";
 import { GoMail } from "react-icons/go";
 // import { Link } from "react-router-dom"
-import { PlaceWithDistance } from '../../../types/Place.types';
+import { Place } from '../../../types/Place.types';
 
 type Props = {
-	place: PlaceWithDistance
+	place: Place
 }
 
 const PlaceCards: React.FC<Props> = ({ place }) => {
