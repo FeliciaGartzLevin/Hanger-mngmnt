@@ -20,11 +20,10 @@ type Props = {
 
 const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
-	const locality = searchParams.get("locality") ?? ""
+	const locality = searchParams.get("locality") ?? "Malmö"
 	const filter = searchParams.get("filter") ?? 'All'
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
-	const [city, setCity] = useState("")
 	const [, /* error */ setError] = useState<FirestoreError | string | null>(null)
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [, /* isLoading */ setIsLoading] = useState<boolean>(false)
@@ -43,7 +42,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			const foundCity = findAdressComponent(results)
 
 			if (!foundCity) return
-			setCity(foundCity)
+			// setCity(foundCity)
 			setSearchParams({ locality: foundCity, filter: filter })
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
@@ -97,8 +96,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		setClickedPlace({ ...place, distance, distanceText })
 	}
 
-	const handleClosePlaceModal = () => setShowPlaceModal(false)
-
 	// Finding and showing the location that user requested in the queryinput autocomplete-form
 	const handleSearchInput = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -133,12 +130,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			// center the map on the searched city
 			setCenter({ lat, lng })
 
-			// getting the city ('postal_town' or 'locality') from the response
-			const foundCity = findAdressComponent(results)
-
-			if (!foundCity) return
-			setCity(foundCity)
-
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.log("No city was found:", error.message)
@@ -148,18 +139,12 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}, [])
 
 	const queryConstraints: QueryConstraint[] = [
-		where("city", "==", city),
+		where("city", "==", locality),
 		where("isApproved", "==", true),
 		where("category", "in", filter === 'All'
 			? ['Café', 'Pub', 'Restaurant', 'Fast Food', 'Kiosk/grill', 'Food Truck']
 			: [filter]),
 	]
-
-	// Get info of city every time city changes
-	useEffect(() => {
-		if (!city) return
-		queryCity(city)
-	}, [city, queryCity])
 
 	// Get info of city every time locality changes
 	useEffect(() => {
@@ -172,7 +157,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
 		const queryRef = query(placesCol, ...queryConstraints)
-		console.log('queryConstraints', ...queryConstraints)
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -191,7 +175,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 		return unsubscribe
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, city, filter])
+	}, [locality, /* city, */ filter])
 
 	return (
 		<GoogleMap
@@ -230,7 +214,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 					/>
 				))}
 			<PlaceModal
-				onClose={handleClosePlaceModal}
+				onClose={() => setShowPlaceModal(false)}
 				place={clickedPlace}
 				show={showPlaceModal}
 			/>
