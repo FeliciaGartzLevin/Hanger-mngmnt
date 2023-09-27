@@ -47,7 +47,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
 				<Row
-					className='justify-content-end position-absolute start-0'
+					className='position-absolute start-0 g-3 pb-3'
 					xs='auto'
 				>
 					{place.website && (
