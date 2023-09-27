@@ -87,6 +87,11 @@ const Navigation = () => {
 											to='/admin-users-list'
 										>Users List</NavDropdown.Item>
 
+										<NavDropdown.Item
+											as={NavLink}
+											to='/admin-photos-list'
+										>Photos List</NavDropdown.Item>
+
 										<NavDropdown.Divider />
 									</>
 								)}

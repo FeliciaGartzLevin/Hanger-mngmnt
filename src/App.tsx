@@ -3,6 +3,7 @@ import RequireAuthAdmin from './components/RequireAuthAdmin'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import AdminUsersListPage from './pages/AdminPages/AdminUsersListPage'
+import AdminPhotosListPage from './pages/AdminPages/AdminPhotosListPage'
 import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
 import ForgotPasswordPage from './pages/GuestPages/ForgotPasswordPage'
 import HomePage from './pages/GuestPages/HomePage'
@@ -51,6 +52,12 @@ const App = () => {
 					<Route path='/admin-users-list' element={
 						<RequireAuthAdmin>
 							<AdminUsersListPage />
+						</RequireAuthAdmin>
+					} />
+
+					<Route path='/admin-photos-list' element={
+						<RequireAuthAdmin>
+							<AdminPhotosListPage />
 						</RequireAuthAdmin>
 					} />
 
