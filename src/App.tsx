@@ -1,6 +1,9 @@
 import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import AdminUsersListPage from './pages/AdminPages/AdminUsersListPage'
+import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
 import ForgotPasswordPage from './pages/GuestPages/ForgotPasswordPage'
 import HomePage from './pages/GuestPages/HomePage'
 import NotFoundPage from './pages/GuestPages/NotFoundPage'
@@ -10,11 +13,11 @@ import SignUpPage from './pages/GuestPages/SignUpPage'
 import Navigation from './pages/Partials/Navigation'
 import PlaceFormPage from './pages/UserPages/PlaceFormPage'
 import UpdateProfilePage from './pages/UserPages/UpdateProfilePage'
+import UploadPhotoPage from './pages/UserPages/UploadPhotoPage'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './assets/scss/App.scss'
-import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
 
 const App = () => {
 	return (
@@ -65,6 +68,15 @@ const App = () => {
 						element={
 							<RequireAuth>
 								<PlaceFormPage />
+							</RequireAuth>
+						}
+					/>
+
+					<Route
+						path='/upload-photo/:placeId'
+						element={
+							<RequireAuth>
+								<UploadPhotoPage />
 							</RequireAuth>
 						}
 					/>

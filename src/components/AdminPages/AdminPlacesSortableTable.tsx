@@ -18,7 +18,7 @@ interface IProps<TData, TValue> {
 	data: TData[]
 }
 
-const AdminUsersSortableTable = <TData, TValue>({
+const AdminPlacesSortableTable = <TData, TValue>({
 	columns,
 	data,
 }: IProps<TData, TValue>) => {
@@ -123,4 +123,4 @@ const AdminUsersSortableTable = <TData, TValue>({
 	)
 }
 
-export default AdminUsersSortableTable
+export default AdminPlacesSortableTable

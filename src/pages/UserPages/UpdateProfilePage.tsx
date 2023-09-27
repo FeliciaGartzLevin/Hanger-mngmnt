@@ -35,7 +35,15 @@ const UpdateProfile = () => {
 		signedInUserEmail,
 		signedInUserPhotoUrl
 	} = useAuth()
-	const { handleSubmit, register, setValue, watch, formState: { errors } } = useForm<UserUpdate>({
+
+	const {
+		handleSubmit,
+		register,
+		resetField,
+		setValue,
+		watch,
+		formState: { errors }
+	} = useForm<UserUpdate>({
 		defaultValues: {
 			displayName: signedInUserName ?? '',
 			email: signedInUserEmail ?? ''
@@ -77,6 +85,9 @@ const UpdateProfile = () => {
 					setErrorMessage(error.message)
 
 				}, async () => {
+					setUploadProgress(null)
+					resetField('photoFile')
+
 					const photoUrl = await getDownloadURL(fileRef)
 					await setPhotoUrl(photoUrl)
 					await reloadUser()

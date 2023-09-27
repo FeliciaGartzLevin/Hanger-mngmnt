@@ -1,11 +1,13 @@
-import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
-import { GoMail } from 'react-icons/go'
+import ImageGallery from '../../ImageGallery'
+import useGetPhotosByPlace from '../../../hooks/useGetPhotosByPlace'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
+import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
+import { GoMail } from 'react-icons/go'
+import { Link, useNavigate } from 'react-router-dom'
 import { PlaceWithDistance } from '../../../types/Place.types'
-import { Link } from 'react-router-dom'
 
 interface IProps {
 	onClose: () => void
@@ -14,7 +16,9 @@ interface IProps {
 }
 
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
-	const iconSize = 25
+	const navigate = useNavigate()
+	const iconSize = 20
+	const { data: photos } = useGetPhotosByPlace(place?._id)
 
 	if (place) return (
 		<Modal
@@ -39,8 +43,11 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
+				{photos && <ImageGallery photos={photos} />}
+			</Modal.Body>
+			<Modal.Footer className='position-relative'>
 				<Row
-					className='mt-3 justify-content-end'
+					className='justify-content-end position-absolute start-0'
 					xs='auto'
 				>
 					{place.website && (
@@ -83,13 +90,12 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 						</Col>
 					)}
 				</Row>
-			</Modal.Body>
-			<Modal.Footer>
+
 				<Button
-					// onClick={onClose}
+					onClick={() => navigate('/upload-photo/' + place._id)}
 					size='sm'
 					variant='primary'
-				>Upload Photos</Button>
+				>Add Photo</Button>
 
 				<Button
 					onClick={onClose}

@@ -29,3 +29,7 @@ export type UserUpdate = {
 	password: string
 	passwordConfirm: string
 }
+
+export type ForgotPassword ={
+	email: string
+}
