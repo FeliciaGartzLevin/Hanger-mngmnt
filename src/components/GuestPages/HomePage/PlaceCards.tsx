@@ -26,8 +26,7 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 				<Card.Text>{place.description}</Card.Text>
 				<Card.Footer className="card-links d-flex justify-content-between align-items-center">
 					<div className="d-flex align-items-centers">
-						{/* This will be a link ltr: <Link to={<UploadPhotoPage />}>
-						needa check here if user is authorized and conditionally render*/}
+						{/* needa check here if user is authorized and conditionally render*/}
 						<Link
 							to={'/upload-photo/' + place._id}
 							className="add-photo-links">

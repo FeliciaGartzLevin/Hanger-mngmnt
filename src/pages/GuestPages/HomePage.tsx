@@ -65,6 +65,10 @@ const HomePage = () => {
 					<Offcanvas.Title>Places</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
+					{places && places.length <= 0 &&
+						<Alert variant="warning">
+							No places to show.
+						</Alert>}
 					{places &&
 						<SortAndMapPlaces
 							places={places} />
@@ -84,6 +88,10 @@ const HomePage = () => {
 				<Row className='d-flex justify-content-center'>
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>
+						{places && places.length <= 0 &&
+							<Alert variant="warning">
+								No places to show.
+							</Alert>}
 						{places &&
 							<SortAndMapPlaces
 								places={places} />
