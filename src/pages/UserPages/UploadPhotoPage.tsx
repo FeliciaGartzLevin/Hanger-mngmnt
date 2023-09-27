@@ -40,6 +40,9 @@ const UploadPhotoPage = () => {
 
 	const { data: photos } = useStreamPhotosByPlace(placeId)
 
+	console.log(photos)
+
+
 	const photoRef = useRef<FileList|null>(null)
 	photoRef.current = watch('photoFile')
 
@@ -92,6 +95,7 @@ const UploadPhotoPage = () => {
 						isApproved: (signedInUserDoc && signedInUserDoc.isAdmin) || false,
 						name: photo.name,
 						placeId,
+						placeName: place.data?.name,
 						uid: signedInUser.uid,
 						url
 					})

@@ -35,7 +35,6 @@ const AdminPlacesListPage = () => {
 
 	if (isError) return <Alert variant='danger'>{error}</Alert>
 
-
 	if (data) {
 		const totalPages = Math.ceil(data.length / itemsPerPage)
 

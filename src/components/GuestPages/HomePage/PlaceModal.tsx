@@ -11,14 +11,14 @@ import { PlaceWithDistance } from '../../../types/Place.types'
 
 interface IProps {
 	onClose: () => void
-	place: PlaceWithDistance | null
+	place: PlaceWithDistance
 	show: boolean
 }
 
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 	const navigate = useNavigate()
 	const iconSize = 20
-	const { data: photos } = useStreamPhotosByPlace(place?._id)
+	const { data: photos } = useStreamPhotosByPlace(place._id)
 
 	if (place) return (
 		<Modal
@@ -43,6 +43,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small'>{place.description}</div>
+
 				{photos && <ImageGallery photos={photos} />}
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
