@@ -53,8 +53,20 @@ const AdminPlacesSortableTable = <TData, TValue>({
 		</Form>
 	)
 
+	const renderDateCell = (date: Date) => {
+		return new Intl.DateTimeFormat('sv', {
+			year: '2-digit',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit'
+		}).format(date)
+	}
+
 	const cellRenderer = (cellType: string, PlaceData: Place) => {
 		switch (cellType) {
+			case 'createdAt':
+				return renderDateCell(PlaceData.createdAt.toDate())
 			case 'isApproved':
 				return renderApprovalCell(PlaceData)
 			default:
@@ -62,7 +74,7 @@ const AdminPlacesSortableTable = <TData, TValue>({
 		}
 	}
 
-	const altRendering = [ 'isApproved']
+	const altRendering = ['createdAt', 'isApproved']
 
 	return (
 		<Table striped bordered hover responsive>

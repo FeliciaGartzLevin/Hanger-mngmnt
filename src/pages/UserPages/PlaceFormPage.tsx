@@ -1,6 +1,6 @@
 import PlacesAutoComplete from '../../components/GuestPages/HomePage/PlacesAutoComplete'
 import { FirebaseError } from 'firebase/app'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
 import useAuth from '../../hooks/useAuth'
 import { useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
@@ -18,7 +18,6 @@ import { Category, Place, Supply } from '../../types/Place.types'
 import { getLatLng } from 'use-places-autocomplete'
 
 const libraries: Libraries = ['places']
-
 
 const categories: Category[] = [
 	'Café',
@@ -90,6 +89,7 @@ const PlaceFormPage = () => {
 
 			const newPlace = {
 				...data,
+				createdAt: serverTimestamp(),
 				isApproved: signedInUserDoc && signedInUserDoc.isAdmin,
 				uid: signedInUser.uid
 			}
