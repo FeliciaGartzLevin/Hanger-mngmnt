@@ -175,7 +175,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 		return unsubscribe
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, /* city, */ filter])
+	}, [locality, filter])
 
 	return (
 		<GoogleMap
