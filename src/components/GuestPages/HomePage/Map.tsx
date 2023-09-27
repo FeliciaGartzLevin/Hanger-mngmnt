@@ -63,14 +63,14 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			setError(error.message)
-			console.log("No current city was found:", error)
+			// console.log("No current city was found:", error)
 		}
 	}
 	// Handling choice of filter
 	const handleFilterChoice = (passedFilter: string) => {
 		setSearchParams({ locality: locality, filter: passedFilter })
-		console.log('filter param:', filter)
-		console.log('passedFilter:', passedFilter)
+		// console.log('filter param:', filter)
+		// console.log('passedFilter:', passedFilter)
 	}
 
 	// Handling click on localisation button
@@ -165,14 +165,14 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
-		console.log("places", places)
+		// console.log("places", places)
 	}, [locality, queryCity, places])
 
 
 	// Querying the firestore db for all the places in current city
 	useEffect(() => {
 		const queryRef = query(placesCol, ...queryConstraints)
-		console.log('queryConstraints', ...queryConstraints)
+		// console.log('queryConstraints', ...queryConstraints)
 		const unsubscribe = onSnapshot(
 			queryRef,
 			(snapshot) => {
@@ -228,12 +228,16 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 							scaledSize: new window.google.maps.Size(32, 32), // Adjust the icon size
 						}}
 					/>
-				))}
-			<PlaceModal
-				onClose={handleClosePlaceModal}
-				place={clickedPlace}
-				show={showPlaceModal}
-			/>
+				))
+			}
+
+			{clickedPlace && (
+				<PlaceModal
+					onClose={handleClosePlaceModal}
+					place={clickedPlace}
+					show={showPlaceModal}
+				/>
+			)}
 		</GoogleMap>
 	)
 }
