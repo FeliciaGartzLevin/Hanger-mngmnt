@@ -2,7 +2,7 @@ import { useState } from 'react'; // Import useState
 import { ColumnDef } from '@tanstack/react-table';
 import AdminUsersSortableTable from '../../components/AdminPages/AdminUsersSortableTable'
 import { UserDoc } from '../../types/User.types';
-import useGetUsers from '../../hooks/useGetUsers';
+import useStreamUsers from '../../hooks/useStreamUsers';
 import { Alert } from 'react-bootstrap';
 import PaginationComponent from '../../components/PaginationComponent';
 
@@ -34,7 +34,7 @@ const columns: ColumnDef<UserDoc>[] = [
 ]
 
 const AdminUsersListPage = () => {
-  const { data, error, isError, isLoading } = useGetUsers();
+  const { data, error, isError, isLoading } = useStreamUsers();
 
 
   const [currentPage, setCurrentPage] = useState(1);
