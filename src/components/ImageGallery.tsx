@@ -31,7 +31,7 @@ const ImageGallery: React.FC<IProps> = ({ photos }) => {
 	}
 
 	return (
-		<div className='px-3'>
+		<div className='px-3 pb-2'>
 			<Slider {...settings}>
 				{photos.map(photo => (
 					<Image
