@@ -4,19 +4,20 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import FormSelect from 'react-bootstrap/FormSelect'
-import { FaLocationArrow } from 'react-icons/fa'
+import { BiCurrentLocation as FaLocationArrow } from 'react-icons/bi'
 import PlacesAutoComplete from './PlacesAutoComplete'
 import { SelectCategory } from '../../../types/Place.types'
 
 type Props = {
 	handleFindLocation: () => void
 	passOnResults: (results: google.maps.GeocoderResult[]) => void
+	passFilter: (filter: string) => void
+	filter: string
 }
 
 const categoriesArr: SelectCategory[] = ['All', 'Café', 'Pub', 'Restaurant', 'Fast Food', 'Kiosk/grill', 'Food Truck']
 
-const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
-	const [filter, setFilter] = useState<string>('All')
+const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults, passFilter, filter }) => {
 
 	return (
 		<Container
@@ -40,7 +41,7 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 					<FormSelect
 						id='select'
 						name='select'
-						onChange={e => setFilter(e.target.value)}
+						onChange={e => passFilter(e.target.value)}
 						value={filter}
 						title="select"
 						aria-label="Choose a genre">
@@ -57,13 +58,16 @@ const SearchBox: React.FC<Props> = ({ handleFindLocation, passOnResults }) => {
 				</Col>
 				<Col xs={2}>
 					<Button
+						// style={{
+						// 	backgroundColor: '#3B4C73',
+						// 	borderColor: '#3B4C73',
+						// }}
 						onClick={handleFindLocation}
 						aria-label="Use my location"
-						variant='secondary'
-						className='rounded-circle'
+						variant='dark'
 						type='submit'
 					>
-						<FaLocationArrow />
+						<FaLocationArrow style={{ fontSize: '1.5rem' }} />
 					</Button>
 				</Col>
 			</Row>

@@ -1,5 +1,5 @@
 import ImageGallery from '../../ImageGallery'
-import useGetPhotosByPlace from '../../../hooks/useGetPhotosByPlace'
+import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
@@ -18,7 +18,7 @@ interface IProps {
 const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 	const navigate = useNavigate()
 	const iconSize = 20
-	const { data: photos } = useGetPhotosByPlace(place?._id)
+	const { data: photos } = useStreamPhotosByPlace(place?._id)
 
 	if (place) return (
 		<Modal

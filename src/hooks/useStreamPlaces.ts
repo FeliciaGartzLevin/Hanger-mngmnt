@@ -2,10 +2,10 @@ import useStreamCollection from './useStreamCollection'
 import { placesCol } from '../services/firebase'
 import { Place } from '../types/Place.types'
 
-const useGetPlaces = () => {
+const useStreamPlaces = () => {
 	return useStreamCollection<Place>(
 		placesCol
 	)
 }
 
-export default useGetPlaces
+export default useStreamPlaces

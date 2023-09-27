@@ -4,7 +4,7 @@ import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import useAuth from '../../hooks/useAuth'
 import useGetPlace from '../../hooks/useGetPlace'
-import useGetPhotosByPlace from '../../hooks/useGetPhotosByPlace'
+import useStreamPhotosByPlace from '../../hooks/useStreamPhotosByPlace'
 import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
@@ -38,7 +38,7 @@ const UploadPhotoPage = () => {
 	const { placeId } = useParams()
 	const place = useGetPlace(placeId)
 
-	const { data: photos } = useGetPhotosByPlace(placeId)
+	const { data: photos } = useStreamPhotosByPlace(placeId)
 
 	const photoRef = useRef<FileList|null>(null)
 	photoRef.current = watch('photoFile')
