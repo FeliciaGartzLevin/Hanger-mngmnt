@@ -329,8 +329,8 @@ const PlaceFormPage = () => {
 									variant='primary'
 								>
 									{isSubmitting
-										? "Submit Place..."
-										: "Submitting Place"}
+										? "Submitting Place..."
+										: "Submit Place"}
 								</Button>
 							</Form>
 						</Card.Body>
