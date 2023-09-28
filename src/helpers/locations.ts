@@ -18,3 +18,4 @@ export const findAdressComponent = (results: google.maps.GeocoderResult[]) => {
 	if (!component) return
 	return component.long_name
 }
+

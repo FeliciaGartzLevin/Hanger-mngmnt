@@ -120,12 +120,13 @@ a {
 		}
 	}
 
-	a.add-photo-links {
-		color: white;
+}
 
-		&:hover {
-			color: $primaryColor;
-		}
+a.add-photo-links {
+	color: white;
+
+	&:hover {
+		color: $primaryColor;
 	}
 }
 
@@ -214,7 +215,8 @@ a.sign-up-link {
 	}
 }
 
-.title-table, .title {
+.title-table,
+.title {
 	color: #feb414;
 }
 
