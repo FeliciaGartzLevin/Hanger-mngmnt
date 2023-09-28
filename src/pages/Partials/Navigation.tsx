@@ -79,13 +79,13 @@ const Navigation = () => {
 									<>
 										<NavDropdown.Item
 											as={NavLink}
-											to='/admin-places-list'
-										>Places List</NavDropdown.Item>
+											to='/admin-users-list'
+										>Users List</NavDropdown.Item>
 
 										<NavDropdown.Item
 											as={NavLink}
-											to='/admin-users-list'
-										>Users List</NavDropdown.Item>
+											to='/admin-places-list'
+										>Places List</NavDropdown.Item>
 
 										<NavDropdown.Item
 											as={NavLink}
