@@ -1,12 +1,12 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { useCallback, useEffect, useState } from 'react'
-import { usersCol } from '../../services/firebase'
+import { usersCol } from '../services/firebase'
 
 interface IProps {
 	uid: string
 }
 
-const UserNameCell: React.FC<IProps> = ({ uid }) => {
+const UserName: React.FC<IProps> = ({ uid }) => {
 	const [name, setName] = useState('')
 
 	const getName = useCallback(async () => {
@@ -24,4 +24,4 @@ const UserNameCell: React.FC<IProps> = ({ uid }) => {
 	return <span>{name}</span>
 }
 
-export default UserNameCell
+export default UserName

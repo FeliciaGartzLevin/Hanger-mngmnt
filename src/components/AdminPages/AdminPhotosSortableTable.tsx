@@ -1,6 +1,6 @@
 import DateCell from './DateCell'
 import PhotoCell from './PhotoCell'
-import UserNameCell from './UserNameCell'
+import UserName from '../UserName'
 import { doc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
@@ -61,7 +61,7 @@ const AdminPhotosSortableTable = <TData, TValue>({
 			case 'url':
 				return <PhotoCell alt={photo.name} src={photo.url} />
 			case 'uid':
-				return <UserNameCell uid={photo.uid} />
+				return <UserName uid={photo.uid} />
 			case 'createdAt':
 				return <DateCell date={photo.createdAt.toDate()} />
 			case 'isApproved':

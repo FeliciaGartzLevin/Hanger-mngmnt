@@ -1,5 +1,5 @@
 import DateCell from './DateCell'
-import UserNameCell from './UserNameCell'
+import UserName from '../UserName'
 import { doc, updateDoc } from 'firebase/firestore'
 import { placesCol } from '../../services/firebase'
 import { useState } from 'react'
@@ -58,7 +58,7 @@ const AdminPlacesSortableTable = <TData, TValue>({
 	const cellRenderer = (cellType: string, place: Place) => {
 		switch (cellType) {
 			case 'uid':
-				return <UserNameCell uid={place.uid} />
+				return <UserName uid={place.uid} />
 			case 'createdAt':
 				return <DateCell date={place.createdAt.toDate()} />
 			case 'isApproved':
