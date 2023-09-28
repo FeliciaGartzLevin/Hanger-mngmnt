@@ -1,6 +1,10 @@
 # Hangry Food Guide App made by Group 3
 
-![App Screenshot](screenshot.png)
+![](https://utbweb.its.ltu.se/~anolan-1/medieinstitutet/screenshots-readmes-github/hanger-mgmt-1.png)
+
+![](https://utbweb.its.ltu.se/~anolan-1/medieinstitutet/screenshots-readmes-github/hanger-mgmt-2.png)
+
+![](https://utbweb.its.ltu.se/~anolan-1/medieinstitutet/screenshots-readmes-github/hanger-mgmt-3.png)
 
 An app that acts as a food guide for those moments when you're "hangry" but don't know where to eat or just need some coffee/tea.
 
