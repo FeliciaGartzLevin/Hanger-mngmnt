@@ -7,6 +7,7 @@ import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-ico
 import { GoMail } from "react-icons/go"
 import { Link } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
+import DirectionIcon from './DirectionIcon'
 
 type Props = {
 	place: Place
@@ -25,13 +26,24 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 	return (
 		<Card className="mb-3">
 			<Card.Body>
-				<Card.Title className='d-flex justify-content-between'>
-					{place.name}
-					{place.distanceText &&
-						<small style={{ fontSize: '0.9rem' }}>
-							{place.distanceText} away
-						</small>
-					}
+				<Card.Title className='d-flex justify-content-between social-icons'>
+					<span>
+						{place.name}{' '}
+					</span>
+					<span>
+						{place.distanceText &&
+							<small style={{
+								fontSize: '0.9rem',
+								marginRight: '0.3rem'
+							}}>
+								{place.distanceText} away
+							</small>
+						}
+						<DirectionIcon
+							placeId={place._id}
+						/>
+					</span>
+
 				</Card.Title>
 				<hr />
 				<Card.Subtitle className="mb-2 text-muted">{place.streetAddress}</Card.Subtitle>

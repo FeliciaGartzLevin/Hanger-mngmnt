@@ -30,4 +30,6 @@ export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/gri
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
 
-export type SelectCategory = Category | 'All'
+export type SelectCategory = Category | 'Category'
+
+export type SelectSupply = Supply | 'Supply'

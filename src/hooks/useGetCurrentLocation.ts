@@ -20,7 +20,13 @@ const useGetCurrentLocation = () => {
 		}, (error) => {
 			console.error('Error getting user location:', error);
 			setError(error)
-		})
+		},
+			{
+				enableHighAccuracy: true, // Request high-precision location if available
+				timeout: 10000, // Maximum time (in milliseconds) to wait for a response
+				maximumAge: 0, // Maximum age (in milliseconds) of cached location data
+			}
+		)
 	}
 
 	useEffect(() => {

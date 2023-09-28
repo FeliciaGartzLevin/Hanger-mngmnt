@@ -192,7 +192,7 @@ const PlaceFormPage = () => {
 								>
 									<Form.Control
 										as='textarea'
-										placeholder="Description(min. of 10 characters max. of 300 characters)*"
+										placeholder="Description*"
 										rows={3}
 										{...register('description', {
 											required: "Description missing",
@@ -212,6 +212,7 @@ const PlaceFormPage = () => {
 											{errors.description.message}
 										</Form.Text>
 									)}
+									<Form.Text>Min: 10 characters, Max: 300 characters</Form.Text>
 								</Form.Group>
 
 								<Form.Group

@@ -6,12 +6,15 @@ import { useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
+import Image from 'react-bootstrap/Image'
 import Row from 'react-bootstrap/Row'
 import { BiEditAlt } from 'react-icons/bi'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
+import { getIconForCategory } from '../../../helpers/icons'
+import DirectionIcon from './DirectionIcon'
 
 interface IProps {
 	onClose: () => void
@@ -30,8 +33,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 		if (place) {
 			getCollection()
 		}
-
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [place])
 
 	return (
@@ -42,7 +44,13 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 		>
 			<Modal.Header closeButton>
 				<Modal.Title>
-					{place.name}
+					<Image
+						src={getIconForCategory(place.category) ?? ''}
+						style={{
+							width: '2rem',
+						}}
+					/>
+					{' '}{place.name}
 					{signedInUserDoc && signedInUserDoc.isAdmin && (
 						<Button
 							className='ms-2'
@@ -55,13 +63,21 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<div className='d-flex justify-content-between'>
-					<div>{place.supply} | {place.category}</div>
-					{place.distanceText &&
-						<small style={{ fontSize: '0.9rem' }}>
-							{place.distanceText} away
-						</small>
-					}
+				<div className='d-flex justify-content-between social-icons'>
+					<span>{place.supply} | {place.category}</span>
+					<span >
+						{place.distanceText &&
+							<small style={{
+								fontSize: '0.9rem',
+								marginRight: '0.3rem'
+							}}>
+								{place.distanceText} away
+							</small>
+						}
+						<DirectionIcon
+							placeId={place._id}
+						/>
+					</span>
 				</div>
 				<div className='small text-muted my-1'>{place.streetAddress}</div>
 				<div className='small roboto'>{place.description}</div>

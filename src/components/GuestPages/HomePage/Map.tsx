@@ -23,14 +23,15 @@ type Props = {
 const Map: React.FC<Props> = ({ placesFound }) => {
 	const [searchParams, setSearchParams] = useSearchParams()
 	const locality = searchParams.get("locality") ?? "Malmö"
-	const filter = searchParams.get("filter") ?? "All"
+	const category = searchParams.get("category") ?? "Category"
+	const supply = searchParams.get("supply") ?? "Supply"
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
 	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
 
-	const { data: places, getCollection, error } = useStreamPlacesByLocality(locality, filter)
+	const { data: places, getCollection, error } = useStreamPlacesByLocality(locality, category, supply)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -45,7 +46,11 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			if (!foundCity) return
 			// setCity(foundCity)
-			setSearchParams({ locality: foundCity, filter: filter })
+			setSearchParams({
+				locality: foundCity,
+				category,
+				supply
+			})
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			setErrorMsg(error.message)
@@ -68,8 +73,21 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}
 
 	// Handling choice of filter
-	const handleFilterChoice = (passedFilter: string) => {
-		setSearchParams({ locality: locality, filter: passedFilter })
+	const handleFilterCategoryChoice = (passedFilter: string) => {
+		setSearchParams({
+			locality,
+			category: passedFilter,
+			supply
+		})
+	}
+
+	// Handling choice of filter
+	const handleFilterSupplyChoice = (passedFilter: string) => {
+		setSearchParams({
+			locality,
+			category,
+			supply: passedFilter,
+		})
 	}
 
 	// Handling clicking the crosshairs button for getting users location
@@ -145,7 +163,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			getCollection()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, filter])
+	}, [locality, category, supply])
 
 	return (
 		<GoogleMap
@@ -159,8 +177,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			mapContainerStyle={{
 				width: "100%",
 				height: "100vh",
-				// style away the tiny scroll
-				// check johans video about it
 			}}
 		>
 			{usersPosition && (
@@ -176,8 +192,10 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			<SearchBox
 				passOnResults={handleSearchInput}
 				handleFindLocation={handleFindLocation}
-				passFilter={handleFilterChoice}
-				filter={filter}
+				passCategoryFilter={handleFilterCategoryChoice}
+				passSupplyFilter={handleFilterSupplyChoice}
+				categoryFilter={category}
+				supplyFilter={supply}
 			/>
 			{places &&
 				places.map((place) => (

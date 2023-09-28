@@ -10,8 +10,9 @@ type Props = {
 
 const NoPlacesToShow: React.FC<Props> = ({ places }) => {
 	return places && places.length <= 0 &&
-		<Alert variant="warning">
-			No places to show.{' '}
+		<Alert variant="warning"
+			className='text-center'>
+			No places to show with that filtering.{' '}
 			<Link
 				to={'/place-form'}
 				className="">
