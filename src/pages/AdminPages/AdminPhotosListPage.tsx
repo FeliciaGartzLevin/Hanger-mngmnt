@@ -20,6 +20,10 @@ const columns: ColumnDef<Photo>[] = [
 		header: 'Place'
 	},
 	{
+		accessorKey: 'uid',
+		header: 'User'
+	},
+	{
 		accessorKey: 'createdAt',
 		header: 'Created'
 	},
