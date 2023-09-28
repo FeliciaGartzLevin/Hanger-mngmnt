@@ -1,8 +1,9 @@
+import DateCell from './DateCell'
+import PhotoCell from './PhotoCell'
 import { doc, updateDoc } from 'firebase/firestore'
 import { usersCol } from '../../services/firebase'
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
-import Image from 'react-bootstrap/Image'
 import Table from 'react-bootstrap/Table'
 import {
 	ColumnDef,
@@ -36,26 +37,6 @@ const AdminUsersSortableTable = <TData, TValue>({
 		getSortedRowModel: getSortedRowModel()
 	})
 
-	const renderPhotoCell = (userData: UserDoc) => (
-		<Image
-			alt={userData.displayName}
-			className='img-square'
-			rounded
-			src={userData.photoURL}
-			width={50}
-		/>
-	)
-
-	const renderDateCell = (date: Date) => {
-		return new Intl.DateTimeFormat('sv', {
-			year: '2-digit',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit'
-		}).format(date)
-	}
-
 	const toggleAdmin = (userData: UserDoc) => {
 		const docRef = doc(usersCol, userData.uid)
 		updateDoc(docRef, {
@@ -74,16 +55,16 @@ const AdminUsersSortableTable = <TData, TValue>({
 		</Form>
 	)
 
-	const cellRenderer = (cellType: string, userData: UserDoc) => {
+	const cellRenderer = (cellType: string, user: UserDoc) => {
 		switch (cellType) {
 			case 'photoURL':
-				return renderPhotoCell(userData)
+				return <PhotoCell alt={user.displayName} src={user.photoURL} />
 			case 'createdAt':
-				return renderDateCell(userData.createdAt.toDate())
+				return <DateCell date={user.createdAt.toDate()} />
 			case 'updatedAt':
-				return renderDateCell(userData.updatedAt.toDate())
+				return <DateCell date={user.updatedAt.toDate()} />
 			case 'isAdmin':
-				return renderAdminCell(userData)
+				return renderAdminCell(user)
 			default:
 				return
 		}

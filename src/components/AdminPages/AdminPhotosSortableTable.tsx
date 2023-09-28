@@ -1,7 +1,9 @@
+import DateCell from './DateCell'
+import PhotoCell from './PhotoCell'
+import UserNameCell from './UserNameCell'
 import { doc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
-import Image from 'react-bootstrap/Image'
 import Table from 'react-bootstrap/Table'
 import {
 	ColumnDef,
@@ -36,26 +38,6 @@ const AdminPhotosSortableTable = <TData, TValue>({
 		getSortedRowModel: getSortedRowModel()
 	})
 
-	const renderPhotoCell = (photoData: Photo) => (
-		<Image
-			alt={photoData.name}
-			className='img-square'
-			rounded
-			src={photoData.url}
-			width={50}
-		/>
-	)
-
-	const renderDateCell = (date: Date) => {
-		return new Intl.DateTimeFormat('sv', {
-			year: '2-digit',
-			month: '2-digit',
-			day: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit'
-		}).format(date)
-	}
-
 	const toggleApproval = (photoData: Photo) => {
 		const docRef = doc(photosCol, photoData._id)
 		updateDoc(docRef, {
@@ -74,20 +56,22 @@ const AdminPhotosSortableTable = <TData, TValue>({
 		</Form>
 	)
 
-	const cellRenderer = (cellType: string, photoData: Photo) => {
+	const cellRenderer = (cellType: string, photo: Photo) => {
 		switch (cellType) {
 			case 'url':
-				return renderPhotoCell(photoData)
+				return <PhotoCell alt={photo.name} src={photo.url} />
+			case 'uid':
+				return <UserNameCell uid={photo.uid} />
 			case 'createdAt':
-				return renderDateCell(photoData.createdAt.toDate())
+				return <DateCell date={photo.createdAt.toDate()} />
 			case 'isApproved':
-				return renderApprovalCell(photoData)
+				return renderApprovalCell(photo)
 			default:
 				return
 		}
 	}
 
-	const altRendering = ['url', 'createdAt', 'isApproved']
+	const altRendering = ['url', 'uid', 'createdAt', 'isApproved']
 
 	return (
 		<Table striped bordered hover responsive>
