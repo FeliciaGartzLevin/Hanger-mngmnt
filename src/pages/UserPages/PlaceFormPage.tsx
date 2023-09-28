@@ -307,8 +307,7 @@ const PlaceFormPage = () => {
 								>
 									<Form.Control
 										placeholder="Facebook"
-										type='text'
-										className='caveat-brush-font'
+										type='url'
 										{...register('facebook')}
 									/>
 								</Form.Group>
@@ -319,8 +318,7 @@ const PlaceFormPage = () => {
 								>
 									<Form.Control
 										placeholder="Instagram"
-										type='text'
-										className='caveat-brush-font'
+										type='url'
 										{...register('instagram')}
 									/>
 								</Form.Group>
