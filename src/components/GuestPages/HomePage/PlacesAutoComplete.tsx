@@ -33,6 +33,13 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		// When the user clicks outside of the component, we can dismiss
 		// the searched suggestions by calling this method
 		clearSuggestions()
+		setShowUl(false)
+		if (!showInitialPlace) {
+			return setValue(locality + ', Sverige')
+		} else {
+			return
+		}
+
 	})
 
 	const handleInputClick = () => {
@@ -64,7 +71,7 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		} else {
 			return
 		}
-	}, [locality])
+	}, [setValue, locality, showInitialPlace])
 
 	return (
 		<div ref={ref}>

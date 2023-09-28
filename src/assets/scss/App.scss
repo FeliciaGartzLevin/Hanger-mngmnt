@@ -47,6 +47,27 @@ a {
 	}
 }
 
+.search-box {
+	@media (max-width: 576px) {
+		max-width: 95%;
+
+		.searchbox-col {
+			// width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+
+		input,
+		button {
+			padding: 0.4rem;
+		}
+
+	}
+}
 
 .offcanvas,
 .places-sidebar {
@@ -70,7 +91,7 @@ a {
 	border-radius: 0 $borderRadius $borderRadius 0;
 	position: fixed;
 	left: 0;
-	top: 24vh;
+	top: 50vh;
 	padding: 0.4rem 1rem;
 	color: #fff;
 	font-size: 1.5rem;
@@ -191,7 +212,6 @@ a.sign-up-link {
 	color: #feb414;
 
 }
-
 
 .social-icons {
 	a {
