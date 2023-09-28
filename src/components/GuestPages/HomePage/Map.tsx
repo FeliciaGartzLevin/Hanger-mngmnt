@@ -2,18 +2,11 @@ import PlaceModal from "./PlaceModal"
 import SearchBox from "./SearchBox"
 import { findAdressComponent } from "../../../helpers/locations"
 import useGetCurrentLocation from "../../../hooks/useGetCurrentLocation"
-import {
-	FirestoreError,
-	QueryConstraint,
-	onSnapshot,
-	query,
-	where,
-} from "firebase/firestore"
+import { FirestoreError } from "firebase/firestore"
 import { useCallback, useEffect, useState } from "react"
 import { GoogleMap, MarkerF } from "@react-google-maps/api"
 import { getGeocode, getLatLng } from "use-places-autocomplete"
 import { useSearchParams } from "react-router-dom"
-import { placesCol } from "../../../services/firebase"
 import { Place } from "../../../types/Place.types"
 import {
 	getDistanceInMetresOrKm,
@@ -22,7 +15,7 @@ import {
 import { getIconForCategory } from "../../../helpers/icons"
 import { Alert } from "react-bootstrap"
 import userIcon from "../../../assets/images/hangry-face-map.png"
-import { FirebaseError } from "firebase/app"
+import useStreamPlacesByLocality from "../../../hooks/useStreamPlacesByLocality"
 
 type Props = {
 	placesFound: (places: Place[]) => void
@@ -33,20 +26,14 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const locality = searchParams.get("locality") ?? "Malmö"
 	const filter = searchParams.get("filter") ?? "All"
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
-	const [center, setCenter] = useState<google.maps.LatLngLiteral>({
-		lat: 55.6,
-		lng: 13,
-	}) //Malmö as default
+	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
-	const [firestoreError, setFirestoreError] = useState<FirestoreError | null>(
-		null
-	)
-	const [places, setPlaces] = useState<Place[] | null>(null)
+	const [firestoreError, setFirestoreError] = useState<FirestoreError | null>(null)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
 	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
 	const [, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null)
 
-
+	const { data: places, getCollection } = useStreamPlacesByLocality(locality, filter)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -69,9 +56,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	}
 
 	// Getting users position by reverse geocoding (by coordinates)
-	const getCurrentCity = async (
-		position: google.maps.LatLngLiteral | undefined
-	) => {
+	const getCurrentCity = async (position: google.maps.LatLngLiteral | undefined) => {
 		if (!position) return
 		try {
 			// reversed geocoding to get the users address:
@@ -84,16 +69,15 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			setErrorMsg(error.message)
 		}
 	}
+
 	// Handling choice of filter
 	const handleFilterChoice = (passedFilter: string) => {
 		setSearchParams({ locality: locality, filter: passedFilter })
 	}
 
-	// handling pressing the crosshairs button for getting users location
+	// Handling clicking the crosshairs button for getting users location
 	const handleFindLocation = async () => {
-		if (!usersPosition) {
-			return setErrorMsg("No position." + currentPositionError?.message)
-		}
+		if (!usersPosition) return setErrorMsg("No position." + currentPositionError?.message)
 
 		try {
 			await getCurrentCity(usersPosition)
@@ -103,13 +87,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			if (error instanceof FirebaseError) {
-
-				return setErrorMsg("Position access denied. " + error.message)
-			} else {
-
-				return setErrorMsg("An unexpected error occurred." + error.message)
-			}
+			return setErrorMsg("An unexpected error occurred. " + error.message)
 		}
 	}
 
@@ -135,11 +113,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		}
 	}
 
-	const setStates = (data: Place[]) => {
-		setPlaces(data)
-		placesFound(data)
-	}
-
 	// Getting city info by city name
 	const queryCity = useCallback(async (city: string) => {
 		try {
@@ -154,59 +127,29 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			setErrorMsg("No  city was found: " + error.message)
+			setErrorMsg("No  city was found. " + error.message)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-	const queryConstraints: QueryConstraint[] = [
-		where("city", "==", locality),
-		where("isApproved", "==", true),
-		where(
-			"category",
-			"in",
-			filter === "All"
-				? [
-					"Café",
-					"Pub",
-					"Restaurant",
-					"Fast Food",
-					"Kiosk/grill",
-					"Food Truck",
-				]
-				: [filter]
-		),
-	]
 
 	// Get info of city every time locality changes
 	useEffect(() => {
 		if (!locality) return
 		queryCity(locality)
-		// console.log("places", places)
-	}, [locality, queryCity, places])
 
-	// Querying the firestore db for all the places in current city
+	}, [locality, queryCity])
+
 	useEffect(() => {
-		const queryRef = query(placesCol, ...queryConstraints)
-		const unsubscribe = onSnapshot(
-			queryRef,
-			(snapshot) => {
-				const data: Place[] = snapshot.docs.map((doc) => {
-					return {
-						...doc.data(),
-						_id: doc.id,
-					}
-				})
-				setStates(data)
-			},
-			(error) => {
-				setFirestoreError(error)
-			}
-		)
+		if (places) {
+			placesFound(places)
+		}
+	}, [places, placesFound])
 
-		return unsubscribe
+	useEffect(() => {
+		if (locality) {
+			getCollection()
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality, filter])
+	}, [locality])
 
 	return (
 		<GoogleMap
