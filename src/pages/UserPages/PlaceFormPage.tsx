@@ -135,6 +135,7 @@ const PlaceFormPage = () => {
 								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
 								<PlacesAutoComplete
 									placeHolderText='Search place*'
+									showInitialPlace={true}
 									onClickedPlace={(results, name) => {
 										const selectedPlace = results[0]
 
@@ -218,6 +219,7 @@ const PlaceFormPage = () => {
 									controlId='category'
 								>
 									<Form.Select
+										aria-label='Select category of the place'
 										className='form-select'
 										id='category'
 										{...register('category', {
@@ -243,6 +245,7 @@ const PlaceFormPage = () => {
 									controlId='supply'
 								>
 									<Form.Select
+										aria-label='Select supply of the place'
 										className='form-select'
 										id='supply'
 										{...register('supply', {

@@ -9,8 +9,8 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useState } from "react"
 import { Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
-import SortAndMapPlaces from "../../components/GuestPages/HomePage/SortAndMapPlaces"
 import RingLoader from "react-spinners/RingLoader";
+import SidebarContent from "../../components/GuestPages/HomePage/SidebarContent"
 
 // defining used libraries outside page component so
 // it wont rerender and give a performance warning
@@ -60,16 +60,17 @@ const HomePage = () => {
 				show={show}
 				onHide={() => setShow(false)}>
 				<Offcanvas.Header closeButton>
-					<Offcanvas.Title>Places</Offcanvas.Title>
+					<Offcanvas.Title>
+						<span className="h2">
+							Places
+						</span>
+					</Offcanvas.Title>
 				</Offcanvas.Header>
 				<Offcanvas.Body>
-					{places && places.length <= 0 &&
-						<Alert variant="warning">
-							No places to show.
-						</Alert>}
 					{places &&
-						<SortAndMapPlaces
-							places={places} />
+						<SidebarContent
+							places={places}
+						/>
 					}
 				</Offcanvas.Body>
 			</ Offcanvas>
@@ -86,13 +87,10 @@ const HomePage = () => {
 				<Row className='d-flex justify-content-center'>
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
 						<h2>Places</h2>
-						{places && places.length <= 0 &&
-							<Alert variant="warning">
-								No places to show.
-							</Alert>}
 						{places &&
-							<SortAndMapPlaces
-								places={places} />
+							<SidebarContent
+								places={places}
+							/>
 						}
 					</Col>
 					<Col lg={{ span: 9 }}>

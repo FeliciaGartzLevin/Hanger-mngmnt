@@ -11,11 +11,12 @@ body {
 }
 
 .caveat-brush-font {
-  font-family: 'Caveat Brush', cursive;
+	font-family: 'Caveat Brush', cursive;
 }
 
-.roboto{
-	font-family: 'Roboto', sans-serif;;
+.roboto {
+	font-family: 'Poppins', sans-serif;
+	font-size: 0.9rem;
 }
 
 #App {
@@ -46,6 +47,33 @@ a {
 	}
 }
 
+.search-box {
+	@media (max-width: 768px) {
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	@media (max-width: 576px) {
+		max-width: 95%;
+
+		.searchbox-col {
+			// width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+
+		input,
+		button {
+			padding: 0.4rem;
+		}
+
+	}
+}
 
 .offcanvas,
 .places-sidebar {
@@ -69,7 +97,7 @@ a {
 	border-radius: 0 $borderRadius $borderRadius 0;
 	position: fixed;
 	left: 0;
-	top: 24vh;
+	top: 50vh;
 	padding: 0.4rem 1rem;
 	color: #fff;
 	font-size: 1.5rem;
@@ -81,8 +109,6 @@ a {
 		background-color: darken($primaryColor, 10%);
 	}
 }
-
-
 
 .card-links {
 	a {
@@ -137,9 +163,7 @@ a {
 	}
 }
 
-
-input[type="text"],
-input[type="number"],
+input[type="*"],
 textarea {
 	padding: 0.5rem;
 	border: 1px solid #ccc;
@@ -153,20 +177,12 @@ textarea {
 	}
 }
 
-
-.modal {
-	&.fade.show {
-		.modal-dialog {
-			.modal-content {
-				background-color: $primaryColor;
-				color: white;
-			}
-		}
-	}
+.modal-content {
+	background-color: $darkerBlueBackground;
+	color: white;
 }
 
-
-.forgot-password{
+.forgot-password {
 	color: white;
 }
 
@@ -200,17 +216,17 @@ a.sign-up-link {
 
 .title-table, .title {
 	color: #feb414;
-
 }
-
 
 .social-icons {
 	a {
-	  text-decoration: none;
-	  color: #feb414; /* Set the initial color */
+		text-decoration: none;
+		color: #feb414;
+		/* Set the initial color */
 
-	  &:hover {
-		color: #ff9900; /* Change to your desired hover color */
-	  }
+		&:hover {
+			color: #ff9900;
+			/* Change to your desired hover color */
+		}
 	}
-  }
+}
