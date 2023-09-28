@@ -3,7 +3,7 @@ import useStreamCollection from './useStreamCollection'
 import { placesCol } from '../services/firebase'
 import { Place } from '../types/Place.types'
 
-const useStreamPlacesByLocality = (locality: string, filter: string) => {
+const useStreamPlacesByLocality = (locality: string, category: string, supply: string) => {
 	return useStreamCollection<Place>(
 		placesCol,
 		where("city", "==", locality),
@@ -11,7 +11,7 @@ const useStreamPlacesByLocality = (locality: string, filter: string) => {
 		where(
 			"category",
 			"in",
-			filter === "All"
+			category === "Category"
 				? [
 					"Café",
 					"Pub",
@@ -20,7 +20,20 @@ const useStreamPlacesByLocality = (locality: string, filter: string) => {
 					"Kiosk/grill",
 					"Food Truck",
 				]
-				: [filter]
+				: [category]
+		),
+		where(
+			"supply",
+			"in",
+			supply === "Supply"
+				? [
+					'General Menu',
+					'Lunch',
+					'After Work',
+					'Dinner',
+					'Breakfast/Brunch'
+				]
+				: [supply]
 		),
 	)
 }
