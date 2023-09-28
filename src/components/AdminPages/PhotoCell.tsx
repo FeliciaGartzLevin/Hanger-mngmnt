@@ -11,6 +11,7 @@ const PhotoCell: React.FC<IProps> = ({ alt, src }) =>
 		className='img-square'
 		rounded
 		src={src}
+		title={alt}
 		width={50}
 	/>
 
