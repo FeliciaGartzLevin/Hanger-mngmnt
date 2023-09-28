@@ -24,7 +24,7 @@ const columns: ColumnDef<Photo>[] = [
 	{
 		accessorKey: 'isApproved',
 		header: 'Approved'
-	},
+	}
 ]
 
 const AdminPhotosListPage = () => {

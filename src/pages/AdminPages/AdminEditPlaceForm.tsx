@@ -1,23 +1,20 @@
-import PlacesAutoComplete from '../../components/GuestPages/HomePage/PlacesAutoComplete'
 import { FirebaseError } from 'firebase/app'
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
-import useAuth from '../../hooks/useAuth'
-import { useState } from 'react'
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import useGetPlace from '../../hooks/useGetPlace'
+import { useEffect, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
-import { Libraries, useLoadScript } from '@react-google-maps/api'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { useNavigate, useParams } from 'react-router-dom'
 import { placesCol } from '../../services/firebase'
 import { Category, Place, Supply } from '../../types/Place.types'
-import { getLatLng } from 'use-places-autocomplete'
-
-const libraries: Libraries = ['places']
 
 const categories: Category[] = [
 	'Café',
@@ -25,7 +22,7 @@ const categories: Category[] = [
 	'Restaurant',
 	'Fast Food',
 	'Kiosk/grill',
-	'Food Truck',
+	'Food Truck'
 ]
 
 const supplyOptions: Supply[] = [
@@ -33,15 +30,18 @@ const supplyOptions: Supply[] = [
 	'Lunch',
 	'After Work',
 	'Dinner',
-	'Breakfast/Brunch',
+	'Breakfast/Brunch'
 ]
 
-const PlaceFormPage = () => {
-	const [selectedPlace, setSelectedPlace] = useState<google.maps.LatLngLiteral | null>(null)
+const AdminEditPlaceForm = () => {
 	const [isError, setIsError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [placeName, setPlaceName] = useState<string | undefined>(undefined)
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+	const { placeId } = useParams()
+	const place = useGetPlace(placeId)
+
 	const {
 		handleSubmit,
 		register,
@@ -49,14 +49,20 @@ const PlaceFormPage = () => {
 		formState: { errors }
 	} = useForm<Place>()
 
-	const { signedInUser, signedInUserDoc } = useAuth()
+	const navigate = useNavigate()
 
-	const { isLoaded } = useLoadScript({
-		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
-		libraries
-	})
-
-	if (!isLoaded) return <div>Loading...</div>
+	useEffect(() => {
+		if (place.data) {
+			setValue('description', place.data.description)
+			setValue('category', place.data.category)
+			setValue('supply', place.data.supply)
+			setValue('email', place.data.email)
+			setValue('telephone', place.data.telephone)
+			setValue('website', place.data.website)
+			setValue('facebook', place.data.facebook)
+			setValue('instagram', place.data.instagram)
+		}
+	}, [place.data, setValue])
 
 	const onSubmit = async (data: Place) => {
 		try {
@@ -64,47 +70,28 @@ const PlaceFormPage = () => {
 			setErrorMessage(null)
 			setIsSubmitting(true)
 
-			if (!selectedPlace) {
+			if (!placeId) {
 				setIsError(true)
-				setErrorMessage("Please select a location")
+				setErrorMessage("No place connected")
 				setIsSubmitting(false)
 				return
 			}
 
-			if (!signedInUser) {
-				setIsError(true)
-				setErrorMessage("User not authenticated")
-				setIsSubmitting(false)
-				return
-			}
-
-			const docRef = doc(placesCol, data._id)
+			const docRef = doc(placesCol, placeId)
 			const checkDoc = await getDoc(docRef)
-			if (checkDoc.exists()) {
+			if (!checkDoc.exists()) {
 				setIsError(true)
-				setErrorMessage("Place already exists")
+				setErrorMessage("Place doesn't exist")
 				setIsSubmitting(false)
 				return
 			}
 
-			const newPlace = {
-				...data,
-				createdAt: serverTimestamp(),
-				isApproved: signedInUserDoc && signedInUserDoc.isAdmin,
-				uid: signedInUser.uid
-			}
+			await updateDoc(docRef, {
+				...place.data,
+				...data
+			})
 
-			await setDoc(docRef, newPlace)
-
-			toast.dark("Place added successfully!")
-
-			setValue('name', '')
-			setValue('description', '')
-			setValue('email', '')
-			setValue('telephone', '')
-			setValue('website', '')
-			setValue('facebook', '')
-			setValue('instagram', '')
+			toast.dark("Place updated")
 
 			setIsSubmitting(false)
 
@@ -119,6 +106,15 @@ const PlaceFormPage = () => {
 		}
 	}
 
+	const handleDeletePlace = () => {
+		const docRef = doc(placesCol, placeId)
+		deleteDoc(docRef)
+
+		toast.dark("Place deleted")
+
+		navigate('/admin-places-list')
+	}
+
 	return (
 		<Container className='py-3 center-y'>
 			<Row>
@@ -126,64 +122,10 @@ const PlaceFormPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className='mb-3'>
-								{signedInUserDoc && signedInUserDoc.isAdmin ? "Add" : "Recommend"} Place
+								Edit {place.data?.name}
 							</Card.Title>
 
 							{isError && <Alert variant='danger'>{errorMessage}</Alert>}
-
-							<div className='mb-3'>
-								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
-								<PlacesAutoComplete
-									placeHolderText='Search place*'
-									showInitialPlace={true}
-									onClickedPlace={(results, name) => {
-										const selectedPlace = results[0]
-
-										if (!selectedPlace) {
-											setIsError(true)
-											setErrorMessage("Please select a valid place")
-											return
-										}
-
-										const placeTypes = selectedPlace.types || []
-
-										if (!placeTypes.includes('street_address') && !placeTypes.includes('establishment')) {
-											setIsError(true)
-											setErrorMessage("Please select a valid place")
-											return
-										}
-
-										setIsError(false)
-										setErrorMessage(null)
-
-										setValue('_id', selectedPlace.place_id)
-										setValue('name', name)
-										setPlaceName(name)
-
-										const selectedAddress = selectedPlace.formatted_address || ''
-										setValue('streetAddress', selectedAddress)
-
-										const { lat, lng } = getLatLng(selectedPlace)
-										setSelectedPlace({ lat, lng })
-										setValue('location', { lat, lng })
-
-										selectedPlace.address_components?.find(
-											(component) => {
-												if (component.types[0] !== 'postal_town') return
-
-												setValue('city', component.long_name)
-												const placeTypes = selectedPlace.types || []
-
-												if (!placeTypes.includes('street_address') && !placeTypes.includes('establishment')) {
-													setIsError(true)
-													setErrorMessage("Please select a valid address")
-													return
-												}
-											}
-										)
-									}}
-								/>
-							</div>
 
 							<Form onSubmit={handleSubmit(onSubmit)}>
 								<Form.Group
@@ -192,8 +134,8 @@ const PlaceFormPage = () => {
 								>
 									<Form.Control
 										as='textarea'
-										placeholder="Description(min. of 10 characters max. of 300 characters)*"
-										rows={3}
+										placeholder="Description*"
+										rows={5}
 										{...register('description', {
 											required: "Description missing",
 											minLength: {
@@ -219,7 +161,6 @@ const PlaceFormPage = () => {
 									controlId='category'
 								>
 									<Form.Select
-										aria-label='Select category of the place'
 										className='form-select'
 										id='category'
 										{...register('category', {
@@ -245,7 +186,6 @@ const PlaceFormPage = () => {
 									controlId='supply'
 								>
 									<Form.Select
-										aria-label='Select supply of the place'
 										className='form-select'
 										id='supply'
 										{...register('supply', {
@@ -326,16 +266,48 @@ const PlaceFormPage = () => {
 									/>
 								</Form.Group>
 
-								<Button
-									disabled={isSubmitting}
-									size='sm'
-									type='submit'
-									variant='primary'
+								<div className='d-flex justify-content-between'>
+									<Button
+										disabled={isSubmitting}
+										size='sm'
+										type='submit'
+										variant='primary'
+									>{isSubmitting ? "Submitting..." : "Submit"}</Button>
+
+									<Button
+										onClick={() => setShowDeleteModal(true)}
+										size='sm'
+										variant='danger'
+									>Delete Place</Button>
+								</div>
+
+								<Modal
+									centered
+									onHide={() => setShowDeleteModal(false)}
+									show={showDeleteModal}
 								>
-									{isSubmitting
-										? "Submitting Place..."
-										: "Submit Place"}
-								</Button>
+									<Modal.Header closeButton>
+										<Modal.Title>
+											Deleting {place.data?.name}
+										</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										Are you sure about this?
+									</Modal.Body>
+									<Modal.Footer>
+										<Button
+											onClick={() => setShowDeleteModal(false)}
+											size='sm'
+											variant='success'
+										>No</Button>
+
+										<Button
+											onClick={handleDeletePlace}
+											size='sm'
+											variant='danger'
+										>Yes, Delete forever</Button>
+									</Modal.Footer>
+								</Modal>
 							</Form>
 						</Card.Body>
 					</Card>
@@ -345,4 +317,4 @@ const PlaceFormPage = () => {
 	)
 }
 
-export default PlaceFormPage
+export default AdminEditPlaceForm

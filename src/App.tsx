@@ -2,6 +2,7 @@ import RequireAuth from './components/RequireAuth'
 import RequireAuthAdmin from './components/RequireAuthAdmin'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import AdminEditPlaceForm from './pages/AdminPages/AdminEditPlaceForm'
 import AdminUsersListPage from './pages/AdminPages/AdminUsersListPage'
 import AdminPhotosListPage from './pages/AdminPages/AdminPhotosListPage'
 import AdminPlacesListPage from './pages/AdminPages/AdminPlacesListPage'
@@ -37,12 +38,6 @@ const App = () => {
 
 					{/* Protected Routes: */}
 					{/* Admin Routes */}
-					<Route path='/admin-place-form' element={
-						<RequireAuthAdmin>
-							<PlaceFormPage />
-						</RequireAuthAdmin>
-					} />
-
 					<Route path='/admin-places-list' element={
 						<RequireAuthAdmin>
 							<AdminPlacesListPage />
@@ -58,6 +53,12 @@ const App = () => {
 					<Route path='/admin-photos-list' element={
 						<RequireAuthAdmin>
 							<AdminPhotosListPage />
+						</RequireAuthAdmin>
+					} />
+
+					<Route path='/admin-edit-place/:placeId' element={
+						<RequireAuthAdmin>
+							<AdminEditPlaceForm />
 						</RequireAuthAdmin>
 					} />
 

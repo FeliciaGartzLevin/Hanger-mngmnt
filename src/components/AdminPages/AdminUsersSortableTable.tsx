@@ -28,7 +28,7 @@ const AdminUsersSortableTable = <TData, TValue>({
 	data,
 }: IProps<TData, TValue>) => {
 	const [search, setSearch] = useState('')
-	const [sorting, setSorting] = useState<SortingState>([])
+	const [sorting, setSorting] = useState<SortingState>([{ id: 'displayName', desc: false }])
 
 	const table = useReactTable({
 		columns,
