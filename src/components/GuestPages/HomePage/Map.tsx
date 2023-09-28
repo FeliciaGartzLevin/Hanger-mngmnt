@@ -2,7 +2,6 @@ import PlaceModal from "./PlaceModal"
 import SearchBox from "./SearchBox"
 import { findAdressComponent } from "../../../helpers/locations"
 import useGetCurrentLocation from "../../../hooks/useGetCurrentLocation"
-import { FirestoreError } from "firebase/firestore"
 import { useCallback, useEffect, useState } from "react"
 import { GoogleMap, MarkerF } from "@react-google-maps/api"
 import { getGeocode, getLatLng } from "use-places-autocomplete"
@@ -28,12 +27,10 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 	const { position: usersPosition, error: currentPositionError } = useGetCurrentLocation()
 	const [center, setCenter] = useState<google.maps.LatLngLiteral>({ lat: 55.6, lng: 13, }) //Malmö as default
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
-	const [firestoreError, setFirestoreError] = useState<FirestoreError | null>(null)
 	const [showPlaceModal, setShowPlaceModal] = useState(false)
 	const [clickedPlace, setClickedPlace] = useState<Place | null>(null)
-	const [, setUserLocation] = useState<google.maps.LatLngLiteral | null>(null)
 
-	const { data: places, getCollection } = useStreamPlacesByLocality(locality, filter)
+	const { data: places, getCollection, error } = useStreamPlacesByLocality(locality, filter)
 
 	const basicActions = (results: google.maps.GeocoderResult[]) => {
 		try {
@@ -77,13 +74,10 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 	// Handling clicking the crosshairs button for getting users location
 	const handleFindLocation = async () => {
-		if (!usersPosition) return setErrorMsg("No position." + currentPositionError?.message)
+		if (!usersPosition) return setErrorMsg("Position not accessible. " + currentPositionError?.message)
 
 		try {
 			await getCurrentCity(usersPosition)
-
-			// Set the user's current location state variable.
-			setUserLocation(usersPosition)
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
@@ -113,7 +107,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 		}
 	}
 
-	// Getting city info by city name
+	// Getting city info by city name for Google Maps API
 	const queryCity = useCallback(async (city: string) => {
 		try {
 			// querying the geocoding API in order to get the users address
@@ -138,12 +132,14 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 
 	}, [locality, queryCity])
 
+	// Passing places to parent component
 	useEffect(() => {
 		if (places) {
 			placesFound(places)
 		}
 	}, [places, placesFound])
 
+	// Getting places for current locality
 	useEffect(() => {
 		if (locality) {
 			getCollection()
@@ -218,7 +214,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 				</Alert>
 			)}
 
-			{firestoreError && (
+			{error && (
 				<Alert
 					style={{
 						position: "absolute",
@@ -228,7 +224,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 					variant="danger"
 				>
 					Places could not be loaded from the database.{" "}
-					{firestoreError.message}
+					{error}
 				</Alert>
 			)}
 		</GoogleMap>
