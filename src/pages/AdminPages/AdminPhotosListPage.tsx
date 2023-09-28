@@ -56,7 +56,7 @@ const AdminPhotosListPage = () => {
 
 		return (
 			<>
-				<h3 className='mb-3'>Photos</h3>
+				<h3 className='mb-3 title-table'>Photos</h3>
 				<AdminPhotosSortableTable
 					columns={columns}
 					data={currentItems}
