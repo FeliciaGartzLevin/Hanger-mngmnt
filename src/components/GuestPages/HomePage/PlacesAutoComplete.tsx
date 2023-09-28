@@ -8,9 +8,10 @@ type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[], placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
 	placeHolderText: string
+	showInitialPlace?: boolean
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText, showInitialPlace }) => {
 	const [showUl, setShowUl] = useState<boolean>(false)
 	const [searchParams] = useSearchParams()
 	const locality = searchParams.get("locality") ?? "Malmö"
@@ -58,8 +59,12 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 
 	useEffect(() => {
 		setShowUl(false)
-		setValue(locality + ', Sverige')
-	}, [])
+		if (!showInitialPlace) {
+			return setValue(locality + ', Sverige')
+		} else {
+			return
+		}
+	}, [locality])
 
 	return (
 		<div ref={ref}>

@@ -135,6 +135,7 @@ const PlaceFormPage = () => {
 								{placeName && <h2 className='h6 mb-3'>Name: {placeName}</h2>}
 								<PlacesAutoComplete
 									placeHolderText='Search place*'
+									showInitialPlace={true}
 									onClickedPlace={(results, name) => {
 										const selectedPlace = results[0]
 
@@ -310,7 +311,6 @@ const PlaceFormPage = () => {
 									<Form.Control
 										placeholder="Facebook"
 										type='text'
-										// className='caveat-brush-font'
 										{...register('facebook')}
 									/>
 								</Form.Group>
@@ -322,7 +322,6 @@ const PlaceFormPage = () => {
 									<Form.Control
 										placeholder="Instagram"
 										type='text'
-										// className='caveat-brush-font'
 										{...register('instagram')}
 									/>
 								</Form.Group>
