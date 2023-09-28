@@ -11,6 +11,7 @@ import { Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
 import SortAndMapPlaces from "../../components/GuestPages/HomePage/SortAndMapPlaces"
 import RingLoader from "react-spinners/RingLoader";
+import { Link } from "react-router-dom"
 
 // defining used libraries outside page component so
 // it wont rerender and give a performance warning
@@ -88,8 +89,19 @@ const HomePage = () => {
 						<h2>Places</h2>
 						{places && places.length <= 0 &&
 							<Alert variant="warning">
-								No places to show.
-							</Alert>}
+								No places to show.{' '}
+								<Link
+									to={'/place-form'}
+									className="">
+									<Button
+										className="reccomend-btn"
+										variant="warning"
+									>
+										Recommend us a place
+									</Button>
+								</Link>
+							</Alert>
+						}
 						{places &&
 							<SortAndMapPlaces
 								places={places} />

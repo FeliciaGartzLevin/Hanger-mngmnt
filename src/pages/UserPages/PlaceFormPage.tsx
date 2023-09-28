@@ -218,6 +218,7 @@ const PlaceFormPage = () => {
 									controlId='category'
 								>
 									<Form.Select
+										aria-label='Select category of the place'
 										className='form-select'
 										id='category'
 										{...register('category', {
@@ -243,6 +244,7 @@ const PlaceFormPage = () => {
 									controlId='supply'
 								>
 									<Form.Select
+										aria-label='Select supply of the place'
 										className='form-select'
 										id='supply'
 										{...register('supply', {
