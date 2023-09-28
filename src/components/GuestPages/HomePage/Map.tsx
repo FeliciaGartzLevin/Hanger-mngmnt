@@ -177,8 +177,6 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			mapContainerStyle={{
 				width: "100%",
 				height: "100vh",
-				// style away the tiny scroll
-				// check johans video about it
 			}}
 		>
 			{usersPosition && (
