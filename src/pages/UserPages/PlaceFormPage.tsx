@@ -97,7 +97,7 @@ const PlaceFormPage = () => {
 			await setDoc(docRef, newPlace)
 
 			toast.dark("Place added successfully!")
-			console.log('placeName', placeName)
+
 			setValue('name', '')
 			setValue('description', '')
 			setValue('email', '')
