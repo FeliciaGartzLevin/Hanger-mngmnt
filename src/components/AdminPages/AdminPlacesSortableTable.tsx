@@ -67,7 +67,7 @@ const AdminPlacesSortableTable = <TData, TValue>({
 		<Link to={'/admin-edit-place/' + _id}>
 			<Button
 				size='sm'
-				variant='primary'
+				variant='warning'
 			><BiEditAlt /></Button>
 		</Link>
 	)
