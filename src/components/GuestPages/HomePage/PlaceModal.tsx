@@ -1,15 +1,17 @@
 import ImageGallery from '../../ImageGallery'
 import UserName from '../../UserName'
+import useAuth from '../../../hooks/useAuth'
 import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace'
+import { useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
+import { BiEditAlt } from 'react-icons/bi'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
-import { useEffect } from 'react'
 
 interface IProps {
 	onClose: () => void
@@ -21,6 +23,8 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 	const navigate = useNavigate()
 	const iconSize = 20
 	const { data: photos, getCollection } = useStreamPhotosByPlace(place._id)
+
+	const { signedInUserDoc } = useAuth()
 
 	useEffect(() => {
 		if (place) {
@@ -37,8 +41,16 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 			show={show}
 		>
 			<Modal.Header closeButton>
-				<Modal.Title >
+				<Modal.Title>
 					{place.name}
+					{signedInUserDoc && signedInUserDoc.isAdmin && (
+						<Button
+							className='ms-2'
+							onClick={() => navigate('/admin-edit-place/' + place._id)}
+							size='sm'
+							variant='warning'
+						><BiEditAlt /></Button>
+					)}
 
 				</Modal.Title>
 			</Modal.Header>
