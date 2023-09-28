@@ -4,12 +4,14 @@ import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
+import Image from 'react-bootstrap/Image'
 import Row from 'react-bootstrap/Row'
 import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from 'react-icons/bs'
 import { GoMail } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
 import { Place } from '../../../types/Place.types'
 import { useEffect } from 'react'
+import { getIconForCategory } from '../../../helpers/icons'
 
 interface IProps {
 	onClose: () => void
@@ -27,7 +29,7 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 			getCollection()
 		}
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [place])
 
 	return (
@@ -38,8 +40,14 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 		>
 			<Modal.Header closeButton>
 				<Modal.Title >
-					{place.name}
-
+					<Image
+						// thumbnail
+						src={getIconForCategory(place.category) ?? ''}
+						style={{
+							width: '2rem',
+						}}
+					/>
+					{' '}{place.name}
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
