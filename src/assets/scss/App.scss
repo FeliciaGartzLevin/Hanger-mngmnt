@@ -48,6 +48,12 @@ a {
 }
 
 .search-box {
+	@media (max-width: 768px) {
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+	}
+
 	@media (max-width: 576px) {
 		max-width: 95%;
 
