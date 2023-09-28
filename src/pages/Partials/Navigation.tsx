@@ -109,7 +109,7 @@ const Navigation = () => {
 								>
 									<Button
 										size='sm'
-										variant='outline-light'
+										variant='primary'
 									>Sign In</Button>
 								</Nav.Link>
 								<Nav.Link
@@ -118,7 +118,7 @@ const Navigation = () => {
 								>
 									<Button
 										size='sm'
-										variant='outline-light'
+										variant='warning'
 									>Sign Up</Button>
 								</Nav.Link>
 							</>
