@@ -90,7 +90,7 @@ const SignInPage = () => {
 							</Form>
 
 							<div className='text-center'>
-								<Link to='/forgot-password'>Forgot Password?</Link>
+								<Link className='forgot-password' to='/forgot-password'>Forgot Password?</Link>
 							</div>
 						</Card.Body>
 					</Card>

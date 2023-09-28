@@ -2,12 +2,21 @@
 @import "react-toastify/scss/main";
 @import "toastify";
 @import "styles";
-@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Roboto:wght@300&display=swap');
 
 body {
 	font-family: $fontPrimary;
 	background-color: $darkerBlueBackground;
 	color: $primaryTextColor;
+}
+
+.caveat-brush-font {
+	font-family: 'Caveat Brush', cursive;
+}
+
+.roboto {
+	font-family: 'Poppins', sans-serif;
+	font-size: 0.9rem;
 }
 
 #App {
@@ -38,6 +47,33 @@ a {
 	}
 }
 
+.search-box {
+	@media (max-width:576px) {
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	@media (max-width: 576px) {
+		max-width: 95%;
+
+		.searchbox-col {
+			// width: 100%;
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.searchbox-col:first-of-type {
+			margin-bottom: 0.5rem;
+		}
+
+		input,
+		button {
+			padding: 0.4rem;
+		}
+
+	}
+}
 
 .offcanvas,
 .places-sidebar {
@@ -61,7 +97,7 @@ a {
 	border-radius: 0 $borderRadius $borderRadius 0;
 	position: fixed;
 	left: 0;
-	top: 24vh;
+	top: 50vh;
 	padding: 0.4rem 1rem;
 	color: #fff;
 	font-size: 1.5rem;
@@ -74,8 +110,6 @@ a {
 	}
 }
 
-
-
 .card-links {
 	a {
 		text-decoration: none;
@@ -86,12 +120,13 @@ a {
 		}
 	}
 
-	a.add-photo-links {
-		color: white;
+}
 
-		&:hover {
-			color: $primaryColor;
-		}
+a.add-photo-links {
+	color: white;
+
+	&:hover {
+		color: $primaryColor;
 	}
 }
 
@@ -129,9 +164,7 @@ a {
 	}
 }
 
-
-input[type="text"],
-input[type="number"],
+input[type="*"],
 textarea {
 	padding: 0.5rem;
 	border: 1px solid #ccc;
@@ -145,18 +178,14 @@ textarea {
 	}
 }
 
-
-.modal {
-	&.fade.show {
-		.modal-dialog {
-			.modal-content {
-				background-color: $primaryColor;
-				color: white;
-			}
-		}
-	}
+.modal-content {
+	background-color: $darkerBlueBackground;
+	color: white;
 }
 
+.forgot-password {
+	color: white;
+}
 
 .account,
 .need-account {
@@ -182,6 +211,24 @@ a.sign-up-link {
 	font-weight: bold; // Make the text bold for better readability
 
 	&:hover {
-		color: #ffcc00; // Slightly darker yellow color on hover
+		color: #c5a526; // Slightly darker yellow color on hover
+	}
+}
+
+.title-table,
+.title {
+	color: #feb414;
+}
+
+.social-icons {
+	a {
+		text-decoration: none;
+		color: #feb414;
+		/* Set the initial color */
+
+		&:hover {
+			color: #ff9900;
+			/* Change to your desired hover color */
+		}
 	}
 }

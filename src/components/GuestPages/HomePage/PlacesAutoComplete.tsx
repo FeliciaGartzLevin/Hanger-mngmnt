@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, ListGroup, ListGroupItem } from 'react-bootstrap'
 import useOnclickOutside from 'react-cool-onclickoutside'
+import { useSearchParams } from 'react-router-dom'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 
 type Props = {
 	onClickedPlace: (results: google.maps.GeocoderResult[], placeName: string) => void
 	searchPlacesOfTypes?: string[] | undefined
 	placeHolderText: string
+	showInitialPlace?: boolean
 }
 
-const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText }) => {
+const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText, showInitialPlace }) => {
+	const [showUl, setShowUl] = useState<boolean>(false)
+	const [searchParams] = useSearchParams()
+	const locality = searchParams.get("locality") ?? "Malmö"
 	const {
 		ready,
 		value,
@@ -28,7 +33,19 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		// When the user clicks outside of the component, we can dismiss
 		// the searched suggestions by calling this method
 		clearSuggestions()
+		setShowUl(false)
+		if (!showInitialPlace) {
+			return setValue(locality + ', Sverige')
+		} else {
+			return
+		}
+
 	})
+
+	const handleInputClick = () => {
+		setValue('')
+		setShowUl(true)
+	}
 
 	const handleSelect = ({ description, structured_formatting }: google.maps.places.AutocompletePrediction) => (
 		async () => {
@@ -47,17 +64,26 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		}
 	)
 
+	useEffect(() => {
+		setShowUl(false)
+		if (!showInitialPlace) {
+			return setValue(locality + ', Sverige')
+		} else {
+			return
+		}
+	}, [setValue, locality, showInitialPlace])
+
 	return (
 		<div ref={ref}>
 			<Form.Control
 				role='combobox'
-				onClick={() => setValue('')}
+				onClick={handleInputClick}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready}
 				placeholder={placeHolderText}
 			/>
-			{status === 'OK' &&
+			{status === 'OK' && showUl &&
 				<ListGroup
 					style={{
 						position: 'absolute',

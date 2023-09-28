@@ -79,13 +79,18 @@ const Navigation = () => {
 									<>
 										<NavDropdown.Item
 											as={NavLink}
+											to='/admin-users-list'
+										>Users List</NavDropdown.Item>
+
+										<NavDropdown.Item
+											as={NavLink}
 											to='/admin-places-list'
 										>Places List</NavDropdown.Item>
 
 										<NavDropdown.Item
 											as={NavLink}
-											to='/admin-users-list'
-										>Users List</NavDropdown.Item>
+											to='/admin-photos-list'
+										>Photos List</NavDropdown.Item>
 
 										<NavDropdown.Divider />
 									</>
@@ -113,7 +118,7 @@ const Navigation = () => {
 								>
 									<Button
 										size='sm'
-										variant='primary'
+										variant='outline-light'
 									>Sign Up</Button>
 								</Nav.Link>
 							</>

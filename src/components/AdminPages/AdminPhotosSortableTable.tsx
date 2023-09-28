@@ -1,7 +1,7 @@
 import DateCell from './DateCell'
 import PhotoCell from './PhotoCell'
+import UserName from '../UserName'
 import { doc, updateDoc } from 'firebase/firestore'
-import { usersCol } from '../../services/firebase'
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Pagination from 'react-bootstrap/Pagination'
@@ -14,21 +14,22 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	SortingState,
-	useReactTable,
+	useReactTable
 } from '@tanstack/react-table'
-import { UserDoc } from '../../types/User.types'
+import { photosCol } from '../../services/firebase'
+import { Photo } from '../../types/Photo.types'
 
 interface IProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
 	data: TData[]
 }
 
-const AdminUsersSortableTable = <TData, TValue>({
+const AdminPhotosSortableTable = <TData, TValue>({
 	columns,
 	data,
 }: IProps<TData, TValue>) => {
 	const [search, setSearch] = useState('')
-	const [sorting, setSorting] = useState<SortingState>([{ id: 'displayName', desc: false }])
+	const [sorting, setSorting] = useState<SortingState>([{ id: 'placeName', desc: false }])
 
 	const table = useReactTable({
 		columns,
@@ -44,38 +45,38 @@ const AdminUsersSortableTable = <TData, TValue>({
 		getSortedRowModel: getSortedRowModel()
 	})
 
-	const toggleAdmin = (userData: UserDoc) => {
-		const docRef = doc(usersCol, userData.uid)
+	const toggleApproval = (photoData: Photo) => {
+		const docRef = doc(photosCol, photoData._id)
 		updateDoc(docRef, {
-			isAdmin: !userData.isAdmin
+			isApproved: !photoData.isApproved
 		})
 	}
 
-	const renderAdminCell = (userData: UserDoc) => (
+	const renderApprovalCell = (photoData: Photo) => (
 		<Form.Check
-			checked={userData.isAdmin}
-			id='admin-switch'
-			onChange={() => toggleAdmin(userData)}
+			checked={photoData.isApproved}
+			id='approval-switch'
+			onChange={() => toggleApproval(photoData)}
 			type='switch'
 		/>
 	)
 
-	const cellRenderer = (cellType: string, user: UserDoc) => {
+	const cellRenderer = (cellType: string, photo: Photo) => {
 		switch (cellType) {
-			case 'photoURL':
-				return <PhotoCell alt={user.displayName} src={user.photoURL} />
+			case 'url':
+				return <PhotoCell alt={photo.name} src={photo.url} />
+			case 'uid':
+				return <UserName uid={photo.uid} />
 			case 'createdAt':
-				return <DateCell date={user.createdAt.toDate()} />
-			case 'updatedAt':
-				return <DateCell date={user.updatedAt.toDate()} />
-			case 'isAdmin':
-				return renderAdminCell(user)
+				return <DateCell date={photo.createdAt.toDate()} />
+			case 'isApproved':
+				return renderApprovalCell(photo)
 			default:
 				return
 		}
 	}
 
-	const altRendering = ['photoURL', 'createdAt', 'updatedAt', 'isAdmin']
+	const altRendering = ['url', 'uid', 'createdAt', 'isApproved']
 
 	return (
 		<>
@@ -129,7 +130,7 @@ const AdminUsersSortableTable = <TData, TValue>({
 							{row.getVisibleCells().map((cell) => (
 								<td key={cell.id}>
 									{altRendering.includes(cell.column.id)
-									? cellRenderer(cell.column.id, row.original as UserDoc)
+									? cellRenderer(cell.column.id, row.original as Photo)
 									: (
 										flexRender(
 											cell.column.columnDef.cell,
@@ -161,4 +162,4 @@ const AdminUsersSortableTable = <TData, TValue>({
 	)
 }
 
-export default AdminUsersSortableTable
+export default AdminPhotosSortableTable

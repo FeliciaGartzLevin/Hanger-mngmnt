@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore'
+
 export type Location = {
 	latitude: number
 	longitude: number
@@ -7,6 +9,7 @@ export type Place = {
 	_id: string
 	category: Category
 	city: string
+	createdAt: Timestamp
 	description: string
 	email?: string
 	facebook?: string
@@ -27,5 +30,6 @@ export type Category = 'Café' | 'Pub' | 'Restaurant' | 'Fast Food' | 'Kiosk/gri
 
 export type Supply = 'General Menu' | 'Lunch' | 'After Work' | 'Dinner' | 'Breakfast/Brunch'
 
+export type SelectCategory = Category | 'Category'
 
-export type SelectCategory = Category | 'All'
+export type SelectSupply = Supply | 'Supply'
