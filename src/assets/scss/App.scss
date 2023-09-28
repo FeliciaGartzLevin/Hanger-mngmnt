@@ -11,11 +11,12 @@ body {
 }
 
 .caveat-brush-font {
-  font-family: 'Caveat Brush', cursive;
+	font-family: 'Caveat Brush', cursive;
 }
 
-.roboto{
-	font-family: 'Roboto', sans-serif;;
+.roboto {
+	font-family: 'Roboto', sans-serif;
+	;
 }
 
 #App {
@@ -82,8 +83,6 @@ a {
 	}
 }
 
-
-
 .card-links {
 	a {
 		text-decoration: none;
@@ -137,7 +136,6 @@ a {
 	}
 }
 
-
 input[type="text"],
 input[type="number"],
 textarea {
@@ -153,20 +151,12 @@ textarea {
 	}
 }
 
-
-.modal {
-	&.fade.show {
-		.modal-dialog {
-			.modal-content {
-				background-color: $primaryColor;
-				color: white;
-			}
-		}
-	}
+.modal-content {
+	background-color: $darkerBlueBackground;
+	color: white;
 }
 
-
-.forgot-password{
+.forgot-password {
 	color: white;
 }
 
@@ -198,7 +188,7 @@ a.sign-up-link {
 	}
 }
 
-.title-table{
+.title-table {
 	color: #feb414;
 
 }
@@ -206,11 +196,13 @@ a.sign-up-link {
 
 .social-icons {
 	a {
-	  text-decoration: none;
-	  color: #feb414; /* Set the initial color */
+		text-decoration: none;
+		color: #feb414;
+		/* Set the initial color */
 
-	  &:hover {
-		color: #ff9900; /* Change to your desired hover color */
-	  }
+		&:hover {
+			color: #ff9900;
+			/* Change to your desired hover color */
+		}
 	}
-  }
+}
