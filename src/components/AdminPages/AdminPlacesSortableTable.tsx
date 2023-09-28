@@ -1,4 +1,5 @@
 import DateCell from './DateCell'
+import UserNameCell from './UserNameCell'
 import { doc, updateDoc } from 'firebase/firestore'
 import { placesCol } from '../../services/firebase'
 import { useState } from 'react'
@@ -36,36 +37,38 @@ const AdminPlacesSortableTable = <TData, TValue>({
 		getSortedRowModel: getSortedRowModel()
 	})
 
-	const toggleApproval = (PlaceData: Place) => {
-		const docRef = doc(placesCol, PlaceData._id)
+	const toggleApproval = (place: Place) => {
+		const docRef = doc(placesCol, place._id)
 		updateDoc(docRef, {
-			isApproved: !PlaceData.isApproved
+			isApproved: !place.isApproved
 		})
 	}
 
-	const renderApprovalCell = (PlaceData: Place) => (
+	const renderApprovalCell = (place: Place) => (
 		<Form>
 			<Form.Check
-				checked={PlaceData.isApproved}
+				checked={place.isApproved}
 				id='approval-switch'
-				onChange={() => toggleApproval(PlaceData)}
+				onChange={() => toggleApproval(place)}
 				type='switch'
 			/>
 		</Form>
 	)
 
-	const cellRenderer = (cellType: string, PlaceData: Place) => {
+	const cellRenderer = (cellType: string, place: Place) => {
 		switch (cellType) {
+			case 'uid':
+				return <UserNameCell uid={place.uid} />
 			case 'createdAt':
-				return <DateCell date={PlaceData.createdAt.toDate()} />
+				return <DateCell date={place.createdAt.toDate()} />
 			case 'isApproved':
-				return renderApprovalCell(PlaceData)
+				return renderApprovalCell(place)
 			default:
 				return
 		}
 	}
 
-	const altRendering = ['createdAt', 'isApproved']
+	const altRendering = ['uid', 'createdAt', 'isApproved']
 
 	return (
 		<Table striped bordered hover responsive>

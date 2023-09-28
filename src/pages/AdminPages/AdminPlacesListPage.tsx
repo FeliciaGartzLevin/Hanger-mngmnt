@@ -20,6 +20,10 @@ const columns: ColumnDef<Place>[] = [
 		header: 'Category'
 	},
 	{
+		accessorKey: 'uid',
+		header: 'User'
+	},
+	{
 		accessorKey: 'createdAt',
 		header: 'Created'
 	},
