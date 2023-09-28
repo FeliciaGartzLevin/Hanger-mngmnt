@@ -40,14 +40,14 @@ const SearchBox: React.FC<Props> = ({
 				boxShadow: '8px 8px 5px rgba(0, 0, 0, 0.56)'
 			}}>
 			<Row className='d-flex align-items-center justify-content-center rounded'>
-				<Col xs={12} md={4} className='searchbox-col'>
+				<Col xs={12} sm={4} className='searchbox-col'>
 					<PlacesAutoComplete
 						placeHolderText={'Search location'}
 						onClickedPlace={(results) => passOnResults(results)}
 						searchPlacesOfTypes={['postal_town']}
 					/>
 				</Col>
-				<Col xs={5} md={3} className='searchbox-col'>
+				<Col xs={5} sm={3} className='searchbox-col'>
 					<FormSelect
 						id='filter-categoty'
 						name='select'
@@ -66,7 +66,7 @@ const SearchBox: React.FC<Props> = ({
 
 					</FormSelect>
 				</Col>
-				<Col xs={5} md={3} className='searchbox-col'>
+				<Col xs={5} sm={3} className='searchbox-col'>
 					<FormSelect
 						id='filter-supply'
 						name='select'
@@ -85,7 +85,7 @@ const SearchBox: React.FC<Props> = ({
 
 					</FormSelect>
 				</Col>
-				<Col xs={2} md={2} className='searchbox-col'>
+				<Col xs={2} sm={2} className='searchbox-col'>
 					<Button
 						onClick={handleFindLocation}
 						aria-label="Use my location"
