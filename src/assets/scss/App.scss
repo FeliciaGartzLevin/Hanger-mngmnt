@@ -15,8 +15,8 @@ body {
 }
 
 .roboto {
-	font-family: 'Roboto', sans-serif;
-	;
+	font-family: 'Poppins', sans-serif;
+	font-size: 0.9rem;
 }
 
 #App {
@@ -136,8 +136,7 @@ a {
 	}
 }
 
-input[type="text"],
-input[type="number"],
+input[type="*"],
 textarea {
 	padding: 0.5rem;
 	border: 1px solid #ccc;
