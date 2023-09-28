@@ -1,5 +1,5 @@
 import { FirebaseError } from 'firebase/app'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
 import useGetPlace from '../../hooks/useGetPlace'
 import { useEffect, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
@@ -8,10 +8,11 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
 import Row from 'react-bootstrap/Row'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { placesCol } from '../../services/firebase'
 import { Category, Place, Supply } from '../../types/Place.types'
 
@@ -36,6 +37,7 @@ const AdminEditPlaceForm = () => {
 	const [isError, setIsError] = useState(false)
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
 
 	const { placeId } = useParams()
 	const place = useGetPlace(placeId)
@@ -46,6 +48,8 @@ const AdminEditPlaceForm = () => {
 		setValue,
 		formState: { errors }
 	} = useForm<Place>()
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (place.data) {
@@ -87,7 +91,7 @@ const AdminEditPlaceForm = () => {
 				...data
 			})
 
-			toast.dark("Place updated successfully!")
+			toast.dark("Place updated")
 
 			setIsSubmitting(false)
 
@@ -100,6 +104,15 @@ const AdminEditPlaceForm = () => {
 			setIsError(true)
 			setIsSubmitting(false)
 		}
+	}
+
+	const handleDeletePlace = () => {
+		const docRef = doc(placesCol, placeId)
+		deleteDoc(docRef)
+
+		toast.dark("Place deleted")
+
+		navigate('/admin-places-list')
 	}
 
 	return (
@@ -253,16 +266,48 @@ const AdminEditPlaceForm = () => {
 									/>
 								</Form.Group>
 
-								<Button
-									disabled={isSubmitting}
-									size='sm'
-									type='submit'
-									variant='primary'
+								<div className='d-flex justify-content-between'>
+									<Button
+										disabled={isSubmitting}
+										size='sm'
+										type='submit'
+										variant='primary'
+									>{isSubmitting ? "Submitting..." : "Submit"}</Button>
+
+									<Button
+										onClick={() => setShowDeleteModal(true)}
+										size='sm'
+										variant='danger'
+									>Delete Place</Button>
+								</div>
+
+								<Modal
+									centered
+									onHide={() => setShowDeleteModal(false)}
+									show={showDeleteModal}
 								>
-									{isSubmitting
-										? "Submitting..."
-										: "Submit"}
-								</Button>
+									<Modal.Header closeButton>
+										<Modal.Title>
+											Deleting {place.data?.name}
+										</Modal.Title>
+									</Modal.Header>
+									<Modal.Body>
+										Are you sure about this?
+									</Modal.Body>
+									<Modal.Footer>
+										<Button
+											onClick={() => setShowDeleteModal(false)}
+											size='sm'
+											variant='success'
+										>No</Button>
+
+										<Button
+											onClick={handleDeletePlace}
+											size='sm'
+											variant='danger'
+										>Yes, Delete forever</Button>
+									</Modal.Footer>
+								</Modal>
 							</Form>
 						</Card.Body>
 					</Card>
