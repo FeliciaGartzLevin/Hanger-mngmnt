@@ -28,7 +28,7 @@ const columns: ColumnDef<Place>[] = [
 	{
 		accessorKey: 'isApproved',
 		header: 'Approved'
-	},
+	}
 ]
 
 const AdminPlacesListPage = () => {
