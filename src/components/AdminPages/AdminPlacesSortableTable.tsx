@@ -3,9 +3,12 @@ import UserName from '../UserName'
 import { doc, updateDoc } from 'firebase/firestore'
 import { placesCol } from '../../services/firebase'
 import { useState } from 'react'
+import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Pagination from 'react-bootstrap/Pagination'
 import Table from 'react-bootstrap/Table'
+import { BiEditAlt } from 'react-icons/bi'
+import { Link } from 'react-router-dom'
 import {
 	ColumnDef,
 	flexRender,
@@ -60,6 +63,15 @@ const AdminPlacesSortableTable = <TData, TValue>({
 		/>
 	)
 
+	const renderEditCell = (_id: string) => (
+		<Link to={'/admin-edit-place/' + _id}>
+			<Button
+				size='sm'
+				variant='primary'
+			><BiEditAlt /></Button>
+		</Link>
+	)
+
 	const cellRenderer = (cellType: string, place: Place) => {
 		switch (cellType) {
 			case 'uid':
@@ -68,12 +80,14 @@ const AdminPlacesSortableTable = <TData, TValue>({
 				return <DateCell date={place.createdAt.toDate()} />
 			case 'isApproved':
 				return renderApprovalCell(place)
+			case '_id':
+				return renderEditCell(place._id)
 			default:
 				return
 		}
 	}
 
-	const altRendering = ['uid', 'createdAt', 'isApproved']
+	const altRendering = ['uid', 'createdAt', 'isApproved', '_id']
 
 	return (
 		<>
