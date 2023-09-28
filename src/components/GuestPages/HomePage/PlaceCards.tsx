@@ -1,11 +1,12 @@
+import ImageGallery from '../../ImageGallery'
+import UserName from '../../UserName'
+import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace'
+import { useEffect } from 'react'
 import Card from 'react-bootstrap/Card'
-import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-icons/bs";
-import { GoMail } from "react-icons/go";
-import { Place } from '../../../types/Place.types';
-import { Link } from 'react-router-dom';
-import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace';
-import { useEffect } from 'react';
-import ImageGallery from '../../ImageGallery';
+import { BsInstagram, BsGlobe, BsFacebook, BsFillTelephoneFill } from "react-icons/bs"
+import { GoMail } from "react-icons/go"
+import { Link } from 'react-router-dom'
+import { Place } from '../../../types/Place.types'
 
 type Props = {
 	place: Place
@@ -37,6 +38,8 @@ const PlaceCards: React.FC<Props> = ({ place }) => {
 				<Card.Text>{place.description}</Card.Text>
 
 				{photos && !!photos.filter(photo => photo.isApproved).length && <ImageGallery photos={photos.filter(photo => photo.isApproved)} />}
+
+				<Card.Text className='small text-muted'>Recommended by: {<UserName uid={place.uid} />}</Card.Text>
 
 				<Card.Footer className="card-links d-flex justify-content-between align-items-center">
 					<div className="d-flex align-items-centers">

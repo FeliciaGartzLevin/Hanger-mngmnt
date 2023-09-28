@@ -1,4 +1,5 @@
 import ImageGallery from '../../ImageGallery'
+import UserName from '../../UserName'
 import useStreamPhotosByPlace from '../../../hooks/useStreamPhotosByPlace'
 import Button from 'react-bootstrap/Button'
 import Col from 'react-bootstrap/Col'
@@ -54,6 +55,8 @@ const PlaceModal: React.FC<IProps> = ({ onClose, place, show }) => {
 				<div className='small'>{place.description}</div>
 
 				{photos && !!photos.filter(photo => photo.isApproved).length && <ImageGallery photos={photos.filter(photo => photo.isApproved)} />}
+
+				<div className='small text-muted mt-2'>Recommended by: {<UserName uid={place.uid} />}</div>
 			</Modal.Body>
 			<Modal.Footer className='position-relative'>
 				<Row
