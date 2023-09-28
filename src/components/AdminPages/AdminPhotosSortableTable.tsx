@@ -10,10 +10,11 @@ import {
 	ColumnDef,
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
 	getSortedRowModel,
 	SortingState,
-	useReactTable,
-	getPaginationRowModel
+	useReactTable
 } from '@tanstack/react-table'
 import { photosCol } from '../../services/firebase'
 import { Photo } from '../../types/Photo.types'
@@ -27,16 +28,19 @@ const AdminPhotosSortableTable = <TData, TValue>({
 	columns,
 	data,
 }: IProps<TData, TValue>) => {
+	const [search, setSearch] = useState('')
 	const [sorting, setSorting] = useState<SortingState>([])
 
 	const table = useReactTable({
 		columns,
 		data,
 		state: {
-			sorting,
+			globalFilter: search,
+			sorting
 		},
 		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	})
@@ -49,14 +53,12 @@ const AdminPhotosSortableTable = <TData, TValue>({
 	}
 
 	const renderApprovalCell = (photoData: Photo) => (
-		<Form>
-			<Form.Check
-				checked={photoData.isApproved}
-				id='approval-switch'
-				onChange={() => toggleApproval(photoData)}
-				type='switch'
-			/>
-		</Form>
+		<Form.Check
+			checked={photoData.isApproved}
+			id='approval-switch'
+			onChange={() => toggleApproval(photoData)}
+			type='switch'
+		/>
 	)
 
 	const cellRenderer = (cellType: string, photo: Photo) => {
@@ -78,6 +80,14 @@ const AdminPhotosSortableTable = <TData, TValue>({
 
 	return (
 		<>
+			<Form.Control
+				className='mb-3'
+				onChange={e => setSearch(e.target.value)}
+				placeholder="Search"
+				type='text'
+				value={search}
+			/>
+
 			<Table striped bordered hover responsive>
 				<thead>
 					{table.getHeaderGroups().map((headerGroup) => (

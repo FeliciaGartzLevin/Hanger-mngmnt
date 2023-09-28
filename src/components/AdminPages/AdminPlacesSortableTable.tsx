@@ -10,6 +10,8 @@ import {
 	ColumnDef,
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
 	getSortedRowModel,
 	SortingState,
 	useReactTable,
@@ -25,16 +27,20 @@ const AdminPlacesSortableTable = <TData, TValue>({
 	columns,
 	data,
 }: IProps<TData, TValue>) => {
+	const [search, setSearch] = useState('')
 	const [sorting, setSorting] = useState<SortingState>([])
 
 	const table = useReactTable({
 		columns,
 		data,
 		state: {
-			sorting,
+			globalFilter: search,
+			sorting
 		},
 		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	})
 
@@ -46,14 +52,12 @@ const AdminPlacesSortableTable = <TData, TValue>({
 	}
 
 	const renderApprovalCell = (place: Place) => (
-		<Form>
-			<Form.Check
-				checked={place.isApproved}
-				id='approval-switch'
-				onChange={() => toggleApproval(place)}
-				type='switch'
-			/>
-		</Form>
+		<Form.Check
+			checked={place.isApproved}
+			id='approval-switch'
+			onChange={() => toggleApproval(place)}
+			type='switch'
+		/>
 	)
 
 	const cellRenderer = (cellType: string, place: Place) => {
@@ -73,6 +77,14 @@ const AdminPlacesSortableTable = <TData, TValue>({
 
 	return (
 		<>
+			<Form.Control
+				className='mb-3'
+				onChange={e => setSearch(e.target.value)}
+				placeholder="Search"
+				type='text'
+				value={search}
+			/>
+
 			<Table striped bordered hover responsive>
 				<thead>
 					{table.getHeaderGroups().map((headerGroup) => (

@@ -10,6 +10,8 @@ import {
 	ColumnDef,
 	flexRender,
 	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
 	getSortedRowModel,
 	SortingState,
 	useReactTable,
@@ -25,16 +27,20 @@ const AdminUsersSortableTable = <TData, TValue>({
 	columns,
 	data,
 }: IProps<TData, TValue>) => {
+	const [search, setSearch] = useState('')
 	const [sorting, setSorting] = useState<SortingState>([])
 
 	const table = useReactTable({
 		columns,
 		data,
 		state: {
-			sorting,
+			globalFilter: search,
+			sorting
 		},
 		onSortingChange: setSorting,
 		getCoreRowModel: getCoreRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel()
 	})
 
@@ -46,14 +52,12 @@ const AdminUsersSortableTable = <TData, TValue>({
 	}
 
 	const renderAdminCell = (userData: UserDoc) => (
-		<Form>
-			<Form.Check
-				checked={userData.isAdmin}
-				id='admin-switch'
-				onChange={() => toggleAdmin(userData)}
-				type='switch'
-			/>
-		</Form>
+		<Form.Check
+			checked={userData.isAdmin}
+			id='admin-switch'
+			onChange={() => toggleAdmin(userData)}
+			type='switch'
+		/>
 	)
 
 	const cellRenderer = (cellType: string, user: UserDoc) => {
@@ -75,6 +79,14 @@ const AdminUsersSortableTable = <TData, TValue>({
 
 	return (
 		<>
+			<Form.Control
+				className='mb-3'
+				onChange={e => setSearch(e.target.value)}
+				placeholder="Search"
+				type='text'
+				value={search}
+			/>
+
 			<Table striped bordered hover responsive>
 				<thead>
 					{table.getHeaderGroups().map((headerGroup) => (
