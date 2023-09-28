@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, ListGroup, ListGroupItem } from 'react-bootstrap'
 import useOnclickOutside from 'react-cool-onclickoutside'
+import { useSearchParams } from 'react-router-dom'
 import usePlacesAutoComplete, { getGeocode } from 'use-places-autocomplete'
 
 type Props = {
@@ -10,6 +11,9 @@ type Props = {
 }
 
 const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTypes, placeHolderText }) => {
+	const [showUl, setShowUl] = useState<boolean>(false)
+	const [searchParams] = useSearchParams()
+	const locality = searchParams.get("locality") ?? "Malmö"
 	const {
 		ready,
 		value,
@@ -30,6 +34,11 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		clearSuggestions()
 	})
 
+	const handleInputClick = () => {
+		setValue('')
+		setShowUl(true)
+	}
+
 	const handleSelect = ({ description, structured_formatting }: google.maps.places.AutocompletePrediction) => (
 		async () => {
 			// When the user selects a place, we can replace the keyword without request data from API
@@ -47,17 +56,22 @@ const PlacesAutoComplete: React.FC<Props> = ({ onClickedPlace, searchPlacesOfTyp
 		}
 	)
 
+	useEffect(() => {
+		setShowUl(false)
+		setValue(locality + ', Sverige')
+	}, [])
+
 	return (
 		<div ref={ref}>
 			<Form.Control
 				role='combobox'
-				onClick={() => setValue('')}
+				onClick={handleInputClick}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				disabled={!ready}
 				placeholder={placeHolderText}
 			/>
-			{status === 'OK' &&
+			{status === 'OK' && showUl &&
 				<ListGroup
 					style={{
 						position: 'absolute',
