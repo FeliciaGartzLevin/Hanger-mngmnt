@@ -145,7 +145,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			getCollection()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [locality])
+	}, [locality, filter])
 
 	return (
 		<GoogleMap
