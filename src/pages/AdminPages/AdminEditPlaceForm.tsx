@@ -154,6 +154,7 @@ const AdminEditPlaceForm = () => {
 											{errors.description.message}
 										</Form.Text>
 									)}
+									<Form.Text>Min: 10 characters, Max: 300 characters</Form.Text>
 								</Form.Group>
 
 								<Form.Group
