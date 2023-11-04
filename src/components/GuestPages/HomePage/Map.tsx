@@ -176,7 +176,7 @@ const Map: React.FC<Props> = ({ placesFound }) => {
 			mapContainerClassName="map-container"
 			mapContainerStyle={{
 				width: "100%",
-				height: "100vh",
+				height: "calc(100vh - 130px)",
 			}}
 		>
 			{usersPosition && (
