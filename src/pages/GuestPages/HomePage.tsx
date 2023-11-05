@@ -6,8 +6,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Offcanvas from 'react-bootstrap/Offcanvas'
-import { useState } from "react"
-import { Place } from "../../types/Place.types"
+import { useEffect, useState } from "react"
+import { FilterPlacesType, Place } from "../../types/Place.types"
 import { MdMenuOpen } from "react-icons/md";
 import RingLoader from "react-spinners/RingLoader";
 import SidebarContent from "../../components/GuestPages/HomePage/SidebarContent"
@@ -19,12 +19,32 @@ const libraries: Libraries = ['places']
 const HomePage = () => {
 	const [places, setPlaces] = useState<Place[] | null>(null)
 	const [show, setShow] = useState(false)
+	const [sortBy, setSortBy] = useState<FilterPlacesType>('distance')
 
 	// connect to Google Maps API, using the 'places' library
 	const { isLoaded, loadError } = useLoadScript({
 		googleMapsApiKey: import.meta.env.VITE_GEOCODE_API_KEY,
 		libraries: libraries,
 	})
+
+	const buttonClasses = 'btn btn-primary btn-sm'
+
+	const buttonsElement = (
+		<div>
+			Sort by:
+			<Button className={`${buttonClasses} mx-2 ${sortBy === 'name' ? 'active-filter' : ''}`} onClick={() => setSortBy('name')}>
+				Name
+			</Button>
+			<Button className={`${buttonClasses} ${sortBy === 'distance' ? 'active-filter' : ''}`} onClick={() => setSortBy('distance')}>
+				Distance
+			</Button>
+		</div>
+	)
+	const [buttons, setButtons] = useState(buttonsElement)
+
+	useEffect(() => {
+		setButtons(buttonsElement)
+	}, [sortBy])
 
 	if (!isLoaded) return (
 		<Container
@@ -59,17 +79,19 @@ const HomePage = () => {
 				className="d-block d-lg-none offcanvas"
 				show={show}
 				onHide={() => setShow(false)}>
-				<Offcanvas.Header closeButton>
+				<Offcanvas.Header closeButton className="d-flex justify-content-between">
 					<Offcanvas.Title>
 						<span className="h2">
 							Places
 						</span>
 					</Offcanvas.Title>
+					{places && places.length > 0 && buttons}
 				</Offcanvas.Header>
 				<Offcanvas.Body>
 					{places &&
 						<SidebarContent
 							places={places}
+							filter={sortBy}
 						/>
 					}
 				</Offcanvas.Body>
@@ -86,10 +108,14 @@ const HomePage = () => {
 			<Container fluid className="py-3 center-y">
 				<Row className='d-flex justify-content-center'>
 					<Col className="d-none d-lg-block places-sidebar" lg={{ span: 3 }} >
-						<h2>Places</h2>
+						<div className="d-flex justify-content-between flex-column mb-2 flex-xl-row">
+							<h2>Places</h2>
+							{places && places.length > 0 && buttons}
+						</div>
 						{places &&
 							<SidebarContent
 								places={places}
+								filter={sortBy}
 							/>
 						}
 					</Col>

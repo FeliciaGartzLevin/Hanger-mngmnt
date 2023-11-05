@@ -5,6 +5,8 @@ export type Location = {
 	longitude: number
 }
 
+export type FilterPlacesType = 'name' | 'distance'
+
 export type Place = {
 	_id: string
 	category: Category

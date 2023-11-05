@@ -162,6 +162,15 @@ a.add-photo-links {
 			background-color: darken($primaryColor, 10%);
 		}
 	}
+
+	&.active-filter {
+		background-color: $secondaryColor;
+		color: black;
+
+		&:hover {
+			background-color: darken($secondaryColor, 10%);
+		}
+	}
 }
 
 input[type="*"],

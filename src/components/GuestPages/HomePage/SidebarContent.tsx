@@ -1,13 +1,14 @@
 import React from 'react'
-import { Place } from '../../../types/Place.types'
+import { FilterPlacesType, Place } from '../../../types/Place.types'
 import NoPlacesToShow from './NoPlacesToShow'
 import SortAndMapPlaces from './SortAndMapPlaces'
 
 type Props = {
 	places: Place[]
+	filter: FilterPlacesType
 }
 
-const SidebarContent: React.FC<Props> = ({ places }) => {
+const SidebarContent: React.FC<Props> = ({ places, filter }) => {
 	return places &&
 		<>
 			<NoPlacesToShow
@@ -15,7 +16,9 @@ const SidebarContent: React.FC<Props> = ({ places }) => {
 			/>
 
 			<SortAndMapPlaces
-				places={places} />
+				places={places}
+				filter={filter}
+			/>
 		</>
 }
 
