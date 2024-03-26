@@ -2,7 +2,8 @@
 
 An app that acts as a food guide for those moments when you're "hangry" but don't know where to eat or just need some coffee/tea.
 
-I was working on this project together with the eminent @albinario and @andrenormanlang
+I was working on this project together with the eminent [@albinario](https://github.com/albinario) and [@andrenormanlang](https://github.com/andrenormanlang).
+
 See commits for who worked on what.
 
 ## Screenshots from the app
